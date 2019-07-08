@@ -8,7 +8,7 @@ class BbForm(ModelForm):
     class Meta:
         model = Bb
         fields = {'title', 'content', 'price', 'slug', 'rubric'}
-        # widgets = {
-        #     'title': TextInput(attrs={'onchange': 'a_value(this);'}),
-        # }
+        widgets = {
+            'slug': TextInput(attrs={'class': 'colortext'}),
+        }
 
