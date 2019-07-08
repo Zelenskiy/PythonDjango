@@ -1,0 +1,25 @@
+{% extends "layout/basic.html" %}
+
+{% block title %}
+    {{ post.title }} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<div class="card mb-4">
+  <div class="card-header">
+    <strong>Опубліковано: </strong>{{ post.published|date:"d.m.y H:i" }}
+  </div>
+  <div class="card-body">
+      <h5>{{ post.title }}</h5>
+    <p class="card-text">{{  post.content}}</p>
+    <p class="card-text"><a href="{% url 'by_rubric' post.rubric.pk %}">{{ post.rubric.name }}</a> </p>
+
+
+    <a href="../edit/{{post.slug }}" class="btn btn-light">Редагувати</a>
+{#    <a href="{% url 'edit_url' %}" class="btn btn-light">Редагувати</a>#}
+    <a href="#" class="btn btn-light">Вилучити</a>
+  </div>
+</div>
+
+{% endblock %}

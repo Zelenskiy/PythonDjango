@@ -1,0 +1,25 @@
+{% extends "layout/basic.html" %}
+
+{% block title %} {{ current_rubric.name }}{% endblock %}
+
+{% block content %}
+    <h4>Рубрика: {{ current_rubric.name }}</h4>
+
+    {% for bb in bbs %}
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <strong>Опубліковано: </strong>{{ bb.published|date:"d.m.y H:i" }}
+            </div>
+            <div class="card-body">
+                <h5>{{ bb.title }}</h5>
+                <p class="card-text">{{ bb.content }}</p>
+                {#    <p class="card-text"><a href="{% url 'by_rubric' bb.rubric.pk %}"></a> {{ bb.rubric.name }}</p>#}
+
+
+                <a href="#" class="btn btn-light">Читати</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+

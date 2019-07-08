@@ -1,0 +1,27 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+    {% for bb in bbs %}
+
+
+        <div class="card text-white bg-info mb-3 ml-3">
+            <div class="card-header">
+                <strong>Опубліковано: </strong>{{ bb.published|date:"d.m.y H:i" }}
+            </div>
+            <div class="card-body">
+                <h5>{{ bb.title }}</h5>
+                <p class="card-text" style="max-width: 18rem">{{ bb.content|truncatewords:15 }}</p>
+                <p class="card-text"><a href="{% url 'by_rubric' bb.rubric.pk %}">{{ bb.rubric.name }}</a> </p>
+
+
+                <a href="{% url 'post_detail_url' bb.slug %}" class="btn btn-light">Читати</a>
+            </div>
+        </div>
+        {#<div class="b">#}
+        {#        <h2>{{ bb.title }}</h2>#}
+        {#        <p>{{ bb.content }}</p>#}
+        {#        <p><a href="{% url 'by_rubric' bb.rubric.pk %}"></a> {{ bb.rubric.name }}</p>#}
+        {#        <p>{{ bb.published|date:"d.m.y H:i:s" }}</p>#}
+        {#</div>#}
+    {% endfor %}
+{% endblock %}
