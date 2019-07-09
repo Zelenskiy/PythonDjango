@@ -37,16 +37,31 @@ def post_detail(request, slug):
     post = Bb.objects.get(slug__iexact=slug)
     return render(request, 'bboard/post_detail.html', context={'post': post})
 
-
-def edit(request, slug):
-    post = get_object_or_404(Bb, slug__iexact=slug)
-    # post = Bb.objects.get(slug__iexact=slug)
-    if request.method == "POST":
-        # form = BbForm(data=request.POST, instance=post)
-        form = BbForm(request.POST)
+def add_simple_flower(request):
+    if request.method == 'POST':
+        form = SimpleAddFlowerForm(request.POST, request.FILES)
         if form.is_valid():
+            print(request)
             if 'photo' in request.FILES:
                 form.photo = request.FILES['photo']
+                handle_uploaded_file(request.FILES['photo'])
+            p = form.save(commit=True)
+            return HttpResponseRedirect('')
+    else:
+        form = SimpleAddFlowerForm()
+    return render(request, 'flowers/add_simple_flower.html', {'form': form})
+
+def edit(request, slug):
+    # post = get_object_or_404(Bb, slug__iexact=slug)
+    post = Bb.objects.get(slug__iexact=slug)
+    if request.method == "POST":
+        form = BbForm(request.POST, request.FILES, instance=post)
+        # form = BbForm(request.POST)
+        if form.is_valid():
+            if 'photo' in request.FILES:
+                print("Ok")
+                form.photo = request.FILES['photo']
+                handle_uploaded_file(request.FILES['photo'])
             post = form.save(commit=False)
             #К примеру меняем одно поле сами, если не нужно, то просто сохраняем
             post.moder = 0
@@ -56,7 +71,10 @@ def edit(request, slug):
         form = BbForm(instance=post)
     return render(request, 'bboard/edit.html', {'form': form})
 
-
+def handle_uploaded_file(f):
+    with open('d:/name.jpg', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
 
 # def add(request):
 #     bbf = BbForm()

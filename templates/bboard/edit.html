@@ -6,7 +6,7 @@
 
 
 
-    <form method="post">
+    <form method="post"  enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class=" mb-0 ml-3">{{ form.title.label_tag }} </div>
@@ -20,7 +20,7 @@
         <div class=" mb-0 ml-3">{{ form.slug.label_tag }} </div>
         <div class="card text-white bg-info mb-3 ml-3">{{ form.slug }}</div>
         <div class="card bg-info mb-3 ml-3">{{ form.photo }}</div>
-
+{#        <input type="file" name="photo"  />#}
         <div class="card text-white bg-info mb-3 ml-3"><input type="submit" value="Додати"></div>
     </form>
     {#Скрипт для генерирования slug#}
