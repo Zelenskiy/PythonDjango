@@ -4,7 +4,7 @@
 {% block content %}
     {#    <h2>Додавання оголошення</h2>#}
     <style>
-        .colortext {
+        .color                                                                                  text {
             background-color: #fffe; /* Цвет фона */
             color: #777777; /* Цвет текста */
         }
@@ -13,17 +13,7 @@
 
     <form method="post">
         {% csrf_token %}
-        {#            {{ form.as_p }}#}
-        {#            {{ form.as_ul }}#}
-        {#        <p>{{ form }} </p>#}
-        {#        {% for field in form %}#}
-        {#            <div >#}
-        {#                {{ field.errors }}#}
-        {#                <div class=" mb-0 ml-3">{{ field.label_tag }} </div>#}
-        {#                <div class="card text-white bg-info mb-3 ml-3">{{ field }}</div>#}
-        {##}
-        {#            </div>#}
-        {#        {% endfor %}#}
+{#                    {{ form.as_p }}#}
 
         <div class=" mb-0 ml-3">{{ form.title.label_tag }} </div>
         <div class="card text-white bg-info mb-3 ml-3">{{ form.title }}</div>
@@ -35,6 +25,9 @@
         <div class="card text-white bg-info mb-3 ml-3">{{ form.rubric }}</div>
         <div class=" mb-0 ml-3">{{ form.slug.label_tag }} </div>
         <div class="card bg-info mb-3 ml-3">{{ form.slug }}</div>
+
+{#        <div class="card bg-info mb-3 ml-3">{{ form.photo }}</div>#}
+
 
         <div class="card text-white bg-info mb-3 ml-3"><input type="submit" value="Додати"></div>
     </form>

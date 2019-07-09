@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import index, by_rubric, BbCreateView, post_detail, edit
 
+
 urlpatterns = [
 
     path('add/', BbCreateView.as_view(), name='add'),

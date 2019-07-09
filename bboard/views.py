@@ -5,6 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView
 from .forms import BbForm
+from django import forms
 
 
 def by_rubric(request, rubric_id):
@@ -41,8 +42,11 @@ def edit(request, slug):
     post = get_object_or_404(Bb, slug__iexact=slug)
     # post = Bb.objects.get(slug__iexact=slug)
     if request.method == "POST":
-        form = BbForm(data=request.POST, instance=post)
+        # form = BbForm(data=request.POST, instance=post)
+        form = BbForm(request.POST)
         if form.is_valid():
+            if 'photo' in request.FILES:
+                form.photo = request.FILES['photo']
             post = form.save(commit=False)
             #К примеру меняем одно поле сами, если не нужно, то просто сохраняем
             post.moder = 0
@@ -51,6 +55,8 @@ def edit(request, slug):
     else:
         form = BbForm(instance=post)
     return render(request, 'bboard/edit.html', {'form': form})
+
+
 
 # def add(request):
 #     bbf = BbForm()

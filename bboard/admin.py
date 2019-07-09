@@ -7,7 +7,7 @@ from .models import Rubric
 # admin.site.register(Bb)
 
 class BbAdmin(admin.ModelAdmin):
-    list_display = ('title', 'content', 'price', 'published', 'rubric', 'slug')
+    list_display = ('title', 'content', 'price', 'published', 'rubric', 'slug', 'photo')
     list_display_links = ('title', 'content')
     search_fields = ('title', 'content')
 

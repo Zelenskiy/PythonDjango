@@ -1,0 +1,33 @@
+{% extends "layout/basic.html" %}
+{% block title %} Додавання оголошення{% endblock %}
+
+{% block content %}
+    {#    <h2>Додавання оголошення</h2>#}
+    {#    <style>#}
+    {#        .color                                                                                  text {#}
+    {#            background-color: #fffe; /* Цвет фона */#}
+    {#            color: #777777; /* Цвет текста */#}
+    {#        }#}
+    {#    </style>#}
+
+
+    <h2>Simple Flower</h2>
+    <h3>ADD FLOWER</h3>
+
+
+
+    <form method="post"  enctype="multipart/form-data">
+
+        {% csrf_token %}
+         {{ form.as_p }}
+
+{#        <div class="card text-white bg-info mb-3 ml-3">{{ form.title }}</div>#}
+{#        <div class="card text-white bg-info mb-3 ml-3">{{ form.description }}</div>#}
+{#        <div class="card text-white bg-info mb-3 ml-3">{{ form.care }}</div>#}
+{#         <input type="file" name="photo"  />#}
+        <div><input type="submit" value="Додати"></div>
+    </form>
+
+
+
+{% endblock %}

@@ -9,7 +9,8 @@ class Bb(models.Model):
     price = models.FloatField(null=True, blank=True, verbose_name='Цена')
     published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубликовано')
     rubric = models.ForeignKey('Rubric', null=True, on_delete=models.PROTECT, verbose_name='Рубрика')
-    slug = models.SlugField(null=False, max_length=150, unique=True, default="",verbose_name='Slug')
+    slug = models.SlugField(null=False, max_length=150, unique=True, default="", verbose_name='Slug')
+    photo = models.ImageField(upload_to='user_images', blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Объявления'
@@ -18,7 +19,7 @@ class Bb(models.Model):
 
 
 class Rubric(models.Model):
-    name = models.CharField(max_length=20, db_index=True, verbose_name='Название')
+    name = models.CharField(max_length=20, db_index=True, verbose_name='Назва')
 
     def __str__(self):
         return self.name
