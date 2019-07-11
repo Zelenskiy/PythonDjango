@@ -1,4 +1,5 @@
 {% extends "layout/basic.html" %}
+{#{% import os %}#}
 
 {% block content %}
     {% for bb in bbs %}
@@ -11,9 +12,14 @@
             <div class="card-body">
                 <h5>{{ bb.title }}</h5>
                 <p class="card-text" style="max-width: 18rem">{{ bb.content|truncatewords:15 }}</p>
-                <p class="card-text"><a href="{% url 'by_rubric' bb.rubric.pk %}">{{ bb.rubric.name }}</a> </p>
+                <p class="card-text"><a href="{% url 'by_rubric' bb.rubric.pk %}"></a>{{ bb.rubric.name }} </p>
 
-
+                {% if bb.photo != null %}
+                    {% if bb.photo != '' %}
+                     <p align="center"><img src="{{ MEDIA_URL }}{{ 'prev_' }}{{ bb.photo }}"></p>
+{#                     <p align="center"><img src="{{ MEDIA_URL }}{{ prev }}" width=250></p>#}
+                    {% endif %}
+                {% endif %}
                 <a href="{% url 'post_detail_url' bb.slug %}" class="btn btn-light">Читати</a>
             </div>
         </div>

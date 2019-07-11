@@ -22,6 +22,7 @@ from PythonDjango import settings
 from bboard.views import index
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
     path('bboard/', include('bboard.urls')),
 

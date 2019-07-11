@@ -12,6 +12,8 @@ class Bb(models.Model):
     slug = models.SlugField(null=False, max_length=150, unique=True, default="", verbose_name='Slug')
     photo = models.ImageField(upload_to='user_images', blank=True, null=True)
 
+
+
     class Meta:
         verbose_name_plural = 'Объявления'
         verbose_name = 'Объявление'
@@ -28,3 +30,16 @@ class Rubric(models.Model):
         verbose_name_plural = 'Рубрики'
         verbose_name = 'Рубрика'
         ordering = ['name']
+
+class Image(models.Model):
+    content = models.TextField(null=True, blank=True, verbose_name='Опис')
+    image = models.ImageField(upload_to='user_images', blank=True, null=True)
+    bb_id = models.ForeignKey('Bb', null=True, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.content
+
+    class Meta:
+        verbose_name_plural = 'Малюнок'
+        verbose_name = 'Малюнки'
+        ordering = ['content']

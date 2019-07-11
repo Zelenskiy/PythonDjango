@@ -6,20 +6,26 @@
 
 {% block content %}
 
-<div class="card mb-4">
-  <div class="card-header">
-    <strong>Опубліковано: </strong>{{ post.published|date:"d.m.y H:i" }}
-  </div>
-  <div class="card-body">
-      <h5>{{ post.title }}</h5>
-    <p class="card-text">{{  post.content}}</p>
-    <p class="card-text"><a href="{% url 'by_rubric' post.rubric.pk %}">{{ post.rubric.name }}</a> </p>
+    <div class="card mb-4">
+        <div class="card-header">
+            <strong>Опубліковано: </strong>{{ post.published|date:"d.m.y H:i" }}
+        </div>
+        <div class="card-body">
+            <h5>{{ post.title }}</h5>
+            <p class="card-text">{{ post.content }}</p>
+            <p class="card-text"><a href="{% url 'by_rubric' post.rubric.pk %}">{{ post.rubric.name }}</a></p>
 
+            {% if post.photo != null %}
+                     {% if bb.photo != '' %}
+                <a href="{{ MEDIA_URL }}{{ post.photo }}">
+                    <p><img src="{{ MEDIA_URL }}{{ post.photo }}" width=500></p>
+                </a>
+                {% endif %}
+            {% endif %}
 
-    <a href="../edit/{{post.slug }}" class="btn btn-light">Редагувати</a>
-{#    <a href="{% url 'edit_url' %}" class="btn btn-light">Редагувати</a>#}
-    <a href="#" class="btn btn-light">Вилучити</a>
-  </div>
-</div>
+            <a href="../edit/{{ post.slug }}" class="btn btn-light">Редагувати</a>
+            <a href="#" class="btn btn-light">Вилучити</a>
+        </div>
+    </div>
 
 {% endblock %}
