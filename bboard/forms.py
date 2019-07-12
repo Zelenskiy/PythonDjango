@@ -6,7 +6,7 @@ from .models import Bb
 class BbForm(ModelForm):
     class Meta:
         model = Bb
-        fields = {'title', 'content', 'price', 'slug', 'rubric', 'photo'}
+        fields = {'title', 'content', 'price', 'slug', 'rubric', 'photo', 'photo_prev', 'photo_ori'}
         widgets = {
             'slug': TextInput(attrs={'class': 'colortext'}),
         }

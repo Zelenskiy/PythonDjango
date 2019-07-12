@@ -1,10 +1,11 @@
 import os
 
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 
 from PythonDjango.settings import MEDIA_DIR
-from .models import Bb, Rubric
+from .models import Bb, Rubric, Albom
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView
@@ -45,27 +46,35 @@ def add(request):
     form = BbForm(request.POST, request.FILES)
     if request.method == "POST":
         if form.is_valid():
-
             if 'photo' in request.FILES:
-                form.photo = request.FILES['photo']
-                # form.photo_prev = os.path.join('user_photo_prev', str(form.photo))
+                # form.photo = request.FILES['photo']
+                form.photo_prev = request.FILES['photo']
+                # form.photo_ori = request.FILES['photo']
                 handle_uploaded_file(request.FILES['photo'])
             post = form.save(commit=False)
-            # К примеру меняем одно поле сами, если не нужно, то просто сохраняем
             post.moder = 0
             post.save()
-            if 'photo' in request.FILES:
-                resize_for_prev(form.photo)
+            # if 'photo' in request.FILES:
+            #     resize_for_prev(form.photo)
             return redirect('../')
     else:
         # pass
         form = BbForm(instance=post)
     return render(request, 'bboard/create.html', {'form': form})
 
+#user_images/71.png
+
+#TODO
+def handle_uploaded_file(f):
+    with open('d:/name.jpg', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
 
 def post_detail(request, slug):
     post = Bb.objects.get(slug__iexact=slug)
-    return render(request, 'bboard/post_detail.html', context={'post': post})
+    images = Albom.objects.all()
+    # images = Image.objects.filter(Bb__slug__iexact=slug)
+    return render(request, 'bboard/post_detail.html', context={'post': post, 'images': images})
 
 
 def resize_for_prev(photo):
@@ -85,24 +94,21 @@ def edit(request, slug):
         if form.is_valid():
             if 'photo' in request.FILES:
                 form.photo = request.FILES['photo']
+                form.photo_prev = request.FILES['photo']
                 # form.photo_prev = os.path.join('user_photo_prev', str(form.photo))
                 handle_uploaded_file(request.FILES['photo'])
             post = form.save(commit=False)
             # К примеру меняем одно поле сами, если не нужно, то просто сохраняем
             post.moder = 0
             post.save()
-            if 'photo' in request.FILES:
-                resize_for_prev(form.photo)
+            # if 'photo' in request.FILES:
+            #     resize_for_prev(post.photo)
             return redirect('../../')
     else:
         form = BbForm(instance=post)
     return render(request, 'bboard/edit.html', {'form': form})
 
-#TODO
-def handle_uploaded_file(f):
-    with open('d:/name.jpg', 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
+
 
 # def add(request):
 #     bbf = BbForm()

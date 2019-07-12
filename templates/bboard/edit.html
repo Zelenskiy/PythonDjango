@@ -18,40 +18,13 @@
         <div class="card text-white bg-info mb-3 ml-3">{{ form.rubric }}</div>
         <div class=" mb-0 ml-3">{{ form.slug.label_tag }} </div>
         <div class="card text-white bg-info mb-3 ml-3">{{ form.slug }}</div>
-        <div class="card bg-info mb-3 ml-3">{{ form.photo }}</div>
+        <div class="card bg-info mb-3 ml-3">{{ form.photo_prev }}</div>
 {#        <input type="file" name="photo"  />#}
         <div class="card text-white bg-info mb-3 ml-3"><input type="submit" value="Додати"></div>
     </form>
     {#Скрипт для генерирования slug#}
 
 
-    <script>
-        function translit(s) {
-
-            var ru = {
-                'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd',
-                'е': 'e', 'ё': 'e', 'ж': 'j', 'з': 'z', 'и': 'i',
-                'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o',
-                'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u',
-                'ф': 'f', 'х': 'h', 'ц': 'c', 'ч': 'ch', 'ш': 'sh',
-                'щ': 'shch', 'ы': 'y', 'э': 'e', 'ю': 'u', 'я': 'ya',
-                'є': 'ye', 'ї: 'yi'
-            }, n_str = [];
-
-            s = s.replace(/[ъь]+/g, '').replace(/й/g, 'i');
-
-            for (var i = 0; i < s.length; ++i) {
-                n_str.push(
-                    ru[s[i]]
-                    || ru[s[i].toLowerCase()] == undefined && s[i]
-                    || ru[s[i].toLowerCase()].replace(/^(.)/, function (match) {
-                        return match.toUpperCase()
-                    })
-                );
-            }
-            return n_str.join('');
-        }
-    </script>
 
     <script>
         function tr(s) {

@@ -1,7 +1,12 @@
+import os
+
+from PIL import Image
 from django.db import models
 
 
 # Create your models here.
+from PythonDjango.settings import MEDIA_DIR
+
 
 class Bb(models.Model):
     title = models.CharField(max_length=50, verbose_name='Товар')
@@ -10,15 +15,42 @@ class Bb(models.Model):
     published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубликовано')
     rubric = models.ForeignKey('Rubric', null=True, on_delete=models.PROTECT, verbose_name='Рубрика')
     slug = models.SlugField(null=False, max_length=150, unique=True, default="", verbose_name='Slug')
-    photo = models.ImageField(upload_to='user_images', blank=True, null=True)
+    photo = models.CharField(max_length=250, blank=True, null=True)
+    photo_prev = models.ImageField(upload_to='prev_user_images', blank=True, null=True)
+    photo_ori = models.ImageField(upload_to='user_images', blank=True, null=True)
+
+    def save(self):
+        # if not self.id and not self.photo_prev:
+        #     return
+        super(Bb, self).save()
+        image = Image.open(self.photo_prev)
+        (width, height) = image.size
+        "Max width and height 250"
+        if (250 / width < 250 / height):
+            factor = 250 / height
+        else:
+            factor = 250 / width
+        size = (int(width / factor), int(height / factor))
+        image_prev = image.resize(size, Image.ANTIALIAS)
+        image_prev.save(self.photo_prev.path)
+        # image.save(self.photo_ori.path)
+        file_name = os.path.basename(str(self.photo_prev.path))
+        # self.photo = file_name
+        image.save(os.path.join(MEDIA_DIR, 'user_images', file_name))
 
 
+        # image.save(self.photo.path)
 
     class Meta:
         verbose_name_plural = 'Объявления'
         verbose_name = 'Объявление'
         ordering = ['-published']
 
+#TODO
+def handle_uploaded_file(f):
+    with open('d:/name.jpg', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
 
 class Rubric(models.Model):
     name = models.CharField(max_length=20, db_index=True, verbose_name='Назва')
@@ -31,13 +63,15 @@ class Rubric(models.Model):
         verbose_name = 'Рубрика'
         ordering = ['name']
 
-class Image(models.Model):
+class Albom(models.Model):
     content = models.TextField(null=True, blank=True, verbose_name='Опис')
     image = models.ImageField(upload_to='user_images', blank=True, null=True)
-    bb_id = models.ForeignKey('Bb', null=True, on_delete=models.PROTECT)
+    bb = models.ForeignKey('Bb', null=True, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.content
+
+
 
     class Meta:
         verbose_name_plural = 'Малюнок'
