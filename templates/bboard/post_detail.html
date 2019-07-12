@@ -23,9 +23,9 @@
                     </a>
                 {% endif %}
             {% endif %}
-        <br>
+        <p>&nbsp;</p>
             <a href="../edit/{{ post.slug }}" class="btn btn-light">Редагувати</a>
-            <a href="#" class="btn btn-light">Вилучити</a>
+            <a href="{% url 'post_delete_url' post.slug%}" class="btn btn-light">Вилучити</a>
             <hr>
             {% for im in albom %}
                 <span >

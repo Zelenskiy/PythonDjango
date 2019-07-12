@@ -35,7 +35,7 @@ class Bb(models.Model):
         super(Bb, self).save(*args, **kwargs)
         image = Image.open(self.photo_prev)
         (width, height) = image.size
-        "Max width and height 250"
+        # "Max width and height 250"
         if (250 / width < 250 / height):
             factor = 250 / height
         else:

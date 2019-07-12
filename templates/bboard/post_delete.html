@@ -1,0 +1,23 @@
+{% extends "layout/basic.html" %}
+
+{% block title %}
+    Вилучення запису "{{ post.title }} - {{ block.super }}"
+{% endblock %}
+
+{% block content %}
+
+    <div class="card mb-4">
+        <form action="{% url 'post_delete_url' slug=post.slug %}" method="POST">
+            {% csrf_token %}
+            <h3>
+                Чи впевнені ви, що хочете вилучити запис <b>{{ post.title }}</b>?
+            </h3>
+            <a href="{% url 'index' %}">Відміна</a>
+            <button type="submit" name="button" class="btn btn-danger">Вилучити</button>
+            </h3>
+
+        </form>
+
+    </div>
+
+{% endblock %}

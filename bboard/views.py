@@ -1,8 +1,10 @@
 import os
 
+from django.conf.urls import url
 from django.utils.text import slugify
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
+from django.views import View
 
 from PythonDjango.settings import MEDIA_DIR
 from .models import Bb, Rubric, Albom
@@ -13,6 +15,8 @@ from .forms import BbForm
 from django import forms
 import PIL
 from PIL import Image
+from .utils import *
+from django.urls import reverse
 
 
 def by_rubric(request, rubric_id):
@@ -40,9 +44,12 @@ def index(request):
 #         context['rubrics'] = Rubric.objects.all()
 #         return context
 
+# def add(ObjectCreateMixin):
+#     model_form = BbForm
+#     template = 'bboard/create.html'
+
 def add(request):
     post = Bb(title='', content='', price='')
-
     form = BbForm(request.POST, request.FILES)
     if request.method == "POST":
         if form.is_valid():
@@ -62,13 +69,24 @@ def add(request):
         form = BbForm(instance=post)
     return render(request, 'bboard/create.html', {'form': form})
 
-#user_images/71.png
 
-#TODO
+# TODO
 def handle_uploaded_file(f):
     with open('d:/name.jpg', 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
+
+
+class Post_delete(View):
+    def get(self, request, slug):
+        post = Bb.objects.get(slug__iexact=slug)
+        return render(request, 'bboard/post_delete.html', context={'post': post})
+
+    def post(self, request, slug):
+        post = Bb.objects.get(slug__iexact=slug)
+        post.delete()
+        return redirect(reverse('index'))
+
 
 def post_detail(request, slug):
     post = Bb.objects.get(slug__iexact=slug)
@@ -107,8 +125,6 @@ def edit(request, slug):
     else:
         form = BbForm(instance=post)
     return render(request, 'bboard/edit.html', {'form': form})
-
-
 
 # def add(request):
 #     bbf = BbForm()
