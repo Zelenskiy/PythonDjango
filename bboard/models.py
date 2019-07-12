@@ -1,12 +1,18 @@
 import os
+from time import time
 
 from PIL import Image
 from django.db import models
 
 
 # Create your models here.
+from django.utils.text import slugify
+
 from PythonDjango.settings import MEDIA_DIR
 
+
+def gen_slug(s):
+    return slugify(s, allow_unicode=True) + '-' + str(int(time()))
 
 class Bb(models.Model):
     title = models.CharField(max_length=50, verbose_name='Товар')
@@ -16,13 +22,17 @@ class Bb(models.Model):
     rubric = models.ForeignKey('Rubric', null=True, on_delete=models.PROTECT, verbose_name='Рубрика')
     slug = models.SlugField(null=False, max_length=150, unique=True, default="", verbose_name='Slug')
     photo = models.CharField(max_length=250, blank=True, null=True)
-    photo_prev = models.ImageField(upload_to='prev_user_images', blank=True, null=True)
+    photo_prev = models.ImageField(upload_to='', blank=True, null=True)
     photo_ori = models.ImageField(upload_to='user_images', blank=True, null=True)
+    def gen_slug(s):
+        return slugify(s, allow_unicode=True)+'-'+str(int(time()))
 
-    def save(self):
+    def save(self, *args, **kwargs):
         # if not self.id and not self.photo_prev:
         #     return
-        super(Bb, self).save()
+        if not self.id:
+            self.slug = gen_slug(self.title)
+        super(Bb, self).save(*args, **kwargs)
         image = Image.open(self.photo_prev)
         (width, height) = image.size
         "Max width and height 250"
@@ -70,8 +80,6 @@ class Albom(models.Model):
 
     def __str__(self):
         return self.content
-
-
 
     class Meta:
         verbose_name_plural = 'Малюнок'

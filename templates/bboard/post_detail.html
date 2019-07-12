@@ -10,7 +10,7 @@
         <div class="card-header">
             <strong>Опубліковано: </strong>{{ post.published|date:"d.m.y H:i" }}
         </div>
-        <div class="card-body">
+        <div class="card-body ">
             <h5>{{ post.title }}</h5>
             <p class="card-text">{{ post.content }}</p>
             <p class="card-text"><a href="{% url 'by_rubric' post.rubric.pk %}">{{ post.rubric.name }}</a></p>
@@ -18,14 +18,16 @@
             {% if post.photo_prev != null %}
                 {% if bb.photo_prev != '' %}
                     <a href="{{ MEDIA_URL }}{{ photo_prev.photo_prev }}">
-                        <p><img src="{{ MEDIA_URL }}{{ post.photo_prev }}" width=500></p>
+                        <p><a href="{{ MEDIA_URL }}{{ 'user_images/' }}{{ post.photo_prev}}" ><img src="{{ MEDIA_URL }}{{ post.photo_prev}}" width=500></a></p>
+{#                        <p><img src="{{ MEDIA_URL }}{{ post.photo_prev }}" width=500></p>#}
                     </a>
                 {% endif %}
             {% endif %}
+        <br>
             <a href="../edit/{{ post.slug }}" class="btn btn-light">Редагувати</a>
             <a href="#" class="btn btn-light">Вилучити</a>
             <hr>
-            {% for im in images %}
+            {% for im in albom %}
                 <span >
                     <img src="{{ MEDIA_URL }}{{ im.image }}" width=150>
                 </span>

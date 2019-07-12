@@ -1,6 +1,6 @@
 import os
 
-
+from django.utils.text import slugify
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 
@@ -41,7 +41,7 @@ def index(request):
 #         return context
 
 def add(request):
-    post = Bb(title='', content='', price=0, slug='')
+    post = Bb(title='', content='', price='')
 
     form = BbForm(request.POST, request.FILES)
     if request.method == "POST":
@@ -72,9 +72,9 @@ def handle_uploaded_file(f):
 
 def post_detail(request, slug):
     post = Bb.objects.get(slug__iexact=slug)
-    images = Albom.objects.all()
-    # images = Image.objects.filter(Bb__slug__iexact=slug)
-    return render(request, 'bboard/post_detail.html', context={'post': post, 'images': images})
+    # images = Albom.objects.all()
+    albom = Albom.objects.filter(bb__slug__iexact=slug)
+    return render(request, 'bboard/post_detail.html', context={'post': post, 'albom': albom})
 
 
 def resize_for_prev(photo):
