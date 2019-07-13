@@ -62,134 +62,134 @@
     {#        }#}
     {#    </script>#}
 
-    <script>
-        function tr(s) {
-            res = ''
-            s = s.toLowerCase()
-            for (var i = 0; i < s.length; ++i) {
-                switch (s[i]) {
-                    case 'а':
-                        res = res + 'a';
-                        break;
-                    case 'б':
-                        res = res + 'b';
-                        break;
-                    case 'в':
-                        res = res + 'v';
-                        break;
-                    case 'г':
-                        res = res + 'g';
-                        break;
-                    case 'д':
-                        res = res + 'd';
-                        break;
-                    case 'е':
-                        res = res + 'e';
-                        break;
-                    case 'ё':
-                        res = res + 'e';
-                        break;
-                    case 'ж':
-                        res = res + 'j';
-                        break;
-                    case 'з':
-                        res = res + 'z';
-                        break;
-                    case 'и':
-                    case 'ы':
-                    case 'і':
-                        res = res + 'i';
-                        break;
-                    case 'к':
-                        res = res + 'k';
-                        break;
-                    case 'л':
-                        res = res + 'l';
-                        break;
-                    case 'м':
-                        res = res + 'm';
-                        break;
-                    case 'н':
-                        res = res + 'n';
-                        break;
-                    case 'о':
-                        res = res + 'o';
-                        break;
-                    case 'п':
-                        res = res + 'p';
-                        break;
-                    case 'р':
-                        res = res + 'r';
-                        break;
-                    case 'с':
-                        res = res + 's';
-                        break;
-                    case  'т':
-                        res = res + 't';
-                        break;
-                    case  'у':
-                        res = res + 'u';
-                        break;
-                    case 'ф':
-                        res = res + 'f';
-                        break;
-                    case  'х':
-                        res = res + 'h';
-                        break;
-                    case  'ц':
-                        res = res + 'c';
-                        break;
-                    case  'ч':
-                        res = res + 'ch';
-                        break;
-                    case  'ш':
-                        res = res + 'sh';
-                        break;
-                    case 'щ':
-                        res = res + 'shch';
-                        break;
-                    case  'й':
-                        res = res + 'y';
-                        break;
-                    case  'э':
-                        res = res + 'e';
-                        break;
-                    case  'ю':
-                        res = res + 'u';
-                        break;
-                    case  'я':
-                        res = res + 'ya';
-                        break;
-                    case 'є':
-                        res = res + 'ye';
-                        break;
-                    case  'ї':
-                        res = res + 'yi';
-                        break;
-                    case  'ь':
-                        res = res + '';
-                        break;
-                    case  ' ':
-                        res = res + '_';
-                        break;
-                    default:
-                        if (((s[i] >= 'a') &&
-                            (s[i] <= 'z')) || ((s[i] >= '0') && (s[i] <= '9')))
-                            res = res + s[i];
-
-                }
-
-            }
-            return res;
-        }
-    </script>
-
-    <script>
-
-        id_title.onkeypress = function (e) {
-            s = this.value;
-            id_slug.value = tr(s);
-        };
-    </script>
+{#    <script>#}
+{#        function tr(s) {#}
+{#            res = ''#}
+{#            s = s.toLowerCase()#}
+{#            for (var i = 0; i < s.length; ++i) {#}
+{#                switch (s[i]) {#}
+{#                    case 'а':#}
+{#                        res = res + 'a';#}
+{#                        break;#}
+{#                    case 'б':#}
+{#                        res = res + 'b';#}
+{#                        break;#}
+{#                    case 'в':#}
+{#                        res = res + 'v';#}
+{#                        break;#}
+{#                    case 'г':#}
+{#                        res = res + 'g';#}
+{#                        break;#}
+{#                    case 'д':#}
+{#                        res = res + 'd';#}
+{#                        break;#}
+{#                    case 'е':#}
+{#                        res = res + 'e';#}
+{#                        break;#}
+{#                    case 'ё':#}
+{#                        res = res + 'e';#}
+{#                        break;#}
+{#                    case 'ж':#}
+{#                        res = res + 'j';#}
+{#                        break;#}
+{#                    case 'з':#}
+{#                        res = res + 'z';#}
+{#                        break;#}
+{#                    case 'и':#}
+{#                    case 'ы':#}
+{#                    case 'і':#}
+{#                        res = res + 'i';#}
+{#                        break;#}
+{#                    case 'к':#}
+{#                        res = res + 'k';#}
+{#                        break;#}
+{#                    case 'л':#}
+{#                        res = res + 'l';#}
+{#                        break;#}
+{#                    case 'м':#}
+{#                        res = res + 'm';#}
+{#                        break;#}
+{#                    case 'н':#}
+{#                        res = res + 'n';#}
+{#                        break;#}
+{#                    case 'о':#}
+{#                        res = res + 'o';#}
+{#                        break;#}
+{#                    case 'п':#}
+{#                        res = res + 'p';#}
+{#                        break;#}
+{#                    case 'р':#}
+{#                        res = res + 'r';#}
+{#                        break;#}
+{#                    case 'с':#}
+{#                        res = res + 's';#}
+{#                        break;#}
+{#                    case  'т':#}
+{#                        res = res + 't';#}
+{#                        break;#}
+{#                    case  'у':#}
+{#                        res = res + 'u';#}
+{#                        break;#}
+{#                    case 'ф':#}
+{#                        res = res + 'f';#}
+{#                        break;#}
+{#                    case  'х':#}
+{#                        res = res + 'h';#}
+{#                        break;#}
+{#                    case  'ц':#}
+{#                        res = res + 'c';#}
+{#                        break;#}
+{#                    case  'ч':#}
+{#                        res = res + 'ch';#}
+{#                        break;#}
+{#                    case  'ш':#}
+{#                        res = res + 'sh';#}
+{#                        break;#}
+{#                    case 'щ':#}
+{#                        res = res + 'shch';#}
+{#                        break;#}
+{#                    case  'й':#}
+{#                        res = res + 'y';#}
+{#                        break;#}
+{#                    case  'э':#}
+{#                        res = res + 'e';#}
+{#                        break;#}
+{#                    case  'ю':#}
+{#                        res = res + 'u';#}
+{#                        break;#}
+{#                    case  'я':#}
+{#                        res = res + 'ya';#}
+{#                        break;#}
+{#                    case 'є':#}
+{#                        res = res + 'ye';#}
+{#                        break;#}
+{#                    case  'ї':#}
+{#                        res = res + 'yi';#}
+{#                        break;#}
+{#                    case  'ь':#}
+{#                        res = res + '';#}
+{#                        break;#}
+{#                    case  ' ':#}
+{#                        res = res + '_';#}
+{#                        break;#}
+{#                    default:#}
+{#                        if (((s[i] >= 'a') &&#}
+{#                            (s[i] <= 'z')) || ((s[i] >= '0') && (s[i] <= '9')))#}
+{#                            res = res + s[i];#}
+{##}
+{#                }#}
+{##}
+{#            }#}
+{#            return res;#}
+{#        }#}
+{#    </script>#}
+{##}
+{#    <script>#}
+{##}
+{#        id_title.onkeypress = function (e) {#}
+{#            s = this.value;#}
+{#            id_slug.value = tr(s);#}
+{#        };#}
+{#    </script>#}
 
 {% endblock %}

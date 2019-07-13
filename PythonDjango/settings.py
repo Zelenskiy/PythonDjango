@@ -37,6 +37,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'bboard.apps.BboardConfig',
+    'plan.apps.PlanConfig',
     'flowers.apps.FlowersConfig',
     # 'bootstrap3',
     'django.contrib.admin',
