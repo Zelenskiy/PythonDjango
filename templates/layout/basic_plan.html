@@ -8,7 +8,8 @@
     {#<link type="text/css" href="{% static "style.css" %}" rel="stylesheet">#}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.js"></script>
+{#    <script type="text/javascript" src="script.js"></script>#}
     {#    {% load bootstrap3 %}#}
     {#    <script src="{% bootstrap_jquery_url %}"></script>#}
     {#    {% bootstrap_javascript %}#}
@@ -47,15 +48,6 @@
     </div>
 </nav>
 
-{#<nav>#}
-{#    <a href="{% url 'index' %}">Головна</a>#}
-{#    <a href="{% url 'add' %}">Додати</a>#}
-{##}
-{#    {% for rubric in rubrics %}#}
-{#        <a href="{% url 'by_rubric' rubric.pk %}">{{ rubric.name }}</a>#}
-{#    {% endfor %}#}
-{##}
-{#</nav>#}
 <section>
     <div class="container mt-3 ml-3">
         <div class="row">
@@ -69,5 +61,7 @@
     </div>
 
 </section>
+
+{#<a href="https://www.google.com.ua">GOOGLE</a>#}
 </body>
 </html>

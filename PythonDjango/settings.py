@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'plan.apps.PlanConfig',
     'flowers.apps.FlowersConfig',
     # 'bootstrap3',
+    # 'scripts.import_from_excel',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -84,11 +85,23 @@ WSGI_APPLICATION = 'PythonDjango.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# https://djbook.ru/rel1.9/topics/db/multi-db.html
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+    # ,
+    # 'firebird': {
+    #     'ENGINE' : 'firebird',
+    #     'NAME' : 'd:/MyDoc/Dropbox/BASE/BASE_DP.FDB', # Path to database or db alias
+    #     'USER' : 'SYSDBA',           # Your db user
+    #     'PASSWORD' : 'masterkey',    # db user password
+    #     'HOST' : '127.0.0.1',        # Your host machine
+    #     'PORT' : '3050',             # If is empty, use default 3050
+    #     #'OPTIONS' : {'charset':'ISO8859_1'}
+    # }
 }
 
 
