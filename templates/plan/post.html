@@ -1,11 +1,20 @@
 
 
 
-               {% for plan in plans %}
-                   <p>id={{ plan.id }}</p>
+
+                   <p>id={{ plans.0.id }}</p>
                     <p style="max-width: 180rem">
-                         <textarea rows="10" cols="72">{{ plan.content }}</textarea>
+                         <textarea rows="10" cols="35">{{ plans.0.content }}</textarea>
                     </p>
-                {% endfor %}
+{#                   <input id="aqaq" type="text" value="{{ s }}" />#}
+
+
+
+{#              {% for plan in plans %}#}
+{#                   <p>id={{ plan.id }}</p>#}
+{#                    <p style="max-width: 180rem">#}
+{#                         <textarea rows="10" cols="72">{{ plan.content }}</textarea>#}
+{#                    </p>#}
+{#                {% endfor %}#}
 
 

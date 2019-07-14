@@ -17,14 +17,16 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.urls import path
 from PythonDjango import settings
-from plan.views import index, imp_from_excel, view, post, postr
+from plan.views import index, imp_from_excel, view, post, postr,getjson
 
 urlpatterns = [
 
                   path('', index, name='index'),
                   path('import/', imp_from_excel, name='imp_from_excel'),
-                  path('view/<int:id>', view, name='view'),
+                  path('view/', view, name='view'),
+                  path('getjson/', getjson, name='getjson'),
+                  # path('view/<int:id>', view, name='view'),
                   path('post/<int:id>', post, name='post'),
-                  path('postr/<int:id>', postr, name='postr'),
+                  path('postr/<int:r_id>', postr, name='postr'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

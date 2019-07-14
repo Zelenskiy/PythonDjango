@@ -9,11 +9,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.js"></script>
-{#    <script type="text/javascript" src="script.js"></script>#}
-    {#    {% load bootstrap3 %}#}
-    {#    <script src="{% bootstrap_jquery_url %}"></script>#}
-    {#    {% bootstrap_javascript %}#}
-    {#    {% bootstrap_css %}#}
 </head>
 <body>
 {#<header>#}
@@ -22,9 +17,9 @@
 
 <style>
     img.resize {
-    width:100px; /* you can use % */
-    height: auto;
-}
+        width: 100px; /* you can use % */
+        height: auto;
+    }
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
@@ -51,17 +46,16 @@
 <section>
     <div class="container mt-3 ml-3">
         <div class="row">
-{#            <div class="col-6 offset-md-0">#}
-                {% block content %}
-                {% endblock %}
-{#            </div>#}
-
+            {% block content %}
+            {% endblock %}
         </div>
 
     </div>
 
 </section>
-
-{#<a href="https://www.google.com.ua">GOOGLE</a>#}
 </body>
+
+
+
+
 </html>
