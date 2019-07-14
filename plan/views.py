@@ -1,5 +1,3 @@
-
-
 from django.shortcuts import render
 
 from PythonDjango.settings import BASE_DIR
@@ -11,6 +9,13 @@ def index(request):
     return render(request, 'plan/index.html')
 
 
+def kostil(s):
+    c = s.rfind('/')
+    s = s[:c]
+    c = s.rfind('/')
+    return s[:c + 1] + 'post/'
+
+
 def view(request, id):
     plans = Plan.objects.filter(id=id)
     # plans = Plan.objects.filter(r_id=r_id)
@@ -18,19 +23,27 @@ def view(request, id):
     # plans = Plan.objects.filter(r_id = 29)
     # plans = Plan.objects.all()
     rubrics = Rubric.objects.all()
-    s = request.build_absolute_uri()
-    c = s.rfind('/')
-    s = s[:c]
-    c = s.rfind('/')
-    dir = s[:c + 1] + 'post/'
+    # Костильчик
+    dir = kostil(request.build_absolute_uri())
+    # кінець костильчика
     context = {'plans': plans, 'rubrics': rubrics, 'dir': dir}
     return render(request, 'plan/index.html', context)
 
 
 def post(request, id):
     plans = Plan.objects.filter(id=id)
-    context = {'plans': plans }
+    plan2 = plans.filter()
+    context = {'plans': plans}
     return render(request, 'plan/post.html', context)
+
+
+def postr(request, r_id):
+    plans = Plan.objects.filter(r_id=r_id)
+    # plan2 = plans.filter()
+    rubrics = Rubric.objects.all()
+    dir = kostil(request.build_absolute_uri())
+    context = {'plans': plans, 'rubrics': rubrics, 'dir': dir}
+    return render(request, 'plan/index.html', context)
 
 
 def imp_from_excel(request):

@@ -25,13 +25,13 @@
 
             <div id="pl" class="col-6 mx-auto col-md-6 order-md-2 bg-danger text-white">
 
-               {% for plan in plans %}
-                   <p>{{ plan.id }}</p>
-                    <p style="max-width: 180rem">
-                        <textarea rows="10" cols="72">{{ plan.content }}</textarea>
-
-                    </p>
-                {% endfor %}
+{#               {% for plan in plans %}#}
+{#                   <p>{{ plan.id }}</p>#}
+{#                    <p style="max-width: 180rem">#}
+{#                        <textarea rows="10" cols="72">{{ plan.content }}</textarea>#}
+{##}
+{#                    </p>#}
+{#                {% endfor %}#}
 
             </div>
             <div  class="col-6 mx-auto col-md-6 order-md-2 mt-5">
@@ -47,7 +47,11 @@
     </div>
 
     <script type="text/javascript">
-    {#jQuery('body').append('<a href="https://www.google.com.ua">GOOGLE</a>');#}
+    var n = 1
+
+    jQuery(document).ready(function(){
+        $('#pl').load("{{ dir }}"+n);
+    });
 
     jQuery('#exampleFormControlSelect2').on('click',function () {
         var value1 = jQuery(this).find(":selected").attr('level');
@@ -55,17 +59,17 @@
         {#jQuery("#pl").text();#}
         {#alert(value1);#}
     });
-    var n = 1
-    jQuery('#next').on('click',function () {
-        $('#pl').load("{{ dir }}"+n);
-        n=n+1
-        jQuery("#title").text("{{ dir }}"+n);
 
+    jQuery('#next').on('click',function () {
+        n=n+1
+        if (n<=0) n=1;
+        $('#pl').load("{{ dir }}"+n);
     });
     jQuery('#first').on('click',function () {
-        $('#pl').load("{{ dir }}"+n);
         n=n-1
-        jQuery("#title").text("{{ dir }}"+n);
+        if (n<=0) n=1;
+        $('#pl').load("{{ dir }}"+n);
+
 
     });
 </script>

@@ -17,7 +17,7 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.urls import path
 from PythonDjango import settings
-from plan.views import index, imp_from_excel, view, post
+from plan.views import index, imp_from_excel, view, post, postr
 
 urlpatterns = [
 
@@ -25,5 +25,6 @@ urlpatterns = [
                   path('import/', imp_from_excel, name='imp_from_excel'),
                   path('view/<int:id>', view, name='view'),
                   path('post/<int:id>', post, name='post'),
+                  path('postr/<int:id>', postr, name='postr'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
