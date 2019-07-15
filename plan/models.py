@@ -20,6 +20,9 @@ class Plan(models.Model):
     tmp = models.CharField(max_length=50, null=True, blank=True, verbose_name='tmp')
     tmp2 = models.CharField(max_length=50, null=True, blank=True, verbose_name='tmp')
 
+    class Meta:
+        ordering = ['sort']
+
 class Direction(models.Model):
     name = models.CharField(max_length=50, verbose_name='Напрямок')
     # tmp = models.IntegerField(null=True, blank=True, verbose_name='')
@@ -27,7 +30,7 @@ class Direction(models.Model):
         return self.name
 
 class Responsibl (models.Model):
-    name = models.CharField(max_length=150, verbose_name='Напрямок')
+    name = models.CharField(max_length=150, verbose_name='Мета')
     plan_id = models.ForeignKey('Plan', null=True, on_delete=models.PROTECT, verbose_name='')
     def __str__(self):
         return self.name
@@ -60,5 +63,8 @@ class Rubric(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['n_r']
 
 

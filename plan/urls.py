@@ -28,5 +28,6 @@ urlpatterns = [
                   # path('view/<int:id>', view, name='view'),
                   path('post/<int:id>', post, name='post'),
                   path('postr/<int:r_id>/<int:num>', postr, name='postr'),
+                  path('view/<int:r_id>/<int:num>', postr, name='postr'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

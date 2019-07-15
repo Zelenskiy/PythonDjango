@@ -1,20 +1,64 @@
+{% if count != 0 %}
+    <p>id={{ plan.id }}&nbsp;&nbsp;&nbsp;{{ num }}&nbsp;(<span id="count_id">{{ count }}</span>)</p>
+    <form method="post" enctype="multipart/form-data">
+{#    {% csrf_token %}#}
+
+{#    <div class="form-group">#}
+{#        <label for="exampleFormControlSelect1">Мета</label>#}
+{#        <select class="form-control" id="exampleFormControlSelect1">#}
+{#            {% for resp in resps %}#}
+{#                <option>{{ resp.name }}</option>#}
+{#            {% endfor %}#}
+{#        </select>#}
+{#    </div>#}
+    <div class="form-group">
+        <label for="exampleFormControlTextarea1">Зміст</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="10">{{ plan.content }}</textarea>
+{#        <textarea class="form-control" id="exampleFormControlTextarea1" rows="10">{{ form.content }}</textarea>#}
+    </div>
+
+    <input id="first" type="button" value="Початок"/>
+    <input id="prev" type="button" value="Попередній"/>
+    <input id="next" type="button" value="Наступний"/>
+    <input id="last" type="button" value="Кінець"/>
+    <p>&nbsp;</p>
+    <script>
+        var count = {{ count }};
+    </script>
+
+    <script type="text/javascript">
+        jQuery('#next').on('click', function () {
+                n = n + 1;
+                if (n <= 0) n = 1;
+                if (n >= count) n = count;
+                s = "" + a + "/" + n;
+                {#s = "http://127.0.0.1:8000/plan/postr/" + a + "/" + n;#}
+                $('#pl').load(s);
+            }
+        );
+        jQuery('#last').on('click', function () {
+                n = count;
+                s = "" + a + "/" + n;
+                $('#pl').load(s);
+            }
+        );
+
+        jQuery('#prev').on('click', function () {
+            n = n - 1;
+            if (n <= 0) n = 1;
+            if (n >= count) n = count;
+            s = "" + a + "/" + n;
+            $('#pl').load(s);
+        });
+        jQuery('#first').on('click', function () {
+            n = 1;
+            s = "" + a + "/" + n;
+            $('#pl').load(s);
+        });
+    </script>
+</form>
+{% endif %}
 
 
-
-
-                   <p>id={{ plan.id }}&nbsp;&nbsp;&nbsp;{{ num }}&nbsp;(<span id="count_id">{{ count }}</span>)</p>
-                    <p style="max-width: 180rem">
-                         <textarea rows="10" cols="35">{{ plan.content }}</textarea>
-                    </p>
-{#                   <input id="aqaq" type="text" value="{{ s }}" />#}
-
-
-
-{#              {% for plan in plans %}#}
-{#                   <p>id={{ plan.id }}</p>#}
-{#                    <p style="max-width: 180rem">#}
-{#                         <textarea rows="10" cols="72">{{ plan.content }}</textarea>#}
-{#                    </p>#}
-{#                {% endfor %}#}
 
 

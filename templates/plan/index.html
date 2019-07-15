@@ -6,27 +6,48 @@
     <h2>
         <div id="title">qqqq</div>
     </h2>
-    <div class="container-fluid">
+    <div class="container-fluid ">
         <div class="row align-items-lg-baseline">
-            <div class="col-5 mx-auto col-md-6 order-md-2 bg-danger text-white">
+            <div class="col-5 mx-auto col-md-6 order-md-2 bg-danger text-white ">
                 <form>
                     <div class="form-group">
                         <label for="exampleFormControlSelect2">Example multiple select</label>
                         <select multiple class="form-control" id="exampleFormControlSelect2" size="15" name="rozdili">
                             {% for rubric in rubrics %}
-                                <option id="{{ rubric.id }}" level="{{ rubric.id }}">
-                                    {{ rubric.name }}
-                                </option>
+                                {% if rubric.riven == 1 %}
+                                    <option id="{{ rubric.id }}" owner="{{ rubric.id_owner }}" >
+                                        {{ rubric.n_r }}.&nbsp;{{ rubric.name }}
+                                    </option>
+                                    {% for rubric2 in rubrics %}
+                                        {% if rubric2.riven == 2 and rubric2.id_owner_id == rubric.id %}
+                                            <option id="{{ rubric2.id }}" owner="{{ rubric2.id_owner }}">
+                                                 &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric2.name }}
+                                            </option>
+
+                                            {% for rubric3 in rubrics %}
+                                                {% if rubric3.riven == 3 and rubric3.id_owner_id == rubric2.id %}
+                                                    <option id="{{ rubric3.id }}" owner="{{ rubric3.id_owner }}">
+                                                        &nbsp;&nbsp; &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric3.n_r }}.&nbsp;{{ rubric3.name }}
+                                                     </option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
                             {% endfor %}
+
+                            {#                            {{ rubrics_code|safe }}#}
+                            {#                            {% autoescape off  %}#}
+                            {#                                {{ rubrics_code }}#}
+                            {#                            {% endautoescape %}#}
 
                         </select>
                     </div>
                 </form>
-                <input id="prew" type="button" value="Попередній"/>
-                <input id="next" type="button" value="Наступний"/>
-                <input id="nnn" type="number" value="1"/>
+
+                {#                <input id="nnn" type="number" value="1"/>#}
             </div>
-            <div id="pl" class="col-5 mx-auto col-md-6 order-md-2 bg-danger text-white">
+            <div id="pl" class="col-6 mx-auto col-md-6 order-md-2 bg-danger text-white ml-5 ">
 
             </div>
 
@@ -43,47 +64,16 @@
             }
         );
     </script>
-    <div id="fff"  hidden></div>
+    <div id="fff" hidden></div>
     <script type="text/javascript">
         var a;
-        var pl_length = 1000000000;
         jQuery('#exampleFormControlSelect2').on('click', function () {
             n = 1;
             a = jQuery(this).find(":selected").attr('id');
-           n = 1;
-                if (n <= 0) n = 1;
-
-                s = "http://127.0.0.1:8000/plan/postr/"+a+"/"+n;
-                $('#pl').load(s);
-                pl_length = parseInt($('#count_id').val());
-                if (n>=pl_length) n = pl_length;
+            s = "" + a + "/" + n;
+            $('#pl').load(s);
         });
     </script>
-    <script type="text/javascript">
-        jQuery('#next').on('click', function () {
-                n = n + 1;
-                if (n <= 0) n = 1;
 
-                s = "http://127.0.0.1:8000/plan/postr/"+a+"/"+n;
-                $('#pl').load(s);
-                pl_length = parseInt($('#count_id').val());
-                if (n>=pl_length) n = pl_length;
-            }
-        );
-
-        jQuery('#prew').on('click', function () {
-                n = n - 1;
-                if (n <= 0) n = 1;
-
-                s = "http://127.0.0.1:8000/plan/postr/"+a+"/"+n;
-                $('#pl').load(s);
-                pl_length = parseInt(jQuery('#count_id').val());
-                sss = jQuery('#pl').children('#count_id').attr('id');
-                alert("count="+sss)
-                if (n>=pl_length) n = pl_length;
-                {#alert("n="+n)#}
-                {#pl_length = {{ count }};#}
-        });
-    </script>
 
 {% endblock %}
