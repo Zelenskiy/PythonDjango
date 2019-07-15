@@ -38,63 +38,51 @@
         var addres;
         jQuery(document).ready(function () {
                 n = 1;
-                jQuery('#pl').load("{{ dir }}" + n);
+                {#alert("wwww")#}
+                {#jQuery('#pl').load("{{ dir }}" + n);#}
             }
         );
     </script>
+    <div id="fff"  hidden></div>
     <script type="text/javascript">
-
-
+        var a;
+        var pl_length = 1000000000;
         jQuery('#exampleFormControlSelect2').on('click', function () {
             n = 1;
+            a = jQuery(this).find(":selected").attr('id');
+           n = 1;
+                if (n <= 0) n = 1;
 
-            $.ajax({
-                url: '127.0.0.1:8000/hello',
-                type: 'get', // This is the default though, you don't actually need to always mention it
-                success: function (data) {
-                    alert(data);
-                },
-                failure: function (data) {
-                    alert('Got an error dude');
-                }
-            });
-
-            {#var value1 = jQuery(this).find(":selected").attr('id');#}
-            {#jQuery('#pl').load("{{ dir2 }}" + value1);#}
-
-            {#$.getJSON("http://127.0.0.1:8000/plan/getjson", function (json) {#}
-            {#    s = json;#}
-            {##}
-            {#);#}
-            {#alert(s);#}
-            {#addres = s.split(',');#}
-
-
+                s = "http://127.0.0.1:8000/plan/postr/"+a+"/"+n;
+                $('#pl').load(s);
+                pl_length = parseInt($('#count_id').val());
+                if (n>=pl_length) n = pl_length;
         });
     </script>
     <script type="text/javascript">
         jQuery('#next').on('click', function () {
-
-                {#alert(addres[0])#}
                 n = n + 1;
                 if (n <= 0) n = 1;
-                alert("{{ dir2 }}")
-                $('#pl').load("{{ dir2 }}{{ plans.1.id }}");
+
+                s = "http://127.0.0.1:8000/plan/postr/"+a+"/"+n;
+                $('#pl').load(s);
+                pl_length = parseInt($('#count_id').val());
+                if (n>=pl_length) n = pl_length;
             }
         );
 
         jQuery('#prew').on('click', function () {
-            n = n - 1;
-            if (n <= 0) n = 1;
-            k = 0
-            {% for ind in index_plans %}
-                k = k + 1;
-                {% if k == n %}
-                    $('#pl').load("{{ dir }}" +{{ ind.id }});
+                n = n - 1;
+                if (n <= 0) n = 1;
 
-                {% endif %}
-            {% endfor %}
-            jQuery['#nnn'].val(n);
+                s = "http://127.0.0.1:8000/plan/postr/"+a+"/"+n;
+                $('#pl').load(s);
+                pl_length = parseInt(jQuery('#count_id').val());
+                sss = jQuery('#pl').children('#count_id').attr('id');
+                alert("count="+sss)
+                if (n>=pl_length) n = pl_length;
+                {#alert("n="+n)#}
+                {#pl_length = {{ count }};#}
         });
     </script>
 

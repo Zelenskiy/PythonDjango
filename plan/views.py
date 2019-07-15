@@ -34,23 +34,17 @@ def post(request, id):
     context = {'plans': plans}
     return render(request, 'plan/post.html', context)
 
-def getjson(request):
-    context = {'s': s}
-    return render(request, 'plan/index.html', context)
+# def getjson(request):
+#     context = {'s': s}
+#     return render(request, 'plan/index.html', context)
 
-def postr(request, r_id):
+def postr(request, r_id, num):
     plans = Plan.objects.filter(r_id=r_id)
-    index_plans = []
-    dir, dir2 = kostil(request.build_absolute_uri())
-    s = ""
-    for plan in plans:
-        index_plans.append(dir2+str(plan.id))
-        s += dir2+str(plan.id)+','
-    s = s[:-1]
-    # index_plans = {}
-    # for counter, plan in enumerate(plans):
-    #     index_plans[counter+1] = plan
-    context = {'plans': plans, 'index_plans': index_plans, 's': s, 'dir': dir, 'dir2': dir2}
+    count = len(plans)
+    if num >= count:
+        num = count
+    plan = plans[num-1]
+    context = {'plan': plan, 'num': num, 'count': count}
     return render(request, 'plan/post.html', context)
 
 
