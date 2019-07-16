@@ -4,50 +4,53 @@
 {% block content %}
     <script type="text/javascript">var addres = "";</script>
     <h2>
-        <div id="title">qqqq</div>
+        <div id="title">&nbsp;</div>
     </h2>
+    {#    <input id="titleX" type="text" value="" /><br>#}
     <div class="container-fluid ">
         <div class="row align-items-lg-baseline">
             <div class="col-5 mx-auto col-md-6 order-md-2 bg-danger text-white ">
-                <form>
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect2">Example multiple select</label>
-                        <select multiple class="form-control" id="exampleFormControlSelect2" size="15" name="rozdili">
-                            {% for rubric in rubrics %}
-                                {% if rubric.riven == 1 %}
-                                    <option id="{{ rubric.id }}" owner="{{ rubric.id_owner }}" >
-                                        {{ rubric.n_r }}.&nbsp;{{ rubric.name }}
-                                    </option>
-                                    {% for rubric2 in rubrics %}
-                                        {% if rubric2.riven == 2 and rubric2.id_owner_id == rubric.id %}
-                                            <option id="{{ rubric2.id }}" owner="{{ rubric2.id_owner }}">
-                                                 &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric2.name }}
-                                            </option>
 
-                                            {% for rubric3 in rubrics %}
-                                                {% if rubric3.riven == 3 and rubric3.id_owner_id == rubric2.id %}
-                                                    <option id="{{ rubric3.id }}" owner="{{ rubric3.id_owner }}">
-                                                        &nbsp;&nbsp; &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric3.n_r }}.&nbsp;{{ rubric3.name }}
-                                                     </option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                            {% endfor %}
+                <div class="form-group">
+                    <label for="exampleFormControlSelect2">Example multiple select</label>
+                    <select multiple class="form-control" id="exampleFormControlSelect2" size="15" name="rozdili">
+                        {% for rubric in rubrics %}
+                            {% if rubric.riven == 1 %}
+                                <option id="{{ rubric.id }}" owner="{{ rubric.id_owner_id }}" hidden_child="true">
+                                    {{ rubric.n_r }}.&nbsp;{{ rubric.name }}
+                                </option>
+                                {% for rubric2 in rubrics %}
+                                    {% if rubric2.riven == 2 and rubric2.id_owner_id == rubric.id %}
+                                        <option id="{{ rubric2.id }}" owner="{{ rubric2.id_owner_id }}"
+                                                hidden_child="true">
+                                            &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric2.name }}
+                                        </option>
 
-                            {#                            {{ rubrics_code|safe }}#}
-                            {#                            {% autoescape off  %}#}
-                            {#                                {{ rubrics_code }}#}
-                            {#                            {% endautoescape %}#}
+                                        {% for rubric3 in rubrics %}
+                                            {% if rubric3.riven == 3 and rubric3.id_owner_id == rubric2.id %}
+                                                <option id="{{ rubric3.id }}" owner="{{ rubric3.id_owner_id }}"
+                                                        hidden_child="true">
+                                                    &nbsp;&nbsp; &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric3.n_r }}.&nbsp;{{ rubric3.name }}
+                                                </option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
 
-                        </select>
-                    </div>
-                </form>
+                        {#                            {{ rubrics_code|safe }}#}
+                        {#                            {% autoescape off  %}#}
+                        {#                                {{ rubrics_code }}#}
+                        {#                            {% endautoescape %}#}
+
+                    </select>
+                </div>
+
 
                 {#                <input id="nnn" type="number" value="1"/>#}
             </div>
-            <div id="pl" class="col-6 mx-auto col-md-6 order-md-2 bg-danger text-white ml-5 ">
+            <div id="pl" class="col-6 mx-auto  col-md-6 order-md-2 bg-danger text-white ml-5 ">
 
             </div>
 
@@ -56,22 +59,58 @@
 
     <script type="text/javascript">
         var n = 1;
-        var addres;
+        var rubr_id_max = 57;
+
         jQuery(document).ready(function () {
                 n = 1;
-                {#alert("wwww")#}
-                {#jQuery('#pl').load("{{ dir }}" + n);#}
+                {#alert("{{ rubr_id_max }}");#}
+                {#        jQuery('#titleX').val("{{ rubr_id_max|  }}");#}
             }
         );
     </script>
-    <div id="fff" hidden></div>
     <script type="text/javascript">
         var a;
         jQuery('#exampleFormControlSelect2').on('click', function () {
             n = 1;
             a = jQuery(this).find(":selected").attr('id');
             s = "" + a + "/" + n;
-            $('#pl').load(s);
+            jQuery('#pl').load(s);
+            el = jQuery(this).find(":selected");
+            if (el.attr('hidden_child') == 'true') {
+                el.attr('hidden_child', 'false');
+                $('option').each(function (i, elem) {
+                    if ($(this).hasClass("stop")) {
+                        return false;
+                    } else {
+                        if ($(elem).attr('owner') == el.attr('id')) {
+                            $(elem).attr("hidden", true);
+                            $('option').each(function (j, elem2) {
+                                if ($(elem2).attr("owner") == $(elem).attr('id')) {
+                                    $(elem2).attr("hidden", true);
+                                }
+                            });
+                            $(elem).attr('hidden_child', 'false');
+                        }
+                    }
+                });
+            } else {
+                el.attr('hidden_child', 'true');
+                $('option').each(function (i, elem) {
+                    if ($(this).hasClass("stop")) {
+                        return false;
+                    } else {
+                        if ($(elem).attr("owner") == el.attr('id')) {
+                            $(elem).attr("hidden", false);
+                            $('option').each(function (j, elem2) {
+                                if ($(elem2).attr("owner") == $(elem).attr('id')) {
+                                    $(elem2).attr("hidden", false);
+                                }
+                            });
+                            $(elem).attr('hidden_child', 'true');
+                        }
+                    }
+                });
+            }
         });
     </script>
 

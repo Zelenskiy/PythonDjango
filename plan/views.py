@@ -1,3 +1,4 @@
+from django.db.models import Max
 from django.shortcuts import render
 
 from PythonDjango.settings import BASE_DIR
@@ -28,11 +29,12 @@ def view(request):
     s = ""
     plans = Plan.objects.all()
     rubrics = Rubric.objects.all()
+    rubr_id_max = Rubric.objects.aggregate(Max('id'))
     # rubrics_code = make_rubrics(rubrics)
     # Костильчик
     dir, dir2 = kostil(request.build_absolute_uri())
     # кінець костильчика
-    context = {'plans': plans, 'rubrics': rubrics, 'dir': dir, 'dir2': dir2}
+    context = {'plans': plans, 'rubrics': rubrics, 'dir': dir, 'dir2': dir2, 'rubr_id_max': rubr_id_max}
     return render(request, 'plan/index.html', context)
 
 
@@ -46,17 +48,35 @@ def post(request, id):
 #     context = {'s': s}
 #     return render(request, 'plan/index.html', context)
 
+# def postr(request, r_id, num):
+#     plans = Plan.objects.filter(r_id=r_id)
+#     if request.method == "POST":
+#         pass
+#     else:
+#         resps = Responsibl.objects.all()
+#         count = len(plans)
+#         if count == 0:
+#             return render(request, 'plan/post_empty.html')
+#         if num >= count:
+#             num = count
+#         plan = plans[num-1]
+#         context = {'plan': plan, 'num': num, 'resps': resps, 'count': count}
+#     return render(request, 'plan/post.html', context)
+
 def postr(request, r_id, num):
     plans = Plan.objects.filter(r_id=r_id)
-    resps = Responsibl.objects.all()
-    count = len(plans)
-    if count == 0:
-        return render(request, 'plan/post_empty.html')
-    if num >= count:
-        num = count
-    plan = plans[num-1]
-    # form = PlanForm(instance=plans)
-    context = {'plan': plan, 'num': num, 'resps': resps, 'count': count}
+    if request.method == "POST":
+        pass
+    else:
+        # resps = Responsibl.objects.all()
+        count = len(plans)
+        if count == 0:
+            return render(request, 'plan/post_empty.html')
+        if num >= count:
+            num = count
+        plan = plans[num-1]
+        form = PlanForm(instance=plan)
+        context = {'num': num, 'count': count, 'form': form}
     return render(request, 'plan/post.html', context)
 
 
