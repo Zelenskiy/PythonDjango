@@ -75,8 +75,9 @@ def postr(request, r_id, num):
         if num >= count:
             num = count
         plan = plans[num-1]
+        i_id = plan.id
         form = PlanForm(instance=plan)
-        context = {'num': num, 'count': count, 'form': form}
+        context = {'num': num, 'count': count, 'form': form, 'i_id':i_id}
     return render(request, 'plan/post.html', context)
 
 

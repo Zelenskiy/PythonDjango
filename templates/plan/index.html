@@ -3,13 +3,13 @@
 
 {% block content %}
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg bg-success">
+    <div class="container-fluid " >
+        <div class="row mt-5" style=" left: 0px;">
+            <div class="col-sm " style="background: #e3f2fd;">
 
                 <div class="form-group">
                     <label for="exampleFormControlSelect2">Розділи:</label>
-                    <select multiple class="form-control" id="exampleFormControlSelect2" size="15" name="rozdili">
+                    <select  class="form-control" id="exampleFormControlSelect2" size="15" name="rozdili">
                         {% for rubric in rubrics %}
                             {% if rubric.riven == 1 %}
                                 <option id="{{ rubric.id }}" owner="{{ rubric.id_owner_id }}" hidden_child=true>
@@ -46,7 +46,7 @@
 
                 {#                <input id="nnn" type="number" value="1"/>#}
             </div>
-            <div id="pl" class="col-lg bg-secondary">
+            <div id="pl" class="col-lg "  style="background: #e3f2fd;">
 
             </div>
 
@@ -95,7 +95,8 @@
             }
         }
 
-        jQuery('#exampleFormControlSelect2').on('click', function () {
+        jQuery('#exampleFormControlSelect2').on('change', function () {
+        {#jQuery('#exampleFormControlSelect2').on('click', function () {#}
             n = 1;
             a = jQuery(this).find(":selected").attr('id');
             s = "" + a + "/" + n;
