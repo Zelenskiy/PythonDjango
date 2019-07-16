@@ -16,20 +16,20 @@
                     <select multiple class="form-control" id="exampleFormControlSelect2" size="15" name="rozdili">
                         {% for rubric in rubrics %}
                             {% if rubric.riven == 1 %}
-                                <option id="{{ rubric.id }}" owner="{{ rubric.id_owner_id }}" hidden_child="true">
+                                <option id="{{ rubric.id }}" owner="{{ rubric.id_owner_id }}" hidden_child=true>
                                     {{ rubric.n_r }}.&nbsp;{{ rubric.name }}
                                 </option>
                                 {% for rubric2 in rubrics %}
                                     {% if rubric2.riven == 2 and rubric2.id_owner_id == rubric.id %}
                                         <option id="{{ rubric2.id }}" owner="{{ rubric2.id_owner_id }}"
-                                                hidden_child="true">
+                                                hidden_child=true>
                                             &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric2.name }}
                                         </option>
 
                                         {% for rubric3 in rubrics %}
                                             {% if rubric3.riven == 3 and rubric3.id_owner_id == rubric2.id %}
                                                 <option id="{{ rubric3.id }}" owner="{{ rubric3.id_owner_id }}"
-                                                        hidden_child="true">
+                                                        hidden_child=true>
                                                     &nbsp;&nbsp; &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric3.n_r }}.&nbsp;{{ rubric3.name }}
                                                 </option>
                                             {% endif %}
@@ -69,48 +69,44 @@
         );
     </script>
     <script type="text/javascript">
+
+
         var a;
+
+
+        function isDno(el) {
+            dno = true;
+            $('option').each(function (i, elem) {
+                if ($(elem).attr("owner") == el.attr('id')) {
+                    dno = false;
+                }
+            });
+            return dno;
+        }
+
+
+        function tree(el, flag) {
+            if (isDno(el))
+                return true;
+            else {
+                el.attr("hidden_child", !flag);
+                $('option').each(function (i, elem) {
+                    if ($(elem).attr("owner") == el.attr('id')) {
+                        $(elem).attr("hidden", !flag);
+                        tree($(elem), flag);
+                    }
+                });
+            }
+        }
+
         jQuery('#exampleFormControlSelect2').on('click', function () {
             n = 1;
             a = jQuery(this).find(":selected").attr('id');
             s = "" + a + "/" + n;
             jQuery('#pl').load(s);
             el = jQuery(this).find(":selected");
-            if (el.attr('hidden_child') == 'true') {
-                el.attr('hidden_child', 'false');
-                $('option').each(function (i, elem) {
-                    if ($(this).hasClass("stop")) {
-                        return false;
-                    } else {
-                        if ($(elem).attr('owner') == el.attr('id')) {
-                            $(elem).attr("hidden", true);
-                            $('option').each(function (j, elem2) {
-                                if ($(elem2).attr("owner") == $(elem).attr('id')) {
-                                    $(elem2).attr("hidden", true);
-                                }
-                            });
-                            $(elem).attr('hidden_child', 'false');
-                        }
-                    }
-                });
-            } else {
-                el.attr('hidden_child', 'true');
-                $('option').each(function (i, elem) {
-                    if ($(this).hasClass("stop")) {
-                        return false;
-                    } else {
-                        if ($(elem).attr("owner") == el.attr('id')) {
-                            $(elem).attr("hidden", false);
-                            $('option').each(function (j, elem2) {
-                                if ($(elem2).attr("owner") == $(elem).attr('id')) {
-                                    $(elem2).attr("hidden", false);
-                                }
-                            });
-                            $(elem).attr('hidden_child', 'true');
-                        }
-                    }
-                });
-            }
+            tree(el, (el.attr('hidden_child') == 'true'));
+
         });
     </script>
 
