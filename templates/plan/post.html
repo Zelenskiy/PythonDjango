@@ -1,6 +1,7 @@
+
 {% if count != 0 %}
 
-    <form method="post">
+    <form method="post" >
         {% csrf_token %}
 
         <div class=" mb-0 ml-3">{{ form.direction_id.label_tag }} </div>
@@ -86,6 +87,7 @@
     </script>
 
 {% endif %}
+
 
 
 

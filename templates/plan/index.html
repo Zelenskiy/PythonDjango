@@ -3,55 +3,58 @@
 
 {% block content %}
 
-    <div class="container-fluid " >
-        <div class="row mt-5" style=" left: 0px;">
-            <div class="col-sm " style="background: #e3f2fd;">
 
-                <div class="form-group">
-                    <label for="exampleFormControlSelect2">Розділи:</label>
-                    <select  class="form-control" id="exampleFormControlSelect2" size="15" name="rozdili">
-                        {% for rubric in rubrics %}
-                            {% if rubric.riven == 1 %}
-                                <option id="{{ rubric.id }}" owner="{{ rubric.id_owner_id }}" hidden_child=true>
-                                    {{ rubric.n_r }}.&nbsp;{{ rubric.name }}
-                                </option>
-                                {% for rubric2 in rubrics %}
-                                    {% if rubric2.riven == 2 and rubric2.id_owner_id == rubric.id %}
-                                        <option id="{{ rubric2.id }}" owner="{{ rubric2.id_owner_id }}"
-                                                hidden_child=true>
-                                            &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric2.name }}
-                                        </option>
+    <div class="row mt-lg-5">
+        <div class="col-md-4" style=" background: #e3f2fd;">
+            <div class="">
 
-                                        {% for rubric3 in rubrics %}
-                                            {% if rubric3.riven == 3 and rubric3.id_owner_id == rubric2.id %}
-                                                <option id="{{ rubric3.id }}" owner="{{ rubric3.id_owner_id }}"
-                                                        hidden_child=true>
-                                                    &nbsp;&nbsp; &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric3.n_r }}.&nbsp;{{ rubric3.name }}
-                                                </option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        {% endfor %}
+                <label for="exampleFormControlSelect2">Розділи:</label>
+                <select class="form-control small" id="exampleFormControlSelect2" size="15" name="rozdili"
+                        style="overflow-x:auto;">
+                    {% for rubric in rubrics %}
+                        {% if rubric.riven == 1 %}
+                            <option id="{{ rubric.id }}" owner="{{ rubric.id_owner_id }}" hidden_child=true>
+                                {{ rubric.n_r }}.&nbsp;{{ rubric.name }}
+                            </option>
+                            {% for rubric2 in rubrics %}
+                                {% if rubric2.riven == 2 and rubric2.id_owner_id == rubric.id %}
+                                    <option id="{{ rubric2.id }}" owner="{{ rubric2.id_owner_id }}"
+                                            hidden_child=true>
+                                        &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric2.name }}
+                                    </option>
 
-                        {#                            {{ rubrics_code|safe }}#}
-                        {#                            {% autoescape off  %}#}
-                        {#                                {{ rubrics_code }}#}
-                        {#                            {% endautoescape %}#}
+                                    {% for rubric3 in rubrics %}
+                                        {% if rubric3.riven == 3 and rubric3.id_owner_id == rubric2.id %}
+                                            <option id="{{ rubric3.id }}" owner="{{ rubric3.id_owner_id }}"
+                                                    hidden_child=true>
+                                                &nbsp;&nbsp; &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric3.n_r }}.&nbsp;{{ rubric3.name }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
 
-                    </select>
-                </div>
+                    {#                            {{ rubrics_code|safe }}#}
+                    {#                            {% autoescape off  %}#}
+                    {#                                {{ rubrics_code }}#}
+                    {#                            {% endautoescape %}#}
 
-
-                {#                <input id="nnn" type="number" value="1"/>#}
+                </select>
             </div>
-            <div id="pl" class="col-lg "  style="background: #e3f2fd;">
 
-            </div>
+
+            {#                <input id="nnn" type="number" value="1"/>#}
+        </div>
+
+        <div id="pl" class="col-md-8 " style="background: #e3f2fd;">
 
         </div>
+
+
     </div>
+
 
     <script type="text/javascript">
         var n = 1;
@@ -96,7 +99,7 @@
         }
 
         jQuery('#exampleFormControlSelect2').on('change', function () {
-        {#jQuery('#exampleFormControlSelect2').on('click', function () {#}
+            {#jQuery('#exampleFormControlSelect2').on('click', function () {#}
             n = 1;
             a = jQuery(this).find(":selected").attr('id');
             s = "" + a + "/" + n;
