@@ -1,31 +1,36 @@
 {% if count != 0 %}
-    <p>id={{ plan.id }}&nbsp;&nbsp;&nbsp;{{ num }}&nbsp;(<span id="count_id">{{ count }}</span>)</p>
+
     <form method="post">
         {% csrf_token %}
 
-        {#    <div class="form-group">#}
-        {#        <label for="exampleFormControlSelect1">Мета</label>#}
-        {#        <select class="form-control" id="exampleFormControlSelect1">#}
-        {#            {% for resp in resps %}#}
-        {#                <option>{{ resp.name }}</option>#}
-        {#            {% endfor %}#}
-        {#        </select>#}
-        {#    </div>#}
-        <div class="form-group">
-            <div class=" mb-0 ml-3">{{ form.direction_id.label_tag }} </div>
-            <div class="card text-white bg-info mb-1 ml-3 ">{{ form.direction_id }}</div>
-            <div class=" mb-0 ml-3">{{ form.purpose_id.label_tag }} </div>
-            <div class="card text-white bg-info mb-1 ml-3 ">{{ form.purpose_id }}</div>
-            <div class=" mb-0 ml-3">{{ form.content.label_tag }} </div>
-            <div class="card text-white bg-info mb-1 ml-3 ">{{ form.content }}</div>
+        <div class=" mb-0 ml-3">{{ form.direction_id.label_tag }} </div>
+        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.direction_id }}</div>
+
+        <div class=" mb-0 ml-3">{{ form.purpose_id.label_tag }} </div>
+        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.purpose_id }}</div>
+
+        <div class=" mb-0 ml-3">{{ form.content.label_tag }} </div>
+        <div class="card text-white bg-info mb-1 ml-3 small">{{ form.content }}</div>
+
+       <div class=" mb-0 ml-3">{{ form.generalization.label_tag }} </div>
+        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.generalization }}</div>
+
+        <div class=" mb-0 ml-3">{{ form.responsible.label_tag }} </div>
+        <div class="card text-white bg-info mb-1 ml-3  small">{{ form.responsible }}</div>
+
+        <div class=" mb-0 ml-3">{{ form.termin.label_tag }} </div>
+        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.termin }}</div>
 
 
-            <div class="ml-3 mt-3 mb-3">
-                <input id="first" type="button" value="Початок"/>
-                <input id="prev" type="button" value="Попередній"/>
-                <input id="next" type="button" value="Наступний"/>
-                <input id="last" type="button" value="Кінець"/>
-            </div>
+        <div class=" mb-0 ml-3">{{ form.note.label_tag }} </div>
+        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.note }}</div>
+
+        <div class="ml-3 mt-3 mb-3">
+            <input id="first" type="button" value="Початок"/>
+            <input id="prev" type="button" value="Попередній"/>
+            <input id="next" type="button" value="Наступний"/>
+            <input id="last" type="button" value="Кінець"/>
+           &nbsp;&nbsp; id={{ plan.id }}&nbsp;&nbsp;&nbsp;{{ num }}&nbsp;(<span id="count_id">{{ count }}</span>)
         </div>
 
 

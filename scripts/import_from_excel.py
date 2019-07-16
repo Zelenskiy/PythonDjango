@@ -49,7 +49,7 @@ def imp_1(self):
         p.termin = var_to_str(sheet['D' + str(r)].value)
         p.generalization = var_to_str(sheet['E' + str(r)].value)
         p.responsible = var_to_str(sheet['F' + str(r)].value)
-        p.note = var_to_str(sheet['F' + str(r)].value)
+        p.note = var_to_str(sheet['G' + str(r)].value)
 
         p.sort = var_to_float(sheet['H' + str(r)].value)
         p.direction_id = var_to_int(sheet['I' + str(r)].value)

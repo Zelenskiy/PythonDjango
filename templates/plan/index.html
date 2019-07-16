@@ -2,17 +2,13 @@
 {#{% import os %}#}
 
 {% block content %}
-    <script type="text/javascript">var addres = "";</script>
-    <h2>
-        <div id="title">&nbsp;</div>
-    </h2>
-    {#    <input id="titleX" type="text" value="" /><br>#}
-    <div class="container-fluid ">
-        <div class="row align-items-lg-baseline">
-            <div class="col-5 mx-auto col-md-6 order-md-2 bg-danger text-white ">
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg bg-success">
 
                 <div class="form-group">
-                    <label for="exampleFormControlSelect2">Example multiple select</label>
+                    <label for="exampleFormControlSelect2">Розділи:</label>
                     <select multiple class="form-control" id="exampleFormControlSelect2" size="15" name="rozdili">
                         {% for rubric in rubrics %}
                             {% if rubric.riven == 1 %}
@@ -50,7 +46,7 @@
 
                 {#                <input id="nnn" type="number" value="1"/>#}
             </div>
-            <div id="pl" class="col-6 mx-auto  col-md-6 order-md-2 bg-danger text-white ml-5 ">
+            <div id="pl" class="col-lg bg-secondary">
 
             </div>
 
