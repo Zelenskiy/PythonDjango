@@ -74,13 +74,15 @@
 
 
         function isDno(el) {
-            dno = true;
+            {#dno = true;#}
             $('option').each(function (i, elem) {
                 if ($(elem).attr("owner") == el.attr('id')) {
-                    dno = false;
+                    {#dno = false;#}
+                    return false;
                 }
             });
-            return dno;
+            return true;
+            {#return dno;#}
         }
 
 

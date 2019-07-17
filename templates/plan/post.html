@@ -29,24 +29,26 @@
 
         <div class="ml-3 mt-3 mb-3">
             <div class="btn-group btn-group">
-                <button type="button" id="first" class="btn btn-primary"
+                <button type="button" id="first" class="btn btn-primary bg-info"
                         style="width: 50px; background-color: rgba(0, 0, 0, 0.4);">&lt;&lt;
-                </button>
-                <button type="button" id="prev" class="btn btn-primary"
+                </button>&nbsp;
+                <button type="button" id="prev" class="btn btn-primary bg-info"
                         style="width: 50px; background-color: rgba(0, 0, 0, 0.4);">&lt;
-                </button>
-                <button type="button" id="next" class="btn btn-primary"
+                </button>&nbsp;
+                <button type="button" id="next" class="btn btn-primary bg-info"
                         style="width: 50px; background-color: rgba(0, 0, 0, 0.4);">&gt;
-                </button>
-                <button type="button" id="last" class="btn btn-primary"
-                        style="width: 50px; background-color: rgba(0, 0, 0, 0.4);">&gt;&gt;
+                </button>&nbsp;
+                <button type="button" id="last" class="btn btn-primary bg-info"
+                        style="width: 50px; ">&gt;&gt;
                 </button>
             </div>
             {#            <input id="first" type="button" value="Початок"/>#}
             {#            <input id="prev" type="button" value="Попередній"/>#}
             {#            <input id="next" type="button" value="Наступний"/>#}
             {#            <input id="last" type="button" value="Кінець"/>#}
-            &nbsp;&nbsp; id={{ i_id }}&nbsp;&nbsp;&nbsp;{{ num }}&nbsp;(<span id="count_id">{{ count }}</span>)
+            &nbsp;&nbsp; id={{ i_id }}&nbsp;&nbsp;&nbsp;{{ num }}&nbsp;(<span id="count_id">{{ count }}</span>) &nbsp;&nbsp;
+            <input id="goEdit" type="checkbox" aria-label="Дозволити редагування">
+            <label class="form-check-label" for="goEdit">Дозволити редагування</label>
         </div>
 
     </form>

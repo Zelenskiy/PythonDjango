@@ -9,6 +9,7 @@ from django.utils.html import escape
 
 global s
 
+
 def index(request):
     return render(request, 'plan/index.html')
 
@@ -19,16 +20,20 @@ def kostil(s):
     c = s.rfind('/')
     return s[:c + 1] + 'post/', s[:c + 1] + 'postr/'
 
+
 def make_rubrics(rubrics):
     rubrics_code = ''
     for rubric in rubrics:
-        rubrics_code += ' <option id="'+ str(rubric.id) +'" level="'+str(rubric.riven)+'" >'+rubric.name+'</option >'+''
+        rubrics_code += ' <option id="' + str(rubric.id) + '" level="' + str(
+            rubric.riven) + '" >' + rubric.name + '</option >' + ''
     return escape(rubrics_code)
 
-def add (request):
+
+def add(request):
     if request.method == "POST":
-        context = {}
-        return render(request, 'plan/add.html', context)
+        plan = {}
+        context = {'plan': plan}
+        return render(request, 'plan/post.html', context)
 
 
 def view(request):
@@ -44,11 +49,11 @@ def view(request):
     return render(request, 'plan/index.html', context)
 
 
-
 def post(request, id):
     plans = Plan.objects.filter(id=id)
     context = {'plans': plans}
     return render(request, 'plan/post.html', context)
+
 
 # def getjson(request):
 #     context = {'s': s}
@@ -80,10 +85,10 @@ def postr(request, r_id, num):
             return render(request, 'plan/post_empty.html')
         if num >= count:
             num = count
-        plan = plans[num-1]
+        plan = plans[num - 1]
         i_id = plan.id
         form = PlanForm(instance=plan)
-        context = {'num': num, 'count': count, 'form': form, 'i_id':i_id}
+        context = {'num': num, 'count': count, 'form': form, 'i_id': i_id}
     return render(request, 'plan/post.html', context)
 
 
