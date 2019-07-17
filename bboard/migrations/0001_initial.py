@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('content', models.TextField(blank=True, null=True, verbose_name='Опис')),
-                ('image', models.ImageField(blank=True, null=True, upload_to='user_images')),
+                ('images', models.ImageField(blank=True, null=True, upload_to='user_images')),
                 ('bb', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='bboard.Bb')),
             ],
             options={

@@ -1,13 +1,10 @@
 from django.db.models import Max
 from django.shortcuts import render
 
-from PythonDjango.settings import BASE_DIR
 from plan.forms import PlanForm
 from plan.models import Plan, Rubric, Responsibl
-from scripts.import_from_excel import imp_1, imp_2, imp_3, imp_4
 from django.utils.html import escape
 
-global s
 
 
 def index(request):
@@ -51,26 +48,6 @@ def post(request, id):
     context = {'plans': plans}
     return render(request, 'plan/post.html', context)
 
-
-# def getjson(request):
-#     context = {'s': s}
-#     return render(request, 'plan/index.html', context)
-
-# def postr(request, r_id, num):
-#     plans = Plan.objects.filter(r_id=r_id)
-#     if request.method == "POST":
-#         pass
-#     else:
-#         resps = Responsibl.objects.all()
-#         count = len(plans)
-#         if count == 0:
-#             return render(request, 'plan/post_empty.html')
-#         if num >= count:
-#             num = count
-#         plan = plans[num-1]
-#         context = {'plan': plan, 'num': num, 'resps': resps, 'count': count}
-#     return render(request, 'plan/post.html', context)
-
 def postr(request, r_id, num):
     plans = Plan.objects.filter(r_id=r_id)
     if request.method == "POST":
@@ -92,3 +69,5 @@ def postr(request, r_id, num):
 def imp_from_excel(request):
     # imp_1(None)
     return render(request, 'plan/index.html')
+
+

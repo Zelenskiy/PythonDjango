@@ -18,6 +18,8 @@ MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 IMAGES_PREV_URL = os.path.join(MEDIA_ROOT, 'user_images/../media/user_images_prev')
+# Redirect to home URL after login (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = '/'
 
 
 
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     'bboard.apps.BboardConfig',
     'plan.apps.PlanConfig',
     'flowers.apps.FlowersConfig',
+
     # 'bootstrap3',
     # 'scripts.import_from_excel',
     'django.contrib.admin',
@@ -64,7 +67,10 @@ ROOT_URLCONF = 'PythonDjango.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),
+
+
+                 ]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -143,3 +149,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+

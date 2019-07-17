@@ -43,13 +43,13 @@ class Bb(models.Model):
         size = (int(width / factor), int(height / factor))
         image_prev = image.resize(size, Image.ANTIALIAS)
         image_prev.save(self.photo_prev.path)
-        # image.save(self.photo_ori.path)
+        # images.save(self.photo_ori.path)
         file_name = os.path.basename(str(self.photo_prev.path))
         # self.photo = file_name
         image.save(os.path.join(MEDIA_DIR, 'user_images', file_name))
 
 
-        # image.save(self.photo.path)
+        # images.save(self.photo.path)
 
     class Meta:
         verbose_name_plural = 'Объявления'

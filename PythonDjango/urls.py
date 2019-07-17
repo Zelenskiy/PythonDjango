@@ -19,16 +19,22 @@ from django.conf.urls.static import static
 from django.urls import path, include
 # from bboard.views import index
 from PythonDjango import settings
+from PythonDjango.views import main
 from bboard.views import index
 
 urlpatterns = [
 
-    path('admin/', admin.site.urls),
-    path('bboard/', include('bboard.urls')),
-    path('plan/', include('plan.urls')),
+                  path('admin/', admin.site.urls),
+                  path('bboard/', include('bboard.urls')),
+                  path('plan/', include('plan.urls')),
 
-    # path('', include('bboard.urls', namespace='')),
-    url(r'^flowers/', include('flowers.urls')),
+                  path('/', include('plan.urls')),
+                  url(r'^flowers/', include('flowers.urls')),
 
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Add Django site authentication urls (for login, logout, password management)
+urlpatterns += [
+    url(r'^accounts/', include('django.contrib.auth.urls')),
+
+]
