@@ -20,7 +20,6 @@ def kostil(s):
     c = s.rfind('/')
     return s[:c + 1] + 'post/', s[:c + 1] + 'postr/'
 
-
 def make_rubrics(rubrics):
     rubrics_code = ''
     for rubric in rubrics:
@@ -28,13 +27,11 @@ def make_rubrics(rubrics):
             rubric.riven) + '" >' + rubric.name + '</option >' + ''
     return escape(rubrics_code)
 
-
 def add(request):
     if request.method == "POST":
         plan = {}
         context = {'plan': plan}
         return render(request, 'plan/post.html', context)
-
 
 def view(request):
     s = ""
