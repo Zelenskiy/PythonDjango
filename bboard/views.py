@@ -35,7 +35,7 @@ def index(request):
 
 
 # class BbCreateView(CreateView):
-#     template_name = 'bboard/create.html'
+#     template_name = 'bboard/add.html'
 #     form_class = BbForm
 #     success_url = reverse_lazy('index')
 #
@@ -46,7 +46,7 @@ def index(request):
 
 # def add(ObjectCreateMixin):
 #     model_form = BbForm
-#     template = 'bboard/create.html'
+#     template = 'bboard/add.html'
 
 def add(request):
     post = Bb(title='', content='', price='')
@@ -130,7 +130,7 @@ def edit(request, slug):
 #     bbf = BbForm()
 #     rubrics = Rubric.objects.all()
 #     context = {'form': bbf,  'rubrics': rubrics}
-#     return render(request, 'bboard/create.html', context)
+#     return render(request, 'bboard/add.html', context)
 #
 #
 # def add_save(request):
@@ -139,7 +139,7 @@ def edit(request, slug):
 #         return HttpResponseRedirect(reverse('by_rubric', kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
 #     else:
 #         context = {'form': bbf}
-#         return render(request, 'bboard/create.html', context)
+#         return render(request, 'bboard/add.html', context)
 
 
 # name: это строка которую транслитим

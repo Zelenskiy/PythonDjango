@@ -25,6 +25,12 @@ def make_rubrics(rubrics):
         rubrics_code += ' <option id="'+ str(rubric.id) +'" level="'+str(rubric.riven)+'" >'+rubric.name+'</option >'+''
     return escape(rubrics_code)
 
+def add (request):
+    if request.method == "POST":
+        context = {}
+        return render(request, 'plan/add.html', context)
+
+
 def view(request):
     s = ""
     plans = Plan.objects.all()

@@ -17,13 +17,14 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.urls import path
 from PythonDjango import settings
-from plan.views import index, imp_from_excel, view, post, postr
+from plan.views import index, imp_from_excel, view, post, postr, add
 
 urlpatterns = [
 
                   path('', index, name='index'),
                   path('import/', imp_from_excel, name='imp_from_excel'),
                   path('view/', view, name='view'),
+                  path('add/', add, name='add'),
                   # path('getjson/', getjson, name='getjson'),
                   # path('view/<int:id>', view, name='view'),
                   path('post/<int:id>', post, name='post'),
