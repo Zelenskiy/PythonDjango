@@ -1,6 +1,10 @@
-{% extends "layout/basic.html" %}
+{% extends "layout/basic_plan.html" %}
+
 
 {% block content %}
+<div class="container mt-lg-5 ml-3">
+        <div class="row">
+
 
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
@@ -36,4 +40,8 @@
 {# Assumes you setup the password_reset view in your URLconf #}
 <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
 
+
+</div>
+    </div>
 {% endblock %}
+

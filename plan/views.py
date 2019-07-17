@@ -15,6 +15,9 @@ from django.utils.html import escape
 def index(request):
     return render(request, 'plan/index.html')
 
+def login(request):
+    return render(request, 'registration/login.html.html')
+
 
 def kostil(s):
     c = s.rfind('/')
