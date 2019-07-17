@@ -4,7 +4,7 @@ from django.views.generic.edit import FormView
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Max
 from django.shortcuts import render
-# from django.views.generic import FormView
+
 
 from plan.forms import PlanForm, UserRegistrationForm
 from plan.models import Plan, Rubric

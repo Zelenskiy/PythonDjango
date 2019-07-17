@@ -32,7 +32,6 @@ urlpatterns = [
                   path('/', include('plan.urls')),
                   url(r'^flowers/', include('flowers.urls')),
                   path('registration/register/', MyRegisterFormView.as_view(), name="register"),
-                  # path('accounts/login/', login, name="login"),
 
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

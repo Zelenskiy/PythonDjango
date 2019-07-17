@@ -29,6 +29,5 @@ urlpatterns = [
                   path('post/<int:id>', post, name='post'),
                   path('postr/<int:r_id>/<int:num>', postr, name='postr'),
                   path('view/<int:r_id>/<int:num>', postr, name='postr'),
-                  # path('register/', MyRegisterFormView.as_view(), name="register"),
 
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                   ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
