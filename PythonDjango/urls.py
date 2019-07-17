@@ -21,6 +21,7 @@ from django.urls import path, include
 from PythonDjango import settings
 from PythonDjango.views import main
 from bboard.views import index
+from plan.views import MyRegisterFormView
 
 urlpatterns = [
 
@@ -30,6 +31,7 @@ urlpatterns = [
 
                   path('/', include('plan.urls')),
                   url(r'^flowers/', include('flowers.urls')),
+                  path('registration/register/', MyRegisterFormView.as_view(), name="register"),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

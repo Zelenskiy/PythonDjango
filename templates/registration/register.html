@@ -1,0 +1,17 @@
+{% extends "layout/basic_plan.html" %}
+
+{% block content %}
+    <div class="row mt-lg-5">
+
+
+            <form action="" method="post">{% csrf_token %}
+                {{ form.as_table }}
+{#{{ form.password1 }}#}
+{#{{ form.password2 }}#}
+
+                <input type="submit" value="Зарегистрировать">
+            </form>
+
+    </div>
+
+{% endblock %}

@@ -4,159 +4,167 @@
 
 {% block content %}
 
+    {% if user.is_authenticated %}
 
-    <div class="row mt-lg-5">
-        <div class="col-md-4 " style="background: #e3f2fd;">
-            <div class="">
 
-                <label for="exampleFormControlSelect2">Розділи:</label>
-                <select class="form-control small" id="exampleFormControlSelect2" size="23" name="rozdili"
-                        style="overflow-x:auto; ">
-                    {% for rubric in rubrics %}
-                        {% if rubric.riven == 1 %}
-                            <option id="{{ rubric.id }}" owner="{{ rubric.id_owner_id }}" hidden_child=true r="0">
-                                {{ rubric.n_r }}.&nbsp;{{ rubric.name }}
-                            </option>
-                            {% for rubric2 in rubrics %}
-                                {% if rubric2.riven == 2 and rubric2.id_owner_id == rubric.id %}
-                                    <option id="{{ rubric2.id }}" owner="{{ rubric2.id_owner_id }}"
-                                            hidden_child=true r="0">
-                                        &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric2.name }}
-                                    </option>
+        <div class="row mt-lg-5">
+            <div class="col-md-4 " style="background: #e3f2fd;">
+                <div class="">
 
-                                    {% for rubric3 in rubrics %}
-                                        {% if rubric3.riven == 3 and rubric3.id_owner_id == rubric2.id %}
-                                            <option id="{{ rubric3.id }}" owner="{{ rubric3.id_owner_id }}"
-                                                    hidden_child=true r="0">
-                                                &nbsp;&nbsp; &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric3.n_r }}.&nbsp;{{ rubric3.name }}
-                                            </option>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    {% endfor %}
 
-                    {#                            {{ rubrics_code|safe }}#}
-                    {#                            {% autoescape off       %}#}
-                    {#                                {{ rubrics_code }}#}
-                    {#                            {% endautoescape %}#}
+                    <label for="exampleFormControlSelect2">Розділи:</label>
+                    <select class="form-control small" id="exampleFormControlSelect2" size="22" name="rozdili"
+                            style="overflow-x:auto; ">
+                        {% for rubric in rubrics %}
+                            {% if rubric.riven == 1 %}
+                                <option id="{{ rubric.id }}" owner="{{ rubric.id_owner_id }}" hidden_child=true r="0">
+                                    {{ rubric.n_r }}.&nbsp;{{ rubric.name }}
+                                </option>
+                                {% for rubric2 in rubrics %}
+                                    {% if rubric2.riven == 2 and rubric2.id_owner_id == rubric.id %}
+                                        <option id="{{ rubric2.id }}" owner="{{ rubric2.id_owner_id }}"
+                                                hidden_child=true r="0">
+                                            &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric2.name }}
+                                        </option>
 
-                </select>
-                <div class="row justify-content-center align-items-center ">
-                    <button type="button" id="collapse" class="btn" style="">
-                        {#                    &curren#}
-                        <img src="{% static "images/btn.png" %}" style="width: 16px">
-                    </button>
-                    <p>&nbsp;</p>
-                    {#               <button type="button" id="deploy" class="btn btn-primary small bg-info"#}
-                    {#                        style="width: 50px; ">&gt;&lt;#}
-                    {#                </button>#}
+                                        {% for rubric3 in rubrics %}
+                                            {% if rubric3.riven == 3 and rubric3.id_owner_id == rubric2.id %}
+                                                <option id="{{ rubric3.id }}" owner="{{ rubric3.id_owner_id }}"
+                                                        hidden_child=true r="0">
+                                                    &nbsp;&nbsp; &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric3.n_r }}.&nbsp;{{ rubric3.name }}
+                                                </option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {#                            {{ rubrics_code|safe }}#}
+                        {#                            {% autoescape off       %}#}
+                        {#                                {{ rubrics_code }}#}
+                        {#                            {% endautoescape %}#}
+
+                    </select>
+                    <div class="row justify-content-center align-items-center ">
+                        <button type="button" id="collapse" class="btn" style="">
+                            {#                    &curren#}
+                            <img src="{% static "images/btn.png" %}" style="width: 16px">
+                        </button>
+                        <p>&nbsp;</p>
+                        {#               <button type="button" id="deploy" class="btn btn-primary small bg-info"#}
+                        {#                        style="width: 50px; ">&gt;&lt;#}
+                        {#                </button>#}
+
+                    </div>
 
                 </div>
+                {#                <input id="nnn" type="number" value="1"/>#}
+            </div>
+
+            <div id="pl" class="col-md-8 " style="background: #e3f2fd;">
 
             </div>
-            {#                <input id="nnn" type="number" value="1"/>#}
-        </div>
 
-        <div id="pl" class="col-md-8 " style="background: #e3f2fd;">
 
         </div>
 
 
-    </div>
+        <script type="text/javascript">
+            var n = 1;
+            var rubr_id_max = 57;
 
-
-    <script type="text/javascript">
-        var n = 1;
-        var rubr_id_max = 57;
-
-        jQuery(document).ready(function () {
-                n = 1;
-                {#alert("{{ rubr_id_max }}");#}
-                {#        jQuery('#titleX').val("{{ rubr_id_max|  }}");#}
-            }
-        );
-    </script>
-    <script type="text/javascript">
-
-
-        var a;
-        {#ww#}
-
-        function isDno(el) {
-            dno = true;
-            var k = 0;
-            $('option').each(function (i, elem) {
-                k = k + 1;
-                if (($(elem).attr("owner") == el.attr('id')) && ($(elem).attr("r") == "0")) {
-                    dno = false;
+            jQuery(document).ready(function () {
+                    n = 1;
+                    {#alert("{{ rubr_id_max }}");#}
+                    {#        jQuery('#titleX').val("{{ rubr_id_max|  }}");#}
                 }
-                ;
-            });
-            return dno;
-        }
+            );
+        </script>
+        <script type="text/javascript">
 
 
-        function tree(el, flag) {
-            if (isDno(el)) {
-                return true;
-            } else {
+            var a;
+            {#ww#}
+
+            function isDno(el) {
+                dno = true;
+                var k = 0;
+                $('option').each(function (i, elem) {
+                    k = k + 1;
+                    if (($(elem).attr("owner") == el.attr('id')) && ($(elem).attr("r") == "0")) {
+                        dno = false;
+                    }
+                    ;
+                });
+                return dno;
+            }
+
+
+            function tree(el, flag) {
+                if (isDno(el)) {
+                    return true;
+                } else {
+                    el.attr("hidden_child", !flag);
+                    $('option').each(function (i, elem) {
+                        if ($(elem).attr("owner") == el.attr('id')) {
+                            $(elem).attr("hidden", !flag);
+                            tree($(elem), flag);
+                        }
+                    });
+                }
+            }
+
+            function tree_all(el, flag) {
+
                 el.attr("hidden_child", !flag);
                 $('option').each(function (i, elem) {
-                    if ($(elem).attr("owner") == el.attr('id')) {
+                    if (($(elem).attr("r") == "0") && ($(elem).attr("owner") != 0)) {
                         $(elem).attr("hidden", !flag);
                         tree($(elem), flag);
                     }
                 });
+
             }
-        }
 
-        function tree_all(el, flag) {
+            jQuery('#exampleFormControlSelect2').on('change', function () {
+                {#jQuery('#exampleFormControlSelect2').on('click', function () {#}
+                n = 1;
+                a = jQuery(this).find(":selected").attr('id');
+                s = "" + a + "/" + n;
+                jQuery('#pl').load(s);
+                {#el = jQuery(this).find(":selected");#}
+                {#tree(el, (el.attr('hidden_child') == 'true'));#}
 
-            el.attr("hidden_child", !flag);
-            $('option').each(function (i, elem) {
-                if (($(elem).attr("r") == "0") && ($(elem).attr("owner") != 0)) {
-                    $(elem).attr("hidden", !flag);
-                    tree($(elem), flag);
-                }
             });
 
-        }
+            jQuery('#exampleFormControlSelect2').on('dblclick', function () {
+                el = jQuery(this).find(":selected");
+                tree(el, (el.attr('hidden_child') == 'true'));
+            });
 
-        jQuery('#exampleFormControlSelect2').on('change', function () {
-            {#jQuery('#exampleFormControlSelect2').on('click', function () {#}
-            n = 1;
-            a = jQuery(this).find(":selected").attr('id');
-            s = "" + a + "/" + n;
-            jQuery('#pl').load(s);
-            {#el = jQuery(this).find(":selected");#}
-            {#tree(el, (el.attr('hidden_child') == 'true'));#}
+            var collapse_flag = true;
 
-        });
+            jQuery('#collapse').on('click', function () {
+                el = jQuery(this).find(":selected");
+                {#console.log("Зайшли в collapse");#}
+                collapse_flag = !collapse_flag;
+                tree_all(el, collapse_flag);
+            });
 
-        jQuery('#exampleFormControlSelect2').on('dblclick', function () {
-            el = jQuery(this).find(":selected");
-            tree(el, (el.attr('hidden_child') == 'true'));
-        });
-
-        var collapse_flag = true;
-
-        jQuery('#collapse').on('click', function () {
-            el = jQuery(this).find(":selected");
-            {#console.log("Зайшли в collapse");#}
-            collapse_flag = !collapse_flag;
-            tree_all(el, collapse_flag);
-        });
-
-        {#jQuery('#deploy').on('click', function () {#}
-        {#      el = jQuery(this).find(":selected");#}
-        {#      console.log("Зайшли в deploy");#}
-        {#      tree_all(el, true);#}
-        {#  });#}
+            {#jQuery('#deploy').on('click', function () {#}
+            {#      el = jQuery(this).find(":selected");#}
+            {#      console.log("Зайшли в deploy");#}
+            {#      tree_all(el, true);#}
+            {#  });#}
 
 
-    </script>
+        </script>
+    {% else %}
+        <script>
+            alert("Увійдіть");
+            {#location.href = "../../accounts/login/";#}
+        </script>
 
-
+    {% endif %}
 {% endblock %}

@@ -1,5 +1,7 @@
 from django.forms import ModelForm, Textarea
-
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from plan.models import Plan
 from django.views.generic.edit import FormView
 from django.contrib.auth.forms import UserCreationForm
@@ -10,22 +12,21 @@ class PlanForm(ModelForm):
         fields = {'id', 'content', 'termin', 'generalization', 'responsible', 'note', 'sort', \
                   'direction_id', 'purpose_id', 'show', 'done'}
         widgets = {
-            'content': Textarea(attrs={'rows': '6'}),
+            'content': Textarea(attrs={'rows': '4'}),
         }
 
-class RegisterFormView(FormView):
-    form_class = UserCreationForm
 
-    # Ссылка, на которую будет перенаправляться пользователь в случае успешной регистрации.
-    # В данном случае указана ссылка на страницу входа для зарегистрированных пользователей.
-    success_url = "/login/"
 
-    # Шаблон, который будет использоваться при отображении представления.
-    template_name = "register.html"
+class UserRegistrationForm(forms.ModelForm):
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Repeat password', widget=forms.PasswordInput)
 
-    def form_valid(self, form):
-        # Создаём пользователя, если данные в форму были введены корректно.
-        form.save()
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'email')
 
-        # Вызываем метод базового класса
-        return super(RegisterFormView, self).form_valid(form)
+    def clean_password2(self):
+        cd = self.cleaned_data
+        if cd['password'] != cd['password2']:
+            raise forms.ValidationError('Passwords don\'t match.')
+        return cd['password2']

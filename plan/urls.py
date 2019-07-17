@@ -17,10 +17,10 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.urls import path, include
 from PythonDjango import settings
-from plan.views import index, imp_from_excel, view, post, postr, add
+
+from plan.views import index, imp_from_excel, view, post, postr, add, MyRegisterFormView
 
 urlpatterns = [
-
 
                   path('import/', imp_from_excel, name='imp_from_excel'),
                   path('view/', view, name='view'),
@@ -29,7 +29,6 @@ urlpatterns = [
                   path('post/<int:id>', post, name='post'),
                   path('postr/<int:r_id>/<int:num>', postr, name='postr'),
                   path('view/<int:r_id>/<int:num>', postr, name='postr'),
+                  # path('register/', MyRegisterFormView.as_view(), name="register"),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
