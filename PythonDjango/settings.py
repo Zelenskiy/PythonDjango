@@ -20,6 +20,7 @@ MEDIA_URL = '/media/'
 IMAGES_PREV_URL = os.path.join(MEDIA_ROOT, 'user_images/../media/user_images_prev')
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
+STATIC_ROOT = '/plan/static/'
 
 
 
