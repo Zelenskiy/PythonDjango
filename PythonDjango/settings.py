@@ -20,7 +20,11 @@ MEDIA_URL = '/media/'
 IMAGES_PREV_URL = os.path.join(MEDIA_ROOT, 'user_images/../media/user_images_prev')
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
-STATIC_ROOT = '/static/'
+# STATIC_ROOT = '/static/'
+
+
+
+
 
 
 
@@ -61,9 +65,26 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'PythonDjango.urls'
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# STATICFILES_STORAGE = 'django.storage.CompressedManifestStaticFilesStorage'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_TMP = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
+
+os.makedirs(STATIC_TMP, exist_ok=True)
+os.makedirs(STATIC_ROOT, exist_ok=True)
+
+STATICFILES_DIRS = (
+os.path.join(BASE_DIR, 'static'),
+)
+
 
 TEMPLATES = [
     {
