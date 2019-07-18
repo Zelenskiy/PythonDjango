@@ -50,9 +50,17 @@
                         <button type="button" id="collapse" class="btn" style="">
                             {#                    &curren#}
                             <img src="{% static "images/btn.png" %}" style="width: 16px">
-{#                            <img src="{% static "images/btn.png" %}" style="width: 16px">#}
+                            {#                            <img src="{% static "images/btn.png" %}" style="width: 16px">#}
 
                         </button>
+{#                        <form method="post" action="addaddform/">#}
+{#                            {% csrf_token %}#}
+                            <button id="add" class="btn btn-primary"
+                                    style="width: 100px; background-color: rgba(0, 0, 0, 0.4);">
+                                Додати
+                            </button>
+{#                        </form>#}
+
                         <p>&nbsp;</p>
 
                     </div>
@@ -81,6 +89,7 @@
 
 
             var a;
+
             function isDno(el) {
                 dno = true;
                 var k = 0;
@@ -122,16 +131,10 @@
             }
 
             jQuery('#exampleFormControlSelect2').on('change', function () {
-                {#jQuery('#exampleFormControlSelect2').on('click', function () {#}
                 n = 1;
-                {#ad = window.location.href;#}
                 a = jQuery(this).find(":selected").attr('id');
                 s = "" + a + "/" + n;
-                {#console.log("ad="+ad+"a ="+a+" s="+s)#}
                 jQuery('#pl').load(s);
-                {#el = jQuery(this).find(":selected");#}
-                {#tree(el, (el.attr('hidden_child') == 'true'));#}
-
             });
 
             jQuery('#exampleFormControlSelect2').on('dblclick', function () {
@@ -148,6 +151,17 @@
                 tree_all(el, collapse_flag);
             });
         </script>
+        {#TODO#}
+        <script>
+            jQuery("#add").on('click', function () {
+                a = jQuery('#exampleFormControlSelect2').find(":selected").attr('id');
+                s = "" + a ;
+                {#jQuery('#pl').load(s);#}
+                jQuery('#pl').load('http://127.0.0.1:8000/plan/add/'+a);
+            });
+
+        </script>
+
     {% else %}
         <script>
             alert("Увійдіть");
@@ -158,4 +172,4 @@
     {% endif %}
 {% endblock %}
 
-влдаоілдаоівлдаовілдоалдвіоадвіоавідж
+

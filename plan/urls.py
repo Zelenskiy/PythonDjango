@@ -24,11 +24,13 @@ urlpatterns = [
 
                   path('import/', imp_from_excel, name='imp_from_excel'),
                   path('view/', view, name='view'),
+                  path('add/<int:r_id>/', add, name='add'),
                   path('', view, name='view'),
-                  path('add/', add, name='add'),
+                  # path('add/<int:r_id>', add, name='add'),
+                  # path('add/<int:r_id>/', addnew, name='addnew'),
                   path('post/<int:id>', post, name='post'),
                   path('postr/<int:r_id>/<int:num>', postr, name='postr'),
                   path('view/<int:r_id>/<int:num>', postr, name='postr'),
                   path('<int:r_id>/<int:num>', postr, name='postr'),
 
-                   ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

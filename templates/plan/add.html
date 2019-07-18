@@ -5,6 +5,54 @@
     <title>Створення нового запису</title>
 </head>
 <body>
-Ok
+    <form method="post" action="http://127.0.0.1:8000/add/1/">
+        {% csrf_token %}
+{#        ss#}
+
+        <div class=" mb-0 ml-3">{{ form.direction_id.label_tag }} </div>
+        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.direction_id }}</div>
+
+        <div class=" mb-0 ml-3">{{ form.purpose_id.label_tag }} </div>
+        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.purpose_id }}</div>
+
+        <div class=" mb-0 ml-3">{{ form.content.label_tag }} </div>
+        <div class="card text-white bg-info mb-1 ml-3 small">{{ form.content }}</div>
+
+        <div class=" mb-0 ml-3">{{ form.generalization.label_tag }} </div>
+        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.generalization }}</div>
+
+        <div class=" mb-0 ml-3">{{ form.responsible.label_tag }} </div>
+        <div class="card text-white bg-info mb-1 ml-3  small">{{ form.responsible }}</div>
+
+        <div class=" mb-0 ml-3">{{ form.termin.label_tag }} </div>
+        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.termin }}</div>
+
+
+        <div class=" mb-0 ml-3">{{ form.note.label_tag }} </div>
+        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.note }}</div>
+        <input type="submit">
+
+        <div class="ml-3 mt-3 mb-3">
+{#            <div class="btn-group btn-group">#}
+{#                <button type="button" id="first" class="btn btn-primary bg-info"#}
+{#                        style="width: 50px; background-color: rgba(0, 0, 0, 0.4);">&lt;&lt;#}
+{#                </button>&nbsp;#}
+{#                <button type="button" id="prev" class="btn btn-primary bg-info"#}
+{#                        style="width: 50px; background-color: rgba(0, 0, 0, 0.4);">&lt;#}
+{#                </button>&nbsp;#}
+{#                <button type="button" id="next" class="btn btn-primary bg-info"#}
+{#                        style="width: 50px; background-color: rgba(0, 0, 0, 0.4);">&gt;#}
+{#                </button>&nbsp;#}
+{#                <button type="button" id="last" class="btn btn-primary bg-info"#}
+{#                        style="width: 50px; ">&gt;&gt;#}
+{#                </button>#}
+{#            </div>#}
+{#           &nbsp;&nbsp; id={{ i_id }}&nbsp;&nbsp;&nbsp;{{ num }}&nbsp;(<span id="count_id">{{ count }}</span>) &nbsp;&nbsp;#}
+{#            <input id="goEdit" type="checkbox" aria-label="Дозволити редагування">#}
+{#            <label class="form-check-label" for="goEdit">Дозволити редагування</label>#}
+        </div>
+
+
+    </form>
 </body>
 </html>
