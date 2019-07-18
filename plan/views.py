@@ -44,8 +44,13 @@ def add(request, r_id):
     plan.r_id = r_id
     plan.direction_id = None
     plan.purpose_id = None
+
     if request.method == "POST":
-        print("Hello")
+        form = PlanForm(request.POST)
+        if form.is_valid():
+            print("ssssssssss")
+
+
     else:
         form = PlanForm(instance=plan)
         context = {'form': form}
@@ -72,18 +77,15 @@ def add_7(request, r_id):
             return redirect('../')
     else:
         form = PlanForm(instance=post)
-        return render(request, 'http://127.0.0.1:8000/add/1', {'form': form})
+        return render(request, 'http://127.0.0.1:8000/add/'+str(r_id), {'form': form})
 
 
 def view(request):
-    s = ""
+    # s = ""
     plans = Plan.objects.all()
     rubrics = Rubric.objects.all()
     rubr_id_max = Rubric.objects.aggregate(Max('id'))
-    # rubrics_code = make_rubrics(rubrics)
-    # Костильчик
     dir, dir2 = kostil(request.build_absolute_uri())
-    # кінець костильчика
     context = {'plans': plans, 'rubrics': rubrics, 'dir': dir, 'dir2': dir2, 'rubr_id_max': rubr_id_max}
     return render(request, 'plan/index.html', context)
 
@@ -109,7 +111,7 @@ def postr(request, r_id, num):
         i_id = plan.id
         form = PlanForm(instance=plan)
         context = {'num': num, 'count': count, 'form': form, 'i_id': i_id}
-    return render(request, 'plan/post.html', context)
+        return render(request, 'plan/post.html', context)
 
 
 def imp_from_excel(request):
