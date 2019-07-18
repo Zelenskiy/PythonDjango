@@ -124,8 +124,10 @@
             jQuery('#exampleFormControlSelect2').on('change', function () {
                 {#jQuery('#exampleFormControlSelect2').on('click', function () {#}
                 n = 1;
+                {#ad = window.location.href;#}
                 a = jQuery(this).find(":selected").attr('id');
                 s = "" + a + "/" + n;
+                {#console.log("ad="+ad+"a ="+a+" s="+s)#}
                 jQuery('#pl').load(s);
                 {#el = jQuery(this).find(":selected");#}
                 {#tree(el, (el.attr('hidden_child') == 'true'));#}
