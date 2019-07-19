@@ -1,7 +1,7 @@
 {% if count != 0 %}
 
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post">
         {{ form.errors }}
         {% csrf_token %}
         {#        ss#}
@@ -67,7 +67,7 @@
 
     <script type="text/javascript">
         {#jQuery(document).ready(function () {#}
-            {#alert("Промалював post");#}
+        {#alert("Промалював post");#}
         {#    var r_id = jQuery('#exampleFormControlSelect2').find(":selected").attr('id');#}
         {#    alert(r_id);#}
         {#    n = 1;#}
@@ -80,18 +80,36 @@
         {##}
         {##}
 
-        #jQuery(document).ready(function () {
-
-        });
 
         jQuery('#next').on('click', function () {
-                {#alert(location.toString())#}
+                {#alert("saasas")#}
                 n = n + 1;
                 if (n <= 0) n = 1;
                 if (n >= count) n = count;
                 s = "" + a + "/" + n;
                 {#s = "http://127.0.0.1:8000/plan/postr/" + a + "/" + n;#}
                 {#$('#pl').load(s);#}
+                {#alert("ssssssss")#}
+
+                id_pl = {{ i_id }};
+
+
+{#                note = '{{ form.note }}';#}
+{#alert(note);#}
+{##}
+{#                $.ajax({#}
+{#                    type: 'GET',#}
+{#                    async: true,#}
+{#                    url: '/ajax/',#}
+{#                    data: 'id='+id_pl+'&note='+note+';',#}
+{#                    success: function (data) {#}
+{#                        alert("Змінено");#}
+{##}
+{#                    },#}
+{#                    dataType: 'json',#}
+{##}
+{#                });#}
+
                 $('#pl').load(s);
             }
         );

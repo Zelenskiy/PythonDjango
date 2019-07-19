@@ -52,6 +52,7 @@ class BbEditView(UpdateView):
     model = Bb
     form_class = BbForm
     success_url = '/'
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['rubrics'] = Rubric.objects.all()
@@ -82,6 +83,20 @@ def add(request):
         form = BbForm(instance=post)
     return render(request, 'bboard/create.html', {'form': form})
 
+
+def add_and_save(request):
+    if request.method == "POST":
+        bbf = BbForm(request.POST, request.FILES)
+        if bbf.is_valid():
+            bbf.save()
+            return HttpResponseRedirect(reverse('bboard:by_rubric', kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
+        else:
+            context = {'form': bbf}
+            return render(request, 'bboard/create.html', context)
+    else:
+        bbf = BbForm
+        context = {'form': bbf}
+        return render(request, 'bboard/create.html', context)
 
 # TODO
 def handle_uploaded_file(f):
@@ -115,7 +130,6 @@ def resize_for_prev(photo):
     wsize = int((float(img.size[0]) * float(hpercent)))
     img = img.resize((wsize, baseheight), PIL.Image.ANTIALIAS)
     img.save(os.path.join(MEDIA_DIR, 'prev_user_images', str(photo)))
-
 
 # def edit(request, slug):
 #     # post = get_object_or_404(Bb, slug__iexact=slug)

@@ -29,8 +29,8 @@ urlpatterns = [
                   path('bboard/', include('bboard.urls')),
                   path('plan/', include('plan.urls')),
 
-                  path('', include('plan.urls')),
-                  url(r'^flowers/', include('flowers.urls')),
+                  # path('', include('plan.urls')),
+                  # url(r'^flowers/', include('flowers.urls')),
                   path('registration/register/', MyRegisterFormView.as_view(), name="register"),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

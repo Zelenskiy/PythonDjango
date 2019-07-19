@@ -12,12 +12,12 @@ class PlanForm(ModelForm):
         fields = {'id', 'content', 'termin', 'generalization', 'responsible', 'note', 'sort', \
                   'direction_id', 'purpose_id', 'show', 'done'}
         widgets = {
-            'content': forms.Textarea(attrs={'rows': '4'}),
-            'content': forms.Textarea({'class': 'form-control'}),
-            'termin': forms.TextInput({'class': 'form-control'}),
-            'generalization': forms.TextInput({'class': 'form-control'}),
-            'responsible': forms.TextInput({'class': 'form-control'}),
-            'note': forms.TextInput({'class': 'form-control'}),
+            'content': Textarea(attrs={'rows': '4'}),
+            # 'content': forms.Textarea({'class': 'form-control'}),
+            # 'termin': forms.TextInput({'class': 'form-control'}),
+            # 'generalization': forms.TextInput({'class': 'form-control'}),
+            # 'responsible': forms.TextInput({'class': 'form-control'}),
+            # 'note': forms.TextInput({'class': 'form-control'}),
         }
 
 

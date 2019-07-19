@@ -82,12 +82,12 @@ def add(request, r_id):
 
 
 def view(request):
-    # s = ""
     plans = Plan.objects.all()
     rubrics = Rubric.objects.all()
     rubr_id_max = Rubric.objects.aggregate(Max('id'))
     dir, dir2 = kostil(request.build_absolute_uri())
     context = {'plans': plans, 'rubrics': rubrics, 'dir': dir, 'dir2': dir2, 'rubr_id_max': rubr_id_max}
+    # return render(request, reverse_lazy('index'), context)
     return render(request, 'plan/index.html', context)
 
 
@@ -97,10 +97,20 @@ def post(request, id):
     return render(request, 'plan/post.html', context)
 
 
+
+def add_ajax(request, id):
+    print("update update update update update update update update update update update update update update update ")
+    plans = Plan.objects.filter(id=id)
+    context = {'plans': plans}
+    return render(request, 'plan/post.html', context)
+
+
+
 def postr(request, r_id, num):
     plans = Plan.objects.filter(r_id=r_id)
     count = len(plans)
     if count == 0:
+        print("QQQQQQQ----------QQQ")
         return render(request, 'plan/post_empty.html')
     if num >= count:
         num = count
@@ -108,25 +118,25 @@ def postr(request, r_id, num):
     i_id = plan.id
     form = PlanForm(instance=plan)
     if request.method == "POST":
-        pass
+        print("QQQQQQQQQQQQQQQQQQQQ")
+        context = {'num': num, 'count': count, 'form': form, 'i_id': i_id}
+
+
     else:
         context = {'num': num, 'count': count, 'form': form, 'i_id': i_id}
         return render(request, 'plan/post.html', context)
 
 def imp_from_excel(request):
-    # imp_1(None)
     return render(request, 'plan/index.html')
 
 class PlanEditView(UpdateView):
     model = Plan
-    # form_class = PlanForm
-    fields = ['id','direction_id', 'purpose_id', 'content', 'termin', 'generalization', 'responsible', 'note', 'sort', \
-                   'show', 'done']
+    form_class = PlanForm
     template_name = 'plan/post.html'
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        print(context)
+        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         return context
 
 
