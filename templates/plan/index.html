@@ -133,7 +133,9 @@
             jQuery('#exampleFormControlSelect2').on('change', function () {
                 n = 1;
                 a = jQuery(this).find(":selected").attr('id');
+
                 s = "" + a + "/" + n;
+                {#alert(s);#}
                 jQuery('#pl').load(s);
             });
 

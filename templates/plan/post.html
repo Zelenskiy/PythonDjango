@@ -1,9 +1,10 @@
-
 {% if count != 0 %}
 
-    <form method="post">
+
+    <form method="post" enctype="multipart/form-data">
+        {{ form.errors }}
         {% csrf_token %}
-{#        ss#}
+        {#        ss#}
 
         <div class=" mb-0 ml-3">{{ form.direction_id.label_tag }} </div>
         <div class="card text-white bg-info mb-1 ml-3 ">{{ form.direction_id }}</div>
@@ -48,25 +49,49 @@
             {#            <input id="next" type="button" value="Наступний"/>#}
             {#            <input id="last" type="button" value="Кінець"/>#}
 
-            &nbsp;&nbsp; id={{ i_id }}&nbsp;&nbsp;&nbsp;{{ num }}&nbsp;(<span id="count_id">{{ count }}</span>) &nbsp;&nbsp;
+            &nbsp;&nbsp; id={{ i_id }}&nbsp;&nbsp;&nbsp;{{ num }}&nbsp;(<span id="count_id">{{ count }}</span>)
+            &nbsp;&nbsp;
             <input id="goEdit" type="checkbox" aria-label="Дозволити редагування">
             <label class="form-check-label" for="goEdit">Дозволити редагування</label>
             <input type="submit" value="Зберегти">
         </div>
 
     </form>
+
     <p>&nbsp;</p>
     <script>
         var count = {{ count }};
+        var n;
+
     </script>
 
     <script type="text/javascript">
+        {#jQuery(document).ready(function () {#}
+            {#alert("Промалював post");#}
+        {#    var r_id = jQuery('#exampleFormControlSelect2').find(":selected").attr('id');#}
+        {#    alert(r_id);#}
+        {#    n = 1;#}
+        {#    n = n + 1;#}
+        {#    if (n <= 0) n = 1;#}
+        {#    if (n >= count) n = count;#}
+        {#    s = "" + a + "/" + n;#}
+        {#    alert($('#pl'));#}
+        {#    $('#pl').load('10/');#}
+        {##}
+        {##}
+
+        #jQuery(document).ready(function () {
+
+        });
+
         jQuery('#next').on('click', function () {
+                {#alert(location.toString())#}
                 n = n + 1;
                 if (n <= 0) n = 1;
                 if (n >= count) n = count;
                 s = "" + a + "/" + n;
                 {#s = "http://127.0.0.1:8000/plan/postr/" + a + "/" + n;#}
+                {#$('#pl').load(s);#}
                 $('#pl').load(s);
             }
         );

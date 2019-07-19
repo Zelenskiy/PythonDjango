@@ -1,15 +1,16 @@
-from django.urls import reverse_lazy
-from django.views.generic.edit import FormView
+from django.urls import reverse_lazy, reverse
+from django.views.generic.edit import FormView, ProcessFormView, UpdateView
 # from django.contrib.auth.forms import UserCreationForm
 
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Max
 from django.shortcuts import render, redirect
 
-from plan.forms import PlanForm, UserRegistrationForm
-from plan.models import Plan, Rubric
+from .forms import PlanForm, UserRegistrationForm
+from .models import Plan, Rubric
 from django.utils.html import escape
 
+from .utils import *
 
 def index(request):
     return render(request, 'plan/index.html')
@@ -56,28 +57,28 @@ def add(request, r_id):
         context = {'form': form}
     return render(request, 'plan/post.html', context)
 
-
-def add_7(request, r_id):
-    post = Plan
-    post.content = ''
-    post.responsible = ''
-    post.termin = ''
-    post.generalization = ''
-    post.note = ''
-    post.r_id = r_id
-    post.direction_id = None
-    post.purpose_id = None
-    form = PlanForm(request.POST)
-    if request.method == "POST":
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.moder = 0
-            post.save()
-
-            return redirect('../')
-    else:
-        form = PlanForm(instance=post)
-        return render(request, 'http://127.0.0.1:8000/add/'+str(r_id), {'form': form})
+#
+# def add_7(request, r_id):
+#     post = Plan
+#     post.content = ''
+#     post.responsible = ''
+#     post.termin = ''
+#     post.generalization = ''
+#     post.note = ''
+#     post.r_id = r_id
+#     post.direction_id = None
+#     post.purpose_id = None
+#     form = PlanForm(request.POST)
+#     if request.method == "POST":
+#         if form.is_valid():
+#             post = form.save(commit=False)
+#             post.moder = 0
+#             post.save()
+#
+#             return redirect('../')
+#     else:
+#         form = PlanForm(instance=post)
+#         return render(request, 'http://127.0.0.1:8000/add/'+str(r_id), {'form': form})
 
 
 def view(request):
@@ -98,37 +99,65 @@ def post(request, id):
 
 def postr(request, r_id, num):
     plans = Plan.objects.filter(r_id=r_id)
+    count = len(plans)
+    if count == 0:
+        return render(request, 'plan/post_empty.html')
+    if num >= count:
+        num = count
+    plan = plans[num - 1]
+    i_id = plan.id
+    form = PlanForm(instance=plan)
     if request.method == "POST":
         pass
     else:
-        # resps = Responsibl.objects.all()
-        count = len(plans)
-        if count == 0:
-            return render(request, 'plan/post_empty.html')
-        if num >= count:
-            num = count
-        plan = plans[num - 1]
-        i_id = plan.id
-        form = PlanForm(instance=plan)
         context = {'num': num, 'count': count, 'form': form, 'i_id': i_id}
         return render(request, 'plan/post.html', context)
-
 
 def imp_from_excel(request):
     # imp_1(None)
     return render(request, 'plan/index.html')
 
+class PlanEditView(UpdateView):
+    model = Plan
+    # form_class = PlanForm
+    fields = ['id','direction_id', 'purpose_id', 'content', 'termin', 'generalization', 'responsible', 'note', 'sort', \
+                   'show', 'done']
+    template_name = 'plan/post.html'
 
-# Вариант регистрации на базе класса FormView
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        print(context)
+        return context
+
+
+
+
+    # def form_invalid(self, form):
+    #     print("invalid")
+    # def form_valid(self, form):
+    #     print("valid")
+    #
+    # success_url = 'plan/post.html'
+
+    # success_url = 'https://www.google.com/'
+
+    # def form_valid(self, form):
+    #     print("form_valid")
+    #
+    # def form_invalid(self,form):
+    #     print("form_invalid")
+
+
+        # def get_context_data(self, *args, **kwargs):
+    #     context = super().get_context_data(*args, **kwargs)
+    #     # context['form'] = Plan.objects.get(id = args['id'])
+    #     return context
+
+
+
 class MyRegisterFormView(FormView):
-    # Указажем какую форму мы будем использовать для регистрации наших пользователей, в нашем случае
-    # это UserCreationForm - стандартный класс Django унаследованный
     form_class = UserRegistrationForm
-
-    # Ссылка, на которую будет перенаправляться пользователь в случае успешной регистрации.
-    # В данном случае указана ссылка на страницу входа для зарегистрированных пользователей.
     success_url = "../../plan/view/"
-
     # Шаблон, который будет использоваться при отображении представления.
     template_name = "registration/register.html"
 

@@ -18,19 +18,23 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from PythonDjango import settings
 
-from plan.views import index, imp_from_excel, view, post, postr, add, MyRegisterFormView
+from plan.views import index, imp_from_excel, view, post, postr, add, MyRegisterFormView, PlanEditView
 
 urlpatterns = [
 
                   path('import/', imp_from_excel, name='imp_from_excel'),
-                  path('view/', view, name='view'),
-                  path('add/<int:r_id>/', add, name='add'),
-                  path('', view, name='view'),
-                  # path('add/<int:r_id>', add, name='add'),
-                  # path('add/<int:r_id>/', addnew, name='addnew'),
-                  path('post/<int:id>', post, name='post'),
-                  path('postr/<int:r_id>/<int:num>', postr, name='postr'),
-                  path('view/<int:r_id>/<int:num>', postr, name='postr'),
-                  path('<int:r_id>/<int:num>', postr, name='postr'),
 
+                  path('add/<int:r_id>/', add, name='add'),
+
+                  path('post/<int:id>/', post, name='post'),
+
+                  path('view/<pk>/', PlanEditView.as_view()),
+                  # path('view/<pk>/<int:r_id>/', PlanEditView.as_view()),
+
+                  # path('view/<int:r_id>/<int:num>/', PlanEditView.as_view()),
+                  path('view/<int:r_id>/<int:num>/', postr, name='postr'),
+
+
+                  path('view/', view, name='view'),
+                  path('', view, name='view'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

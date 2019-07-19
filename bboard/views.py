@@ -10,12 +10,12 @@ from PythonDjango.settings import MEDIA_DIR
 from .models import Bb, Rubric, Albom
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from .forms import BbForm
 from django import forms
 import PIL
 from PIL import Image
-from .utils import *
+# from .utils import *
 from django.urls import reverse
 
 
@@ -47,6 +47,19 @@ def index(request):
 # def add(ObjectCreateMixin):
 #     model_form = BbForm
 #     template = 'bboard/add.html'
+
+class BbEditView(UpdateView):
+    model = Bb
+    form_class = BbForm
+    success_url = '/'
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['rubrics'] = Rubric.objects.all()
+        print(context)
+        return context
+    # def form_valid(self, form):
+    #     return super(BbForm, self).form_valid(form)
+
 
 def add(request):
     post = Bb(title='', content='', price='')
@@ -104,27 +117,27 @@ def resize_for_prev(photo):
     img.save(os.path.join(MEDIA_DIR, 'prev_user_images', str(photo)))
 
 
-def edit(request, slug):
-    # post = get_object_or_404(Bb, slug__iexact=slug)
-    post = Bb.objects.get(slug__iexact=slug)
-    if request.method == "POST":
-        form = BbForm(request.POST, request.FILES, instance=post)
-        if form.is_valid():
-            if 'photo' in request.FILES:
-                form.photo = request.FILES['photo']
-                form.photo_prev = request.FILES['photo']
-                # form.photo_prev = os.path.join('user_photo_prev', str(form.photo))
-                handle_uploaded_file(request.FILES['photo'])
-            post = form.save(commit=False)
-            # К примеру меняем одно поле сами, если не нужно, то просто сохраняем
-            post.moder = 0
-            post.save()
-            # if 'photo' in request.FILES:
-            #     resize_for_prev(post.photo)
-            return redirect('../../')
-    else:
-        form = BbForm(instance=post)
-    return render(request, 'bboard/edit.html', {'form': form})
+# def edit(request, slug):
+#     # post = get_object_or_404(Bb, slug__iexact=slug)
+#     post = Bb.objects.get(slug__iexact=slug)
+#     if request.method == "POST":
+#         form = BbForm(request.POST, request.FILES, instance=post)
+#         if form.is_valid():
+#             if 'photo' in request.FILES:
+#                 form.photo = request.FILES['photo']
+#                 form.photo_prev = request.FILES['photo']
+#                 # form.photo_prev = os.path.join('user_photo_prev', str(form.photo))
+#                 handle_uploaded_file(request.FILES['photo'])
+#             post = form.save(commit=False)
+#             # К примеру меняем одно поле сами, если не нужно, то просто сохраняем
+#             post.moder = 0
+#             post.save()
+#             # if 'photo' in request.FILES:
+#             #     resize_for_prev(post.photo)
+#             return redirect('../../')
+#     else:
+#         form = BbForm(instance=post)
+#     return render(request, 'bboard/edit.html', {'form': form})
 
 # def add(request):
 #     bbf = BbForm()
