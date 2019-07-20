@@ -8,7 +8,7 @@ from django.db.models import Max
 from django.shortcuts import render, redirect
 
 from .forms import PlanForm, UserRegistrationForm
-from .models import Plan, Rubric
+from .models import Plan, Rubric, Direction, Purpose
 from django.utils.html import escape
 from django.core import serializers
 
@@ -150,22 +150,14 @@ def update_plan(request, id):
         data = request.POST
         # print(id)
         p = Plan.objects.get(pk=id)
-
-        # p.direction_id = data['direction_id']
-        # p.purpose_id = data['purpose_id']
+        p.direction_id = Direction.objects.get(pk=int(data['direction_id']))
+        p.purpose_id = Purpose.objects.get(pk=int(data['purpose_id']))
         p.content = data['content']
         p.generalization = data['generalization']
         p.responsible = data['responsible']
         p.termin = data['termin']
         p.note = data['note']
         p.save()
-
-        # for dat in data:
-        #     print(dat)
-
-        # p.note = data['note']
-
-
     return render(request, 'plan/post.html', {})
 
     # def form_invalid(self, form):

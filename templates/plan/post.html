@@ -8,7 +8,7 @@
 
         <div class=" mb-0 ml-3">{{ form.direction_id.label_tag }} </div>
         <div class="card text-white bg-info mb-1 ml-3 ">{{ form.direction_id }}</div>
-{#        <div class="card text-white bg-info mb-1 ml-3 " >{{ form.id }}</div>#}
+        {#        <div class="card text-white bg-info mb-1 ml-3 " >{{ form.id }}</div>#}
 
         <div class=" mb-0 ml-3">{{ form.purpose_id.label_tag }} </div>
         <div class="card text-white bg-info mb-1 ml-3 ">{{ form.purpose_id }}</div>
@@ -45,9 +45,7 @@
                     <button type="button" id="last" class="btn btn-primary bg-info"
                             style="width: 50px; ">&gt;&gt;
                     </button>
-                    <button type="button" onclick="submitForm('{% url 'view' %}')" class="btn btn-primary bg-info"
-                            style="width: 50px; ">Save
-                    </button>
+
                 </div>
                 <input id="goEdit" type="checkbox" aria-label="Дозволити редагування">
                 <label class="form-check-label" for="goEdit">Дозволити редагування</label>
@@ -55,10 +53,11 @@
 
             </div>
 
-            &nbsp;&nbsp; id=<span id="plan_id" value="{{ i_id }}">{{ i_id }}</span>&nbsp;&nbsp;&nbsp;{{ num }}&nbsp;(<span id="count_id">{{ count }}</span>)
+            &nbsp;&nbsp; id=<span id="plan_id"
+                                  value="{{ i_id }}">{{ i_id }}</span>&nbsp;&nbsp;&nbsp;{{ num }}&nbsp;(<span
+                id="count_id">{{ count }}</span>)
             &nbsp;&nbsp;
 
-            <input type="submit" value="Зберегти">
         </div>
 
     </form>
@@ -86,45 +85,32 @@
     {#  Блок скриптів для роботи з кнопками навігації#}
 
     <script type="text/javascript">
+        function update_model() {
+            id_pl = {{ i_id }};
+            var data = $("#update-form").serialize();
+            $.ajax({
+                    url: "../update_plan/" + id_pl + "/", // the endpoint
+                    {#url: "http://127.0.0.1:8000/plan/update_plan/", // the endpoint#}
+                    type: "POST", // http method
+                    data: data,
+                }
+            );
+        }
 
         jQuery('#next').on('click', function () {
             n = n + 1;
             if (n <= 0) n = 1;
             if (n >= count) n = count;
             s = "" + a + "/" + n;
-            id_pl = {{ i_id }};
-
-
-            console.log($("#update-form"));
-            var data = $("#update-form").serialize()
-            {#var data = $("#update-form").serializeArray();#}
-            console.log(data);
-
-            console.log("id_pl="+parseInt(id_pl));
-            $.ajax({
-                    url: "../update_plan/"+id_pl+"/", // the endpoint
-                    {#url: "http://127.0.0.1:8000/plan/update_plan/", // the endpoint#}
-                    type: "POST", // http method
-                    data: data,
-                }
-            );
+            update_model();
             $('#pl').load(s);
         });
 
 
-        {#jQuery('#next').on('click', function () {#}
-        {#         n = n + 1;#}
-        {#         if (n <= 0) n = 1;#}
-        {#         if (n >= count) n = count;#}
-        {#         s = "" + a + "/" + n;#}
-        {#         id_pl = {{ i_id }};#}
-        {#         $('#pl').load(s);#}
-        {#     }#}
-        {# );#}
-        {##}
         jQuery('#last').on('click', function () {
                 n = count;
                 s = "" + a + "/" + n;
+                update_model();
                 $('#pl').load(s);
             }
         );
@@ -134,11 +120,13 @@
             if (n <= 0) n = 1;
             if (n >= count) n = count;
             s = "" + a + "/" + n;
+            update_model();
             $('#pl').load(s);
         });
         jQuery('#first').on('click', function () {
             n = 1;
             s = "" + a + "/" + n;
+            update_model();
             $('#pl').load(s);
         });
     </script>
