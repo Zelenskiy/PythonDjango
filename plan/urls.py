@@ -18,17 +18,24 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from PythonDjango import settings
 
-from plan.views import index, imp_from_excel, view, post, postr, add, MyRegisterFormView, PlanEditView, add_ajax
+from plan.views import index, imp_from_excel, view, post, postr, add, MyRegisterFormView, PlanEditView, add_ajax, \
+    update_plan
+
+#
+#
+
 
 urlpatterns = [
+                  url(r'^update_plan/([0-9]+)/$', update_plan, name='update_plan'),
                   path('import/', imp_from_excel, name='imp_from_excel'),
                   path('add/<int:r_id>/', add, name='add'),
                   path('post/<int:id>/', post, name='post'),
 
+                  # path('view/update_plan/', update_plan),
                   path('view/<pk>/', PlanEditView.as_view()),
                   path('view/<int:r_id>/<int:num>/', postr, name='postr'),
                   path('view/', view, name='view'),
                   path('', index, name='index'),
-                  path('view/ajax/', add_ajax),
+
                   # url(r'^ajax/<pk>/', add_ajax),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

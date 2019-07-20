@@ -1,3 +1,4 @@
+import simplejson as simplejson
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import FormView, ProcessFormView, UpdateView
 # from django.contrib.auth.forms import UserCreationForm
@@ -9,8 +10,10 @@ from django.shortcuts import render, redirect
 from .forms import PlanForm, UserRegistrationForm
 from .models import Plan, Rubric
 from django.utils.html import escape
+from django.core import serializers
 
 from .utils import *
+
 
 def index(request):
     return render(request, 'plan/index.html')
@@ -57,6 +60,7 @@ def add(request, r_id):
         context = {'form': form}
     return render(request, 'plan/post.html', context)
 
+
 #
 # def add_7(request, r_id):
 #     post = Plan
@@ -97,7 +101,6 @@ def post(request, id):
     return render(request, 'plan/post.html', context)
 
 
-
 def add_ajax(request, id):
     print("update update update update update update update update update update update update update update update ")
     plans = Plan.objects.filter(id=id)
@@ -105,12 +108,10 @@ def add_ajax(request, id):
     return render(request, 'plan/post.html', context)
 
 
-
 def postr(request, r_id, num):
     plans = Plan.objects.filter(r_id=r_id)
     count = len(plans)
     if count == 0:
-        print("QQQQQQQ----------QQQ")
         return render(request, 'plan/post_empty.html')
     if num >= count:
         num = count
@@ -118,16 +119,18 @@ def postr(request, r_id, num):
     i_id = plan.id
     form = PlanForm(instance=plan)
     if request.method == "POST":
-        print("QQQQQQQQQQQQQQQQQQQQ")
-        context = {'num': num, 'count': count, 'form': form, 'i_id': i_id}
-
+        form.save()
+        context = {'num': num, 'count': count, 'form': form, 'r_id': r_id, 'i_id': i_id}
+        return render(request, '', context)
 
     else:
         context = {'num': num, 'count': count, 'form': form, 'i_id': i_id}
         return render(request, 'plan/post.html', context)
 
+
 def imp_from_excel(request):
     return render(request, 'plan/index.html')
+
 
 class PlanEditView(UpdateView):
     model = Plan
@@ -140,7 +143,30 @@ class PlanEditView(UpdateView):
         return context
 
 
+def update_plan(request, id):
+    # print("Зайшло")
+    if request.POST and request.is_ajax():
+        # print("ajax")
+        data = request.POST
+        # print(id)
+        p = Plan.objects.get(pk=id)
 
+        # p.direction_id = data['direction_id']
+        # p.purpose_id = data['purpose_id']
+        p.content = data['content']
+        p.generalization = data['generalization']
+        p.responsible = data['responsible']
+        p.termin = data['termin']
+        p.note = data['note']
+        p.save()
+
+        # for dat in data:
+        #     print(dat)
+
+        # p.note = data['note']
+
+
+    return render(request, 'plan/post.html', {})
 
     # def form_invalid(self, form):
     #     print("invalid")
@@ -157,12 +183,10 @@ class PlanEditView(UpdateView):
     # def form_invalid(self,form):
     #     print("form_invalid")
 
-
-        # def get_context_data(self, *args, **kwargs):
+    # def get_context_data(self, *args, **kwargs):
     #     context = super().get_context_data(*args, **kwargs)
     #     # context['form'] = Plan.objects.get(id = args['id'])
     #     return context
-
 
 
 class MyRegisterFormView(FormView):
