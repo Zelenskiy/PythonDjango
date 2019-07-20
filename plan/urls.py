@@ -19,14 +19,15 @@ from django.urls import path, include
 from PythonDjango import settings
 
 from plan.views import index, imp_from_excel, view, post, postr, add, MyRegisterFormView, PlanEditView, add_ajax, \
-    update_plan
+    update_plan, add_plan
 
 #
 #
 
 
 urlpatterns = [
-                  url(r'^update_plan/([0-9]+)/$', update_plan, name='update_plan'),
+                  url(r'^update_plan/([0-9]+)/', update_plan, name='update_plan'),
+                  url(r'^add_plan/([0-9]+)/$', add_plan, name='add_plan'),
                   path('import/', imp_from_excel, name='imp_from_excel'),
                   path('add/<int:r_id>/', add, name='add'),
                   path('post/<int:id>/', post, name='post'),

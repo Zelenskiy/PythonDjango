@@ -34,29 +34,34 @@
             <div>
                 <div class="btn-group btn-group">
                     <button type="button" id="first" class="btn btn-primary bg-info"
-                            style="width: 50px; background-color: rgba(0, 0, 0, 0.4);">&lt;&lt;
+                            style="width: 50px; ">&lt;&lt;
                     </button>&nbsp;
                     <button type="button" id="prev" class="btn btn-primary bg-info"
-                            style="width: 50px; background-color: rgba(0, 0, 0, 0.4);">&lt;
+                            style="width: 50px; ">&lt;
                     </button>&nbsp;
                     <button type="button" id="next" class="btn btn-primary bg-info"
-                            style="width: 50px; background-color: rgba(0, 0, 0, 0.4);">&gt;
+                            style="width: 50px; ">&gt;
                     </button>&nbsp;
                     <button type="button" id="last" class="btn btn-primary bg-info"
                             style="width: 50px; ">&gt;&gt;
                     </button>
 
+                    <button type="button" id="add_btn" style="width: 50px; " class="ml-5 bg-info text-white"> +</button>
+                    <button type="button" id="del_button" style="width: 50px; " class="ml-5 bg-info text-white"> -
+                    </button>
+
                 </div>
-                <input id="goEdit" type="checkbox" aria-label="Дозволити редагування">
-                <label class="form-check-label" for="goEdit">Дозволити редагування</label>
+                {#                <input id="goEdit" type="checkbox" aria-label="Дозволити редагування" >#}
+                {#                <label class="form-check-label" for="goEdit">Дозволити редагування</label>#}
 
 
             </div>
+            <span id="chb_panel">
 
             &nbsp;&nbsp; id=<span id="plan_id"
                                   value="{{ i_id }}">{{ i_id }}</span>&nbsp;&nbsp;&nbsp;{{ num }}&nbsp;(<span
-                id="count_id">{{ count }}</span>)
-            &nbsp;&nbsp;
+                    id="count_id">{{ count }}</span>)
+                &nbsp;&nbsp;</span>
 
         </div>
 
@@ -67,35 +72,45 @@
         var count = {{ count }};
         var n;
 
-
-        {#function submitForm(url) {#}
-        {#    var data = $("#update-form").serialize();#}
-        {#    $.ajax({#}
-        {#        type: 'POST',#}
-        {#        url: url,#}
-        {#        data: data,#}
-        {#        success: function (data) {#}
-        {#            $(".display").html(data);#}
-        {#        }#}
-        {#    });#}
-        {#{#}
-
-
     </script>
     {#  Блок скриптів для роботи з кнопками навігації#}
 
     <script type="text/javascript">
+
+
         function update_model() {
-            id_pl = {{ i_id }};
+            $('#goEdit').attr('checked', old_value_goEdit);
+            if ($('#goEdit').is(':checked')) {
+                old_value_goEdit = true;
+                id_pl = {{ i_id }};
+                var data = $("#update-form").serialize();
+                $.ajax({
+                        url: "../update_plan/" + id_pl + "/", // the endpoint
+                        {#url: "http://127.0.0.1:8000/plan/update_plan/", // the endpoint#}
+                        type: "POST", // http method
+                        data: data,
+                    }
+                );
+            }
+
+        }
+
+        jQuery('#add_btn').on('click', function () {
+            r_id = {{ r_id }};
+            {#console.log(r_id);#}
             var data = $("#update-form").serialize();
             $.ajax({
-                    url: "../update_plan/" + id_pl + "/", // the endpoint
-                    {#url: "http://127.0.0.1:8000/plan/update_plan/", // the endpoint#}
-                    type: "POST", // http method
+                    url: "../add_plan/" + r_id + "/",
+                    type: "POST",
                     data: data,
                 }
             );
-        }
+            //Відкриваємо щойностворений запис
+
+             //Щоб зберегло
+            $('#goEdit').attr('checked', true);
+
+        });
 
         jQuery('#next').on('click', function () {
             n = n + 1;

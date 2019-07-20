@@ -124,7 +124,7 @@ def postr(request, r_id, num):
         return render(request, '', context)
 
     else:
-        context = {'num': num, 'count': count, 'form': form, 'i_id': i_id}
+        context = {'num': num, 'count': count, 'form': form, 'r_id': r_id,  'i_id': i_id}
         return render(request, 'plan/post.html', context)
 
 
@@ -142,13 +142,14 @@ class PlanEditView(UpdateView):
         print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         return context
 
+def add_plan(request, r_id):
+    if request.POST and request.is_ajax():
+        pass
+    return render(request, 'plan/post.html', {})
 
 def update_plan(request, id):
-    # print("Зайшло")
     if request.POST and request.is_ajax():
-        # print("ajax")
         data = request.POST
-        # print(id)
         p = Plan.objects.get(pk=id)
         p.direction_id = Direction.objects.get(pk=int(data['direction_id']))
         p.purpose_id = Purpose.objects.get(pk=int(data['purpose_id']))
@@ -159,27 +160,6 @@ def update_plan(request, id):
         p.note = data['note']
         p.save()
     return render(request, 'plan/post.html', {})
-
-    # def form_invalid(self, form):
-    #     print("invalid")
-    # def form_valid(self, form):
-    #     print("valid")
-    #
-    # success_url = 'plan/post.html'
-
-    # success_url = 'https://www.google.com/'
-
-    # def form_valid(self, form):
-    #     print("form_valid")
-    #
-    # def form_invalid(self,form):
-    #     print("form_invalid")
-
-    # def get_context_data(self, *args, **kwargs):
-    #     context = super().get_context_data(*args, **kwargs)
-    #     # context['form'] = Plan.objects.get(id = args['id'])
-    #     return context
-
 
 class MyRegisterFormView(FormView):
     form_class = UserRegistrationForm
