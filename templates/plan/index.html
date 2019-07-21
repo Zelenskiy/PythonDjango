@@ -7,6 +7,7 @@
     {% if user.is_authenticated %}
         <script type="text/javascript">
             var old_value_goEdit = false;
+
         </script>
 
         <div class="row mt-lg-5 ">
@@ -54,24 +55,13 @@
                 </div>
             </div>
             <div class="col-md-8 " style="background: #e3f2fd;">
-
-                <div class="col  " id="pl">
-
+                <div class="col  " id="pl" style="background: #e3f2fd;">
 
                 </div>
-
-
-                {#                        &nbsp;&nbsp;#}
-                <div>
-                        <span id="goEditPanel">
+                <span class="mb-0 ml-5" id="goEditPanel" style="background: #e3f2fd;">
                             <input id="goEdit" type="checkbox" aria-label="Дозволити редагування">
                             <label class="form-check-label" for="goEdit">&nbsp;Дозволити редагування</label>
-                        </span>
-
-
-                </div>
-
-
+                </span>
             </div>
         </div>
 
@@ -158,11 +148,11 @@
 
                 s = "" + a + "/" + n;
                 {#alert(s);#}
-                $('#goEdit').attr('checked', false);
-                old_value_goEdit = false;
+
                 jQuery('#pl').load(s);
                 $('#goEditPanel').attr('hidden', false);
-
+                $('#goEdit').attr('checked', false);
+                old_value_goEdit = false;
 
             });
 
@@ -195,5 +185,3 @@
 
 
 {% endblock %}
-
-

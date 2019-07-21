@@ -1,17 +1,56 @@
 {% if count != 0 %}
+    <style>
+     .finger { cursor: pointer; }
+     .cross { cursor: crosshair; }
+     .help { cursor: help; }
+   </style>
 
+    <script type="text/javascript">
+        var count = {{ count }};
+        var n;
+
+    </script>
+
+    <script type="text/javascript">
+
+          function navButtonStatus(){
+            {#console.log(" n="+String(n)+" count="+String(count));#}
+              console.log("n="+n);
+              console.log("count="+count);
+
+            if (n==1){
+                console.log("Робимо неактивною");
+                $('#first').attr('disabled', true);
+                $('#prev').attr('disabled', true);
+            };
+            if (n==count){
+                $('#last').attr('disabled', true);
+                $('#next').attr('disabled', true);
+            } ;
+            if ((n>1)&&(n<count)) {
+                $('#first').attr('disabled', false);
+                $('#prev').attr('disabled', false);
+                $('#last').attr('disabled', false);
+                $('#next').attr('disabled', false);
+            }
+        };
+
+        navButtonStatus();
+
+    </script>
 
     <form id="update-form" method="post" action="{% url 'postr' 20 1 %}">
 
         {% csrf_token %}
-        {#        ss#}
 
-        <div class=" mb-0 ml-3">{{ form.direction_id.label_tag }} </div>
-        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.direction_id }}</div>
-        {#        <div class="card text-white bg-info mb-1 ml-3 " >{{ form.id }}</div>#}
+        <span id="dir_purp_panel" class="finger">
+            <p class="mb-0 ml-3" style="text-align: center"  >&#8230;</p>
+            <div id="l1" class=" mb-0 ml-3 "  hidden>{{ form.direction_id.label_tag }} </div>
+            <div id="f1" class="card text-white mb-1 ml-3 " hidden>{{ form.direction_id }}</div>
 
-        <div class=" mb-0 ml-3">{{ form.purpose_id.label_tag }} </div>
-        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.purpose_id }}</div>
+            <div id="l2" class=" mb-0 ml-3" hidden>{{ form.purpose_id.label_tag }} </div>
+            <div id="f2" class="card text-white bg-info mb-1 ml-3 " hidden>{{ form.purpose_id }}</div>
+        </span>
 
         <div class=" mb-0 ml-3">{{ form.content.label_tag }} </div>
         <div id="a1" class="card text-white bg-info mb-1 ml-3 small">{{ form.content }}</div>
@@ -30,57 +69,45 @@
         <div class="card text-white bg-info mb-1 ml-3 ">{{ form.note }}</div>
 
 
-        <div class="ml-3 mt-3 mb-3">
-            <div>
-                <div class="btn-group btn-group">
-                    <button type="button" id="first" class="btn btn-primary bg-info"
-                            style="width: 50px; ">&lt;&lt;
-                    </button>&nbsp;
-                    <button type="button" id="prev" class="btn btn-primary bg-info"
-                            style="width: 50px; ">&lt;
-                    </button>&nbsp;
-                    <button type="button" id="next" class="btn btn-primary bg-info"
-                            style="width: 50px; ">&gt;
-                    </button>&nbsp;
-                    <button type="button" id="last" class="btn btn-primary bg-info"
-                            style="width: 50px; ">&gt;&gt;
-                    </button>
+        <div id="nav_panel" class="btn-group ml-3 mt-3">
+            <button  type="button" id="first" class="btn btn-primary bg-info"
+                    style="width: 50px; ">&lt;&lt;
+            </button>&nbsp;
+            <button type="button" id="prev" class="btn btn-primary bg-info"
+                    style="width: 50px; ">&lt;
+            </button>&nbsp;
+            <button type="button" id="next" class="btn btn-primary bg-info"
+                    style="width: 50px; ">&gt;
+            </button>&nbsp;
+            <button type="button" id="last" class="btn btn-primary bg-info"
+                    style="width: 50px; ">&gt;&gt;
+            </button>
 
-                    <button type="button" id="add_btn" style="width: 50px; " class="ml-5 bg-info text-white"> +</button>
-                    <button type="button" id="del_button" style="width: 50px; " class="ml-5 bg-info text-white"> -
-                    </button>
+            <button type="button" id="add_btn" style="width: 50px; " class="ml-5 bg-info text-white"> +</button>
+            <button type="button" id="del_button" style="width: 50px; " class="ml-5 bg-info text-white"> -
+            </button>
 
-                </div>
-                {#                <input id="goEdit" type="checkbox" aria-label="Дозволити редагування" >#}
-                {#                <label class="form-check-label" for="goEdit">Дозволити редагування</label>#}
-
-
-            </div>
-            <span id="chb_panel">
-
-            &nbsp;&nbsp; id=<span id="plan_id"
-                                  value="{{ i_id }}">{{ i_id }}</span>&nbsp;&nbsp;&nbsp;{{ num }}&nbsp;(<span
+            <span id="chb_panel">&nbsp;&nbsp; id=<span id="plan_id"
+                                                       value="{{ i_id }}">{{ i_id }}</span>&nbsp;&nbsp;&nbsp;{{ num }}&nbsp;(<span
                     id="count_id">{{ count }}</span>)
                 &nbsp;&nbsp;</span>
-
         </div>
+        {#                <input id="goEdit" type="checkbox" aria-label="Дозволити редагування" >#}
+        {#                <label class="form-check-label" for="goEdit">Дозволити редагування</label>#}
+
 
     </form>
 
     <p>&nbsp;</p>
-    <script type="text/javascript">
-        var count = {{ count }};
-        var n;
 
-    </script>
     {#  Блок скриптів для роботи з кнопками навігації#}
 
     <script type="text/javascript">
 
-
-        function update_model() {
+            function update_model() {
             $('#goEdit').attr('checked', old_value_goEdit);
             if ($('#goEdit').is(':checked')) {
+                $('#nav_panel').attr('style', "background-color: #F76C7E;");
                 old_value_goEdit = true;
                 id_pl = {{ i_id }};
                 var data = $("#update-form").serialize();
@@ -91,9 +118,24 @@
                         data: data,
                     }
                 );
+            } else {
+                $('#nav_panel').attr('style', "background-color: #E3F2FD;");
+
             }
 
         }
+
+
+
+
+
+        jQuery('#dir_purp_panel').on('click', function () {
+            flag = $('#f1').attr("hidden");
+            $('#l1').attr("hidden", !flag);
+            $('#f1').attr("hidden", !flag);
+            $('#l2').attr("hidden", !flag);
+            $('#f2').attr("hidden", !flag);
+        });
 
         jQuery('#add_btn').on('click', function () {
             r_id = {{ r_id }};
@@ -107,7 +149,7 @@
             );
             //Відкриваємо щойностворений запис
 
-             //Щоб зберегло
+            //Щоб зберегло
             $('#goEdit').attr('checked', true);
 
         });
@@ -119,6 +161,7 @@
             s = "" + a + "/" + n;
             update_model();
             $('#pl').load(s);
+            navButtonStatus();
         });
 
 
@@ -127,6 +170,7 @@
                 s = "" + a + "/" + n;
                 update_model();
                 $('#pl').load(s);
+                navButtonStatus();
             }
         );
 
@@ -137,12 +181,14 @@
             s = "" + a + "/" + n;
             update_model();
             $('#pl').load(s);
+            navButtonStatus();
         });
         jQuery('#first').on('click', function () {
             n = 1;
             s = "" + a + "/" + n;
             update_model();
             $('#pl').load(s);
+            navButtonStatus();
         });
     </script>
     </div>
