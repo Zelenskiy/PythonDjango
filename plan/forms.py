@@ -1,4 +1,4 @@
-from django.forms import ModelForm, Textarea
+from django.forms import ModelForm, Textarea, TextInput
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -12,7 +12,10 @@ class PlanForm(ModelForm):
         fields = {'id', 'content', 'termin', 'generalization', 'responsible', 'note', 'sort', \
                   'direction_id', 'purpose_id', 'show', 'done'}
         widgets = {
-            'content': Textarea(attrs={'rows': '4'}),
+            'content': Textarea(attrs={'rows': '4', 'placeholder': 'Впишіть сюди зміст заходу'}),
+            'termin': TextInput(attrs={'placeholder': 'Впишіть сюди дату чи період'}),
+            'responsible': TextInput(attrs={ 'placeholder': 'Впишіть сюди відповідального за захід'}),
+            'generalization': TextInput(attrs={ 'placeholder': 'Впишіть сюди документ, у якому захід узагальниться'}),
             # 'content': forms.Textarea({'class': 'form-control'}),
             # 'termin': forms.TextInput({'class': 'form-control'}),
             # 'generalization': forms.TextInput({'class': 'form-control'}),

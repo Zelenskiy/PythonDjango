@@ -1,5 +1,6 @@
 import simplejson as simplejson
 from django.urls import reverse_lazy, reverse
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.generic.edit import FormView, ProcessFormView, UpdateView
 # from django.contrib.auth.forms import UserCreationForm
 
@@ -107,26 +108,61 @@ def add_ajax(request, id):
     context = {'plans': plans}
     return render(request, 'plan/post.html', context)
 
+# @csrf_exempt
+def del_plan(request, id):
+    plan = Plan.objects.get(pk=id)
+    if plan is None:
+        print("Нет такого")
+    else:
+        print("Вилучаємо "+str(plan))
+        plan.delete()
+        plan.save()
+    context = {}
+    return render(request, 'plan/post.html', context)
+
 
 def postr(request, r_id, num):
-    plans = Plan.objects.filter(r_id=r_id)
-    count = len(plans)
-    if count == 0:
-        return render(request, 'plan/post_empty.html')
-    if num >= count:
-        num = count
-    plan = plans[num - 1]
-    i_id = plan.id
-    form = PlanForm(instance=plan)
-    if request.method == "POST":
-        form.save()
-        context = {'num': num, 'count': count, 'form': form, 'r_id': r_id, 'i_id': i_id}
-        return render(request, '', context)
+    if num > 0:
+        plans = Plan.objects.filter(r_id=r_id)
+        count = len(plans)
+        if count == 0:
+            return render(request, 'plan/post_empty.html')
+        if num >= count:
+            num = count
+        plan = plans[num - 1]
+        i_id = plan.id
+        form = PlanForm(instance=plan)
+        if request.method == "POST":
+            form.save()
+            context = {'num': num, 'count': count, 'form': form, 'r_id': r_id, 'i_id': i_id}
+            return render(request, '', context)
 
+        else:
+            context = {'num': num, 'count': count, 'form': form, 'r_id': r_id,  'i_id': i_id}
+            return render(request, 'plan/post.html', context)
     else:
-        context = {'num': num, 'count': count, 'form': form, 'r_id': r_id,  'i_id': i_id}
+        # print("Упіймав")
+        plan = Plan()
+        plan.r_id = Rubric.objects.get(pk=int(r_id))
+        plan.content = ''
+        post.responsible = ''
+        post.termin = ''
+        post.generalization = ''
+        post.note = ''
+        post.sort = 0
+        post.direction_id = 0
+        post.purpose_id = 0
+        post.direction_id = Direction.objects.get(pk=0)
+        post.purpose_id = Purpose.objects.get(pk=0)
+        plan.save()
+        form = PlanForm(instance=plan)
+        # form.save()
+        i_id = plan.id
+        plans = Plan.objects.filter(r_id=r_id)
+        count = len(plans)
+        num = count
+        context = {'num': num, 'count': count, 'form': form, 'r_id': r_id, 'i_id': i_id}
         return render(request, 'plan/post.html', context)
-
 
 def imp_from_excel(request):
     return render(request, 'plan/index.html')
@@ -142,17 +178,35 @@ class PlanEditView(UpdateView):
         print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         return context
 
-def add_plan(request, r_id):
-    if request.POST and request.is_ajax():
-        pass
-    return render(request, 'plan/post.html', {})
+# def add_plan(request, r_id):
+#     if request.POST and request.is_ajax():
+#         plan = Plan
+#         plan.r_id = Rubric.objects.get(pk=int(r_id))
+#         plan.content = '!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+#         # plan.save()
+#         form = PlanForm(instance=plan)
+#         i_id = -1
+#         plans = Plan.objects.filter(r_id=r_id)
+#         count = len(plans)
+#         num = count
+#         context = {'num': num, 'count': count, 'form': form, 'r_id': r_id, 'i_id': i_id}
+#     return render(request, 'plan/post.html', context)
 
 def update_plan(request, id):
     if request.POST and request.is_ajax():
         data = request.POST
         p = Plan.objects.get(pk=id)
-        p.direction_id = Direction.objects.get(pk=int(data['direction_id']))
-        p.purpose_id = Purpose.objects.get(pk=int(data['purpose_id']))
+        if data['direction_id'] == '':
+            p.direction_id = Direction.objects.get(pk=0)
+        else:
+            p.direction_id = Direction.objects.get(pk=int(data['direction_id']))
+        if data['purpose_id'] == '':
+            p.purpose_id = Purpose.objects.get(pk=0)
+        else:
+            p.purpose_id = Purpose.objects.get(pk=int(data['purpose_id']))
+
+        # p.direction_id = Direction.objects.get(pk=int(data['direction_id']))
+        # p.purpose_id = Purpose.objects.get(pk=int(data['purpose_id']))
         p.content = data['content']
         p.generalization = data['generalization']
         p.responsible = data['responsible']

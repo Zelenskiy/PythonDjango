@@ -1,9 +1,17 @@
 {% if count != 0 %}
     <style>
-     .finger { cursor: pointer; }
-     .cross { cursor: crosshair; }
-     .help { cursor: help; }
-   </style>
+        .finger {
+            cursor: pointer;
+        }
+
+        .cross {
+            cursor: crosshair;
+        }
+
+        .help {
+            cursor: help;
+        }
+    </style>
 
     <script type="text/javascript">
         var count = {{ count }};
@@ -13,21 +21,23 @@
 
     <script type="text/javascript">
 
-          function navButtonStatus(){
+        function navButtonStatus() {
             {#console.log(" n="+String(n)+" count="+String(count));#}
-              console.log("n="+n);
-              console.log("count="+count);
+            {#  console.log("n="+n);#}
+            {#  console.log("count="+count);#}
 
-            if (n==1){
-                console.log("Робимо неактивною");
+            if (n == 1) {
+                {#console.log("Робимо неактивною");#}
                 $('#first').attr('disabled', true);
                 $('#prev').attr('disabled', true);
-            };
-            if (n==count){
+            }
+            ;
+            if (n == count) {
                 $('#last').attr('disabled', true);
                 $('#next').attr('disabled', true);
-            } ;
-            if ((n>1)&&(n<count)) {
+            }
+            ;
+            if ((n > 1) && (n < count)) {
                 $('#first').attr('disabled', false);
                 $('#prev').attr('disabled', false);
                 $('#last').attr('disabled', false);
@@ -39,38 +49,49 @@
 
     </script>
 
+    <style>
+        #pdskzk2 {
+            position: relative;
+            display: inline-block;
+        }
+
+    </style>
+
     <form id="update-form" method="post" action="{% url 'postr' 20 1 %}">
 
         {% csrf_token %}
 
+
         <span id="dir_purp_panel" class="finger">
-            <p class="mb-0 ml-3" style="text-align: center"  >&#8230;</p>
-            <div id="l1" class=" mb-0 ml-3 "  hidden>{{ form.direction_id.label_tag }} </div>
-            <div id="f1" class="card text-white mb-1 ml-3 " hidden>{{ form.direction_id }}</div>
+
+            <p class="mb-0 ml-3" style="text-align: center;">&#8230;</p>
+
+            <div id="l1" class=" mb-0 ml-3 " hidden>{{ form.direction_id.label_tag }} </div>
+            <div id="f1" class="card text-white mb-1 ml-3   small" hidden>{{ form.direction_id }}</div>
 
             <div id="l2" class=" mb-0 ml-3" hidden>{{ form.purpose_id.label_tag }} </div>
-            <div id="f2" class="card text-white bg-info mb-1 ml-3 " hidden>{{ form.purpose_id }}</div>
+            <div id="f2" class="card text-white bg-info mb-1 ml-3   small" hidden>{{ form.purpose_id }}</div>
         </span>
 
         <div class=" mb-0 ml-3">{{ form.content.label_tag }} </div>
         <div id="a1" class="card text-white bg-info mb-1 ml-3 small">{{ form.content }}</div>
 
         <div class=" mb-0 ml-3">{{ form.generalization.label_tag }} </div>
-        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.generalization }}</div>
+        <div class="card text-white bg-info mb-1 ml-3   small">{{ form.generalization }}</div>
 
         <div class=" mb-0 ml-3">{{ form.responsible.label_tag }} </div>
         <div class="card text-white bg-info mb-1 ml-3  small">{{ form.responsible }}</div>
 
         <div class=" mb-0 ml-3">{{ form.termin.label_tag }} </div>
-        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.termin }}</div>
+        <div class="card text-white bg-info mb-1 ml-3   small">{{ form.termin }}</div>
 
 
         <div class=" mb-0 ml-3">{{ form.note.label_tag }} </div>
-        <div class="card text-white bg-info mb-1 ml-3 ">{{ form.note }}</div>
+        <div class="card text-white bg-info mb-1 ml-3   small">{{ form.note }}</div>
 
 
         <div id="nav_panel" class="btn-group ml-3 mt-3">
-            <button  type="button" id="first" class="btn btn-primary bg-info"
+            <button type="button" id="first" class="btn btn-primary bg-info"
                     style="width: 50px; ">&lt;&lt;
             </button>&nbsp;
             <button type="button" id="prev" class="btn btn-primary bg-info"
@@ -104,7 +125,7 @@
 
     <script type="text/javascript">
 
-            function update_model() {
+        function update_model() {
             $('#goEdit').attr('checked', old_value_goEdit);
             if ($('#goEdit').is(':checked')) {
                 $('#nav_panel').attr('style', "background-color: #F76C7E;");
@@ -112,24 +133,22 @@
                 id_pl = {{ i_id }};
                 var data = $("#update-form").serialize();
                 $.ajax({
-                        url: "../update_plan/" + id_pl + "/", // the endpoint
-                        {#url: "http://127.0.0.1:8000/plan/update_plan/", // the endpoint#}
-                        type: "POST", // http method
+                        url: "../update_plan/" + id_pl + "/",
+                        type: "POST",
                         data: data,
                     }
                 );
+                return true;
             } else {
                 $('#nav_panel').attr('style', "background-color: #E3F2FD;");
 
             }
+            return false;
 
         }
 
 
-
-
-
-        jQuery('#dir_purp_panel').on('click', function () {
+        jQuery('#dir_purp_panel').on('dblclick', function () {
             flag = $('#f1').attr("hidden");
             $('#l1').attr("hidden", !flag);
             $('#f1').attr("hidden", !flag);
@@ -139,18 +158,42 @@
 
         jQuery('#add_btn').on('click', function () {
             r_id = {{ r_id }};
-            {#console.log(r_id);#}
-            var data = $("#update-form").serialize();
-            $.ajax({
-                    url: "../add_plan/" + r_id + "/",
-                    type: "POST",
-                    data: data,
-                }
-            );
-            //Відкриваємо щойностворений запис
+            {#Зберігаємо старий запис#}
+            {#console.log("qqqqqqqqqqqqqqqqqqq");#}
+            if (update_model()) {
+                {#console.log("qqqqqqqqqqqqqqqqqqq");#}
+                s = "" + String(r_id) + "/0";
+                $('#pl').load(s);
+            } else {
+                alert("Режим редагування вимкнено");
+            }
+            ;
+        });
 
-            //Щоб зберегло
-            $('#goEdit').attr('checked', true);
+        jQuery('#del_button').on('click', function () {
+            if ($('#goEdit').is(':checked')) {
+                i_id = {{ i_id }};
+                console.log(i_id);
+                res = confirm("Видалити запис id=" + String(i_id) + "?");
+                if (res) {
+                    console.log("Заходимо");
+                    var data = $("#update-form").serialize();
+                    $.ajax({
+                            url: "../del_plan/" + i_id + "/",
+                            type: "POST",
+                            data: data,
+                            error: function () {
+                                console.log("Щось не те");
+                            }
+                        }
+                    );
+
+                    s = "" + a + "/" + n;
+                    $('#pl').load(s);
+                }
+            } else {
+                alert("Режим редагування вимкнено");
+            }
 
         });
 
