@@ -1,5 +1,6 @@
 import simplejson as simplejson
 from django.urls import reverse_lazy, reverse
+from django.views import View
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.generic.edit import FormView, ProcessFormView, UpdateView
 # from django.contrib.auth.forms import UserCreationForm
@@ -39,28 +40,28 @@ def make_rubrics(rubrics):
     return escape(rubrics_code)
 
 
-def add(request, r_id):
-    plan = Plan
-    plan.content = ''
-    plan.responsible = ''
-    plan.termin = ''
-    plan.generalization = ''
-    plan.note = ''
-    plan.r_id = r_id
-    plan.direction_id = None
-    plan.purpose_id = None
-
-    if request.method == "POST":
-        form = PlanForm(request.POST)
-        if form.is_valid():
-            print("ssssssssss")
-
-
-    else:
-        form = PlanForm(instance=plan)
-        context = {'form': form}
-    return render(request, 'plan/post.html', context)
-
+# def add(request, r_id):
+#     plan = Plan
+#     plan.content = ''
+#     plan.responsible = ''
+#     plan.termin = ''
+#     plan.generalization = ''
+#     plan.note = ''
+#     plan.r_id = r_id
+#     plan.direction_id = None
+#     plan.purpose_id = None
+#
+#     if request.method == "POST":
+#         form = PlanForm(request.POST)
+#         if form.is_valid():
+#             print("ssssssssss")
+#
+#
+#     else:
+#         form = PlanForm(instance=plan)
+#         context = {'form': form}
+#     return render(request, 'plan/post.html', context)
+#
 
 #
 # def add_7(request, r_id):
@@ -108,17 +109,26 @@ def add_ajax(request, id):
     context = {'plans': plans}
     return render(request, 'plan/post.html', context)
 
-# @csrf_exempt
-def del_plan(request, id):
-    plan = Plan.objects.get(pk=id)
-    if plan is None:
-        print("Нет такого")
-    else:
-        print("Вилучаємо "+str(plan))
-        plan.delete()
-        plan.save()
-    context = {}
-    return render(request, 'plan/post.html', context)
+class Post_delete(View):
+
+    def post(self, request, id):
+        post = Plan.objects.get(pk=id)
+        print("Вилучаємо " + str(id))
+        post.delete()
+        context = {}
+        return render(request, 'plan/post.html', context)
+        # return redirect(reverse('index'))
+
+# def del_plan(request, id):
+#     plan = Plan.objects.get(pk=id)
+#     if plan is None:
+#         print("Нет такого")
+#     else:
+#         print("Вилучаємо "+str(plan))
+#         plan.delete()
+#         plan.save()
+#     context = {}
+#     return render(request, 'plan/post_empty.html', context)
 
 
 def postr(request, r_id, num):
@@ -141,7 +151,7 @@ def postr(request, r_id, num):
             context = {'num': num, 'count': count, 'form': form, 'r_id': r_id,  'i_id': i_id}
             return render(request, 'plan/post.html', context)
     else:
-        # print("Упіймав")
+        print("Додаю")
         plan = Plan()
         plan.r_id = Rubric.objects.get(pk=int(r_id))
         plan.content = ''
@@ -168,15 +178,15 @@ def imp_from_excel(request):
     return render(request, 'plan/index.html')
 
 
-class PlanEditView(UpdateView):
-    model = Plan
-    form_class = PlanForm
-    template_name = 'plan/post.html'
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-        return context
+# class PlanEditView(UpdateView):
+#     model = Plan
+#     form_class = PlanForm
+#     template_name = 'plan/post.html'
+#
+#     def get_context_data(self, *args, **kwargs):
+#         context = super().get_context_data(*args, **kwargs)
+#         print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+#         return context
 
 # def add_plan(request, r_id):
 #     if request.POST and request.is_ajax():
@@ -194,6 +204,7 @@ class PlanEditView(UpdateView):
 
 def update_plan(request, id):
     if request.POST and request.is_ajax():
+        print("Змінюю")
         data = request.POST
         p = Plan.objects.get(pk=id)
         if data['direction_id'] == '':

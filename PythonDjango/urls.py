@@ -21,7 +21,7 @@ from django.urls import path, include
 from PythonDjango import settings
 from PythonDjango.views import main
 from bboard.views import index
-from plan.views import MyRegisterFormView, login, add
+from plan.views import MyRegisterFormView
 
 urlpatterns = [
 
