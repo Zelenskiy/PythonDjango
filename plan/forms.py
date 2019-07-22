@@ -12,10 +12,12 @@ class PlanForm(ModelForm):
         fields = {'id', 'content', 'termin', 'generalization', 'responsible', 'note', 'sort', \
                   'direction_id', 'purpose_id', 'show', 'done'}
         widgets = {
-            'content': Textarea(attrs={'rows': '4', 'placeholder': 'Впишіть сюди зміст заходу'}),
-            'termin': TextInput(attrs={'placeholder': 'Впишіть сюди дату чи період'}),
-            'responsible': TextInput(attrs={ 'placeholder': 'Впишіть сюди відповідального за захід'}),
-            'generalization': TextInput(attrs={ 'placeholder': 'Впишіть сюди документ, у якому захід узагальниться'}),
+            'content': Textarea(attrs={'rows': '7', 'placeholder': 'Впишіть сюди зміст заходу'}),
+            'termin': TextInput(attrs={'placeholder': 'Впишіть сюди дату чи період',  'class': 'form-control'}),
+            'responsible': TextInput(attrs={ 'placeholder': 'Впишіть сюди відповідального за захід',  'class': 'form-control'}),
+            'generalization': TextInput(attrs={ 'placeholder': 'Впишіть сюди документ, у якому захід узагальниться',  'class': 'form-control'}),
+
+
             # 'content': forms.Textarea({'class': 'form-control'}),
             # 'termin': forms.TextInput({'class': 'form-control'}),
             # 'generalization': forms.TextInput({'class': 'form-control'}),
@@ -26,8 +28,11 @@ class PlanForm(ModelForm):
 
 
 class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Repeat password', widget=forms.PasswordInput)
+    username = forms.CharField(label='Логін', widget=forms.TextInput)
+    first_name = forms.CharField(label="Ім'я", widget=forms.TextInput)
+    email = forms.CharField(label='Електронна пошта', widget=forms.EmailInput)
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Пароль повторно', widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -36,5 +41,5 @@ class UserRegistrationForm(forms.ModelForm):
     def clean_password2(self):
         cd = self.cleaned_data
         if cd['password'] != cd['password2']:
-            raise forms.ValidationError('Passwords don\'t match.')
+            raise forms.ValidationError('Пароль не співпадає')
         return cd['password2']

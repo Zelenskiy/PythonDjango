@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.urls import path, include
 # from bboard.views import index
+import plan
 from PythonDjango import settings
 from PythonDjango.views import main
 from bboard.views import index
@@ -29,7 +30,7 @@ urlpatterns = [
                   path('bboard/', include('bboard.urls')),
                   path('plan/', include('plan.urls')),
 
-                  # path('', include('plan.urls')),
+                  path('/', include('plan.urls')),
                   # url(r'^flowers/', include('flowers.urls')),
                   path('registration/register/', MyRegisterFormView.as_view(), name="register"),
 

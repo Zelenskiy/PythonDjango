@@ -1,4 +1,5 @@
 import simplejson as simplejson
+from django.contrib.auth.models import User
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
@@ -9,12 +10,14 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Max
 from django.shortcuts import render, redirect
 
+from PythonDjango import settings
 from .forms import PlanForm, UserRegistrationForm
 from .models import Plan, Rubric, Direction, Purpose
 from django.utils.html import escape
 from django.core import serializers
 
 from .utils import *
+
 
 
 def index(request):
@@ -103,21 +106,36 @@ def post(request, id):
     return render(request, 'plan/post.html', context)
 
 
-def add_ajax(request, id):
-    print("update update update update update update update update update update update update update update update ")
-    plans = Plan.objects.filter(id=id)
-    context = {'plans': plans}
-    return render(request, 'plan/post.html', context)
+# def add_ajax(request, id):
+#     print("update update update update update update update update update update update update update update update ")
+#     plans = Plan.objects.filter(id=id)
+#     context = {'plans': plans}
+#     return render(request, 'plan/post.html', context)
+
+
+def verification_user_permission_for_write(request):
+    if request.user.is_authenticated:
+        if request.user.has_perm('plan.change_plan'):
+            print("Можу міняти")
+        if request.user.has_perm('plan.view_plan'):
+            print("Можу дивитися")
+
+        # perm = User.user_permissions.
+
+        username = request.user
+    # print(username)
+    return username
 
 class Post_delete(View):
 
     def post(self, request, id):
         post = Plan.objects.get(pk=id)
-        print("Вилучаємо " + str(id))
+        # print("Вилучаємо " + str(id))
         post.delete()
         context = {}
         return render(request, 'plan/post.html', context)
         # return redirect(reverse('index'))
+
 
 # def del_plan(request, id):
 #     plan = Plan.objects.get(pk=id)
@@ -132,7 +150,9 @@ class Post_delete(View):
 
 
 def postr(request, r_id, num):
-    if num > 0:
+    verification_user_permission_for_write(request)
+
+    if (num > 0) and (request.user.has_perm('plan.view_plan')):
         plans = Plan.objects.filter(r_id=r_id)
         count = len(plans)
         if count == 0:
@@ -148,31 +168,31 @@ def postr(request, r_id, num):
             return render(request, '', context)
 
         else:
-            context = {'num': num, 'count': count, 'form': form, 'r_id': r_id,  'i_id': i_id}
+            context = {'num': num, 'count': count, 'form': form, 'r_id': r_id, 'i_id': i_id}
             return render(request, 'plan/post.html', context)
     else:
-        print("Додаю")
-        plan = Plan()
-        plan.r_id = Rubric.objects.get(pk=int(r_id))
-        plan.content = ''
-        post.responsible = ''
-        post.termin = ''
-        post.generalization = ''
-        post.note = ''
-        post.sort = 0
-        post.direction_id = 0
-        post.purpose_id = 0
-        post.direction_id = Direction.objects.get(pk=0)
-        post.purpose_id = Purpose.objects.get(pk=0)
-        plan.save()
-        form = PlanForm(instance=plan)
-        # form.save()
-        i_id = plan.id
-        plans = Plan.objects.filter(r_id=r_id)
-        count = len(plans)
-        num = count
-        context = {'num': num, 'count': count, 'form': form, 'r_id': r_id, 'i_id': i_id}
-        return render(request, 'plan/post.html', context)
+        if request.user.has_perm('plan.add_plan'):
+            plan = Plan()
+            plan.r_id = Rubric.objects.get(pk=int(r_id))
+            plan.content = ''
+            plan.responsible = ''
+            plan.termin = ''
+            plan.generalization = ''
+            plan.note = ''
+            plan.direction_id = Direction.objects.get(pk=0)
+            plan.purpose_id = Purpose.objects.get(pk=0)
+            max_sort_fild = Plan.objects.filter(r_id=r_id).aggregate(Max('sort'))
+            srt = max_sort_fild['sort__max']
+            plan.sort = srt + 1
+            plan.save()
+            form = PlanForm(instance=plan)
+            i_id = plan.id
+            plans = Plan.objects.filter(r_id=r_id)
+            count = len(plans)
+            num = count
+            context = {'num': num, 'count': count, 'form': form, 'r_id': r_id, 'i_id': i_id}
+            return render(request, 'plan/post.html', context)
+
 
 def imp_from_excel(request):
     return render(request, 'plan/index.html')
@@ -203,8 +223,7 @@ def imp_from_excel(request):
 #     return render(request, 'plan/post.html', context)
 
 def update_plan(request, id):
-    if request.POST and request.is_ajax():
-        print("Змінюю")
+    if request.POST and request.is_ajax() and request.user.has_perm('plan.change_plan'):
         data = request.POST
         p = Plan.objects.get(pk=id)
         if data['direction_id'] == '':
@@ -225,6 +244,7 @@ def update_plan(request, id):
         p.note = data['note']
         p.save()
     return render(request, 'plan/post.html', {})
+
 
 class MyRegisterFormView(FormView):
     form_class = UserRegistrationForm

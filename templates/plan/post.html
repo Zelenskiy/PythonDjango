@@ -44,6 +44,8 @@
                 $('#next').attr('disabled', false);
             }
         };
+    </script>
+    <script type="text/javascript">
 
         navButtonStatus();
 
@@ -74,16 +76,36 @@
         </span>
 
         <div class=" mb-0 ml-3">{{ form.content.label_tag }} </div>
-        <div id="a1" class="card text-white bg-info mb-1 ml-3 small">{{ form.content }}</div>
+        <div id="a1" class="card text-white text-white mb-1 ml-3 ">{{ form.content }}</div>
 
         <div class=" mb-0 ml-3">{{ form.generalization.label_tag }} </div>
-        <div class="card text-white bg-info mb-1 ml-3   small">{{ form.generalization }}</div>
+        <div class="card text-white  bg-info  mb-1 ml-3   small" style="background: #e3f2fd;">
+            <div class="input-group ">
+                {{ form.generalization }}
+                <div id="open_generalization_btn" class=" input-group-text  small finger">&#9998;</div>
+            </div>
+        </div>
+{#        <div class="card text-white bg-info mb-1 ml-3   small">{{ form.generalization }}</div>#}
 
         <div class=" mb-0 ml-3">{{ form.responsible.label_tag }} </div>
-        <div class="card text-white bg-info mb-1 ml-3  small">{{ form.responsible }}</div>
+        <div class="card text-white  bg-info  mb-1 ml-3   small" style="background: #e3f2fd;">
+            <div class="input-group ">
+                {{ form.responsible }}
+                <div id="open_responsible_btn" class=" input-group-text  small finger">&#9998;</div>
+            </div>
+        </div>
+{#        <div class="card text-white bg-info mb-1 ml-3  small">{{ form.responsible }}</div>#}
 
         <div class=" mb-0 ml-3">{{ form.termin.label_tag }} </div>
-        <div class="card text-white bg-info mb-1 ml-3   small">{{ form.termin }}</div>
+        <div class="card text-white  bg-info  mb-1 ml-3   small" style="background: #e3f2fd;">
+            <div class="input-group ">
+                {{ form.termin }}
+                <div id="open_termin_btn" class=" input-group-text  small finger">&#9998;</div>
+
+
+            </div>
+        </div>
+        {#        <div class="card text-white bg-info mb-1 ml-3   small">{{ form.termin }}</div>#}
 
 
         <div class=" mb-0 ml-3">{{ form.note.label_tag }} </div>
@@ -125,6 +147,7 @@
 
     <script type="text/javascript">
 
+
         function update_model() {
             $('#goEdit').attr('checked', old_value_goEdit);
             if ($('#goEdit').is(':checked')) {
@@ -147,6 +170,10 @@
 
         }
 
+        jQuery('form').on('change', function () {
+            update_model();
+        });
+
 
         jQuery('#dir_purp_panel').on('dblclick', function () {
             flag = $('#f1').attr("hidden");
@@ -156,12 +183,10 @@
             $('#f2').attr("hidden", !flag);
         });
 
+
         jQuery('#add_btn').on('click', function () {
             r_id = {{ r_id }};
-            {#Зберігаємо старий запис#}
-            {#console.log("qqqqqqqqqqqqqqqqqqq");#}
             if (update_model()) {
-                {#console.log("qqqqqqqqqqqqqqqqqqq");#}
                 s = "" + String(r_id) + "/0";
                 $('#pl').load(s);
             } else {
@@ -184,12 +209,15 @@
                             data: data,
                             error: function () {
                                 console.log("Щось не те");
+                            },
+                            success: function () {
+                                s = "" + a + "/" + n;
+                                $('#pl').load(s);
                             }
                         }
                     );
 
-                    s = "" + a + "/" + n;
-                    $('#pl').load(s);
+
                 }
             } else {
                 alert("Режим редагування вимкнено");
@@ -201,8 +229,8 @@
             n = n + 1;
             if (n <= 0) n = 1;
             if (n >= count) n = count;
-            s = "" + a + "/" + n;
             update_model();
+            s = "" + a + "/" + n;
             $('#pl').load(s);
             navButtonStatus();
         });

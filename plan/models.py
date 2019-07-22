@@ -21,7 +21,7 @@ class Plan(models.Model):
     tmp2 = models.CharField(max_length=50, null=True, blank=True, verbose_name='tmp')
 
     class Meta:
-        ordering = ['sort']
+        ordering = ['sort', 'published']
 
 class Direction(models.Model):
     name = models.CharField(max_length=50, verbose_name='Напрямок')

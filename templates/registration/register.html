@@ -1,15 +1,37 @@
 {% extends "layout/basic_plan.html" %}
 
 {% block content %}
-    <div class="row mt-lg-5">
-
-
+    <div class="row mt-lg-5 " style="background: #e3f2fd;">
+        <div class="col min-vw-50">
             <form action="" method="post">{% csrf_token %}
-                {{ form.as_table }}
+                {#                {{ form.as_p }}#}
+                <div class="  mb-0 ml-3">{{ form.username.label_tag }} </div>
+                <div id="a11" class="card text-white  mb-1 ml-3 ">{{ form.username }}</div>
 
-                <input type="submit" value="Зарегистрировать">
+                <div class="  mb-0 ml-3">{{ form.first_name.label_tag }} </div>
+                <div id="a12" class="card text-white  mb-1 ml-3 ">{{ form.first_name }}</div>
+
+                <div class="  mb-0 ml-3">{{ form.email.label_tag }} </div>
+                <div class="input-group  mb-1 ml-3 ">
+                    <div class=" input-group-text  " >@</div>
+                    {{ form.email }}
+
+                </div>
+{#                <div id="a13" class="card  bg-info mb-1 ml-3 ">{{ form.email }}</div>#}
+
+                <div class="  mb-0 ml-3">{{ form.password.label_tag }} </div>
+                <div id="a14" class="card   mb-1 ml-3 ">{{ form.password }}</div>
+
+                <div class="  mb-0 ml-3">{{ form.password2.label_tag }} </div>
+                <div id="a15" class="card   mb-1 ml-3 ">{{ form.password2 }}</div>
+
+                <p></p>
+                <button class="card  ml-5 " type="submit" style="background: #eff2fd;"
+                       value="Зареєструвати">Зареєструвати
+                </button>
+                <p></p>
             </form>
-
+        </div>
     </div>
 
 {% endblock %}
