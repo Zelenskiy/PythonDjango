@@ -29,6 +29,7 @@ urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('bboard/', include('bboard.urls')),
                   path('plan/', include('plan.urls')),
+                  path('timetable/', include('timetable.urls')),
 
                   path('/', include('plan.urls')),
                   # url(r'^flowers/', include('flowers.urls')),

@@ -43,7 +43,9 @@
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'view' %}">Головна <span class="sr-only">(current)</span></a>
             </li>
-
+            <li>
+                <a class="nav-link" href="{% url 'importasc' %}">Імпорт <span class="sr-only">(current)</span></a>
+            </li>
 
         </ul>
         {% if user.is_authenticated %}

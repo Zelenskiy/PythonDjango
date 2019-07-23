@@ -23,16 +23,18 @@ from plan.views import index, imp_from_excel, view, postr,  \
 
 #
 #
-
+from timetable.views import importasc
 
 urlpatterns = [
-                  url(r'^update_plan/([0-9]+)/', update_plan, name='update_plan'),
-
-                  url(r'^del_plan/([0-9]+)/', Post_delete.as_view()),
-                  # url(r'^del_plan/([0-9]+)/', del_plan, name='del_plan'),
-                  path('import/', imp_from_excel, name='imp_from_excel'),
-                  path('view/<int:r_id>/<int:num>/', postr, name='postr'),
-                  path('view/', view, name='view'),
-                  path('', index, name='index'),
+                  # url(r'^update_plan/([0-9]+)/', update_plan, name='update_plan'),
+                  #
+                  # url(r'^del_plan/([0-9]+)/', Post_delete.as_view()),
+                  # # url(r'^del_plan/([0-9]+)/', del_plan, name='del_plan'),
+                  # path('import/', imp_from_excel, name='imp_from_excel'),
+                  # path('view/<int:r_id>/<int:num>/', postr, name='postr'),
+                  # path('view/', view, name='view'),
+                  path('importasc/', importasc, name='importasc'),
+                  # url(r'^importasc/', importasc, name='importasc'),
+                  # path('', index, name='index'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
