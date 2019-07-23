@@ -45,6 +45,7 @@ ALLOWED_HOSTS = ['192.168.0.3']
 INSTALLED_APPS = [
     'bboard.apps.BboardConfig',
     'plan.apps.PlanConfig',
+    'timetable.apps.TimetableConfig',
     'flowers.apps.FlowersConfig',
 
     # 'bootstrap3',
