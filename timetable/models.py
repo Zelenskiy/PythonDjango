@@ -6,7 +6,9 @@ from django.utils.text import slugify
 
 class Timetable(models.Model):
     codename = models.SlugField(null=False, max_length=150, unique=True, default="", verbose_name='Slug')
-    def gen_codename(self,s):
+    name = models.CharField(blank=True, null=True, max_length=20)
+
+    def gen_codename(self, s):
         self.codename = slugify(s, allow_unicode=True)+'-'+str(int(time()))
 
 class Day(models.Model):

@@ -4,23 +4,42 @@ import xml.etree.ElementTree as ET
 
 from PythonDjango.settings import BASE_DIR
 from timetable.models import *
+import logging
+
+from worktime.models import Settings
+
+logging.basicConfig(filename="log-file.log", level=logging.INFO)
+
+
+# logging.info("Открыт Каталог товаров")
+
+def viewteachers(request):
+    s = Settings.objects.filter(field='timetable')[0].value
+    table = Timetable.objects.get(pk=int(s))
+
+    logging.info("!!!!!!!!       timetable/teachers.html")
+    teachers = Teacher.objects.filter(timetable_id=table)
+    context = {'teachers': teachers}
+
+    return render(request, 'timetable/teachers.html', context)
 
 
 def importasc(request):
     if request.method == 'POST' and request.FILES['myfile']:
         myfile = request.FILES['myfile']
+        namefile = request.POST['namefile']
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
-        print(uploaded_file_url)
-        importgo(uploaded_file_url)
+        # print(uploaded_file_url)
+        importgo(namefile, uploaded_file_url)
         return render(request, 'timetable/import_done.html', {
             'uploaded_file_url': uploaded_file_url
         })
     return render(request, 'timetable/import.html')
 
 
-def importgo(uploaded_file_url):
+def importgo(namefile, uploaded_file_url):
     # TODO
     # tt_id = 11  # Це прибрати перед розкоментуванням
 
@@ -30,23 +49,22 @@ def importgo(uploaded_file_url):
     xml = tree.getroot()
     timetable = Timetable()
     timetable.gen_codename(uploaded_file_url)
+    timetable.name = namefile
     timetable.save()
     tt_id = timetable.id
 
-
-
     for child in xml:
         if child.tag == "days":
-                print("Processing XML for Day")
-                for d in child:
-                    day = Day()
-                    day.name = d.get("name").strip()
-                    day.short = d.get("short").strip()
-                    day.day = d.get("day").strip()
-                    day.timetable_id = Timetable.objects.get(pk=tt_id)
-                    day.save()
+            # print("Processing XML for Day")
+            for d in child:
+                day = Day()
+                day.name = d.get("name").strip()
+                day.short = d.get("short").strip()
+                day.day = d.get("day").strip()
+                day.timetable_id = Timetable.objects.get(pk=tt_id)
+                day.save()
         elif child.tag == "periods":
-            print("Processing XML for Period")
+            # print("Processing XML for Period")
             for d in child:
                 period = Period()
                 period.period = d.get("period").strip()
@@ -55,7 +73,7 @@ def importgo(uploaded_file_url):
                 period.timetable_id = Timetable.objects.get(pk=tt_id)
                 period.save()
         elif child.tag == "teachers":
-            print("Processing XML for Teacher")
+            # print("Processing XML for Teacher")
             for d in child:
                 teacher = Teacher()
                 teacher.ident = d.get("id").strip()
@@ -66,7 +84,7 @@ def importgo(uploaded_file_url):
                 teacher.timetable_id = Timetable.objects.get(pk=tt_id)
                 teacher.save()
         elif child.tag == "classes":
-            print("Processing XML for Class")
+            # print("Processing XML for Class")
             for d in child:
                 clas = Class()
                 clas.ident = d.get("id").strip()
@@ -77,7 +95,7 @@ def importgo(uploaded_file_url):
                 clas.timetable_id = Timetable.objects.get(pk=tt_id)
                 clas.save()
         elif child.tag == "subjects":
-            print("Processing XML for Subject")
+            # print("Processing XML for Subject")
             for d in child:
                 subject = Subject()
                 subject.ident = d.get("id").strip()
@@ -86,7 +104,7 @@ def importgo(uploaded_file_url):
                 subject.timetable_id = Timetable.objects.get(pk=tt_id)
                 subject.save()
         elif child.tag == "classrooms":
-            print("Processing XML for Classrooms")
+            # print("Processing XML for Classrooms")
             for d in child:
                 classroom = Classroom()
                 classroom.ident = d.get("id").strip()
@@ -96,7 +114,7 @@ def importgo(uploaded_file_url):
                 classroom.save()
 
         elif child.tag == "groups":
-            print("Processing XML for Group")
+            # print("Processing XML for Group")
             for d in child:  # classid,name,entireclass,divisiontag,studentcount
                 group = Group()
                 group.ident = d.get("id").strip()
@@ -108,7 +126,7 @@ def importgo(uploaded_file_url):
                 group.timetable_id = Timetable.objects.get(pk=tt_id)
                 group.save()
         elif child.tag == "lessons":
-            print("Processing XML for Lesson")
+            # print("Processing XML for Lesson")
             for d in child:  # id,subjectid,classids,groupids,studentids,teacherids,classroomids,periodspercard,periodsperweek,weeks
                 lesson = Lesson()
                 lesson.ident = d.get("id").strip()
@@ -124,7 +142,7 @@ def importgo(uploaded_file_url):
                 lesson.timetable_id = Timetable.objects.get(pk=tt_id)
                 lesson.save()
         elif child.tag == "cards":
-            print("Processing XML for Card")
+            # print("Processing XML for Card")
             for d in child:  # lessonid,day,period,classroomids
                 card = Card()
                 ss = d.get("lessonid").strip()
@@ -145,10 +163,9 @@ def importgo(uploaded_file_url):
 
     # Кінець тимчасово закоментованого
 
-
     # Заповнюємо ManyToMany поля
     # Для поля Class
-    print("Processing ManyToMany for Class")
+    # print("Processing ManyToMany for Class")
     classes = Class.objects.filter(timetable_id=tt_id)
     for clas in classes:
         rooms = clas.classroomids.split(',')
@@ -162,7 +179,7 @@ def importgo(uploaded_file_url):
     # teachers = models.ManyToManyField('Teacher')
 
     # Для поля Lesson
-    print("Processing ManyToMany for Lesson")
+    # print("Processing ManyToMany for Lesson")
     lessons = Lesson.objects.filter(timetable_id=tt_id)
     for lesson in lessons:
         # print(lesson.classids)
@@ -199,7 +216,7 @@ def importgo(uploaded_file_url):
         lesson.save()
 
     # Для поля Group
-    print("Processing ManyToMany for Group")
+    # print("Processing ManyToMany for Group")
     groups = Group.objects.filter(timetable_id=tt_id)
     for group in groups:
         cls = group.classid.split(',')
@@ -210,10 +227,9 @@ def importgo(uploaded_file_url):
                 group.classes.add(Class.objects.get(pk=i_id))
         group.save()
 
-
     #
     # # Для поля Card
-    print("Processing ManyToMany for Card")
+    # print("Processing ManyToMany for Card")
     cards = Card.objects.filter(timetable_id=tt_id)
     for card in cards:
         # print(lesson.classids)
@@ -224,6 +240,7 @@ def importgo(uploaded_file_url):
                 i_id = per.id
                 card.classrooms.add(Classroom.objects.get(pk=i_id))
         card.save()
+
 
 # Скрипти для очистки
 

@@ -1,23 +1,12 @@
-import simplejson as simplejson
-from django.contrib.auth.models import User
-from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
-from django.views.generic.edit import FormView, ProcessFormView, UpdateView
-# from django.contrib.auth.forms import UserCreationForm
-
-from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.edit import FormView
 from django.db.models import Max
-from django.shortcuts import render, redirect
-
-from PythonDjango import settings
+from scripts.import_from_excel import start_import
+from worktime.models import Settings
 from .forms import PlanForm, UserRegistrationForm
-from .models import Plan, Rubric, Direction, Purpose
+from .models import Plan, Rubric, Direction, Purpose, Plantable
 from django.utils.html import escape
-from django.core import serializers
-
 from .utils import *
-
 
 
 def index(request):
@@ -91,8 +80,10 @@ def make_rubrics(rubrics):
 
 
 def view(request):
-    plans = Plan.objects.all()
-    rubrics = Rubric.objects.all()
+    s = Settings.objects.filter(field='plantable')[0].value
+    table = Plantable.objects.get(pk=int(s))
+    plans = Plan.objects.filter(plantable_id=table)
+    rubrics = Rubric.objects.filter(plantable_id=table)
     rubr_id_max = Rubric.objects.aggregate(Max('id'))
     dir, dir2 = kostil(request.build_absolute_uri())
     context = {'plans': plans, 'rubrics': rubrics, 'dir': dir, 'dir2': dir2, 'rubr_id_max': rubr_id_max}
@@ -101,7 +92,9 @@ def view(request):
 
 
 def post(request, id):
-    plans = Plan.objects.filter(id=id)
+    s = Settings.objects.filter(field='plantable')[0].value
+    table = Plantable.objects.get(pk=int(s))
+    plans = Plan.objects.filter(plantable_id=table)
     context = {'plans': plans}
     return render(request, 'plan/post.html', context)
 
@@ -125,6 +118,7 @@ def verification_user_permission_for_write(request):
         username = request.user
     # print(username)
     return username
+
 
 class Post_delete(View):
 
@@ -151,9 +145,11 @@ class Post_delete(View):
 
 def postr(request, r_id, num):
     verification_user_permission_for_write(request)
+    s = Settings.objects.filter(field='plantable')[0].value
+    table = Plantable.objects.get(pk=int(s))
 
     if (num > 0) and (request.user.has_perm('plan.view_plan')):
-        plans = Plan.objects.filter(r_id=r_id)
+        plans = Plan.objects.filter(plantable_id=table, r_id=r_id)
         count = len(plans)
         if count == 0:
             return render(request, 'plan/post_empty.html')
@@ -179,15 +175,16 @@ def postr(request, r_id, num):
             plan.termin = ''
             plan.generalization = ''
             plan.note = ''
-            plan.direction_id = Direction.objects.get(pk=0)
-            plan.purpose_id = Purpose.objects.get(pk=0)
+            plan.direction_id = Direction.objects.filter(name='')[0]
+            plan.purpose_id = Purpose.objects.filter(name='')[0]
             max_sort_fild = Plan.objects.filter(r_id=r_id).aggregate(Max('sort'))
             srt = max_sort_fild['sort__max']
             plan.sort = srt + 1
+            plan.plantable_id = Plantable.objects.get(pk=12)
             plan.save()
             form = PlanForm(instance=plan)
             i_id = plan.id
-            plans = Plan.objects.filter(r_id=r_id)
+            plans = Plan.objects.filter(r_id=r_id, plantable_id=table)
             count = len(plans)
             num = count
             context = {'num': num, 'count': count, 'form': form, 'r_id': r_id, 'i_id': i_id}
@@ -195,32 +192,9 @@ def postr(request, r_id, num):
 
 
 def imp_from_excel(request):
-    return render(request, 'plan/index.html')
+    start_import()
+    return render(request, 'plan/import_end.html')
 
-
-# class PlanEditView(UpdateView):
-#     model = Plan
-#     form_class = PlanForm
-#     template_name = 'plan/post.html'
-#
-#     def get_context_data(self, *args, **kwargs):
-#         context = super().get_context_data(*args, **kwargs)
-#         print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-#         return context
-
-# def add_plan(request, r_id):
-#     if request.POST and request.is_ajax():
-#         plan = Plan
-#         plan.r_id = Rubric.objects.get(pk=int(r_id))
-#         plan.content = '!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-#         # plan.save()
-#         form = PlanForm(instance=plan)
-#         i_id = -1
-#         plans = Plan.objects.filter(r_id=r_id)
-#         count = len(plans)
-#         num = count
-#         context = {'num': num, 'count': count, 'form': form, 'r_id': r_id, 'i_id': i_id}
-#     return render(request, 'plan/post.html', context)
 
 def update_plan(request, id):
     if request.POST and request.is_ajax() and request.user.has_perm('plan.change_plan'):

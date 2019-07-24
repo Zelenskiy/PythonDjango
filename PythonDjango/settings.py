@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'plan.apps.PlanConfig',
     'timetable.apps.TimetableConfig',
     'flowers.apps.FlowersConfig',
+    'worktime.apps.WorktimeConfig',
 
     # 'bootstrap3',
     # 'scripts.import_from_excel',

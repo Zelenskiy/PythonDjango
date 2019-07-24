@@ -17,11 +17,10 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.urls import path, include
-# from bboard.views import index
-import plan
+
+import worktime
 from PythonDjango import settings
-from PythonDjango.views import main
-from bboard.views import index
+
 from plan.views import MyRegisterFormView
 
 urlpatterns = [
@@ -29,7 +28,9 @@ urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('bboard/', include('bboard.urls')),
                   path('plan/', include('plan.urls')),
+
                   path('timetable/', include('timetable.urls')),
+                  path('worktime/', include('worktime.urls')),
 
                   path('/', include('plan.urls')),
                   # url(r'^flowers/', include('flowers.urls')),

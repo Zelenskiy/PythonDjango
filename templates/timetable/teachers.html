@@ -1,0 +1,27 @@
+{% extends "layout/basic_tt.html" %}
+{% load static %}
+{#{% import os %}#}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+
+        <div class="row mt-lg-5 ">
+        <select class="form-control small" size="22" >
+            {% for teacher in teachers %}
+                <option> {{ teacher.name }}</option>
+
+            {% endfor %}
+        </select>
+        </div>
+    {% else %}
+        <script type="text/javascript">
+            alert("Увійдіть");
+            document.location.href = '/accounts/login/';
+
+        </script>
+
+    {% endif %}
+
+
+{% endblock %}

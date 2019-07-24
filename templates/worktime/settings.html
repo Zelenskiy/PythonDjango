@@ -1,0 +1,37 @@
+{% extends "layout/basic_tt.html" %}
+{% load static %}
+{#{% import os %}#}
+{% block title %}
+    Налаштування
+{% endblock %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+
+        <div class="row mt-lg-5 ">
+            <form method="post"> {% csrf_token %}
+                {#                {{ form.as_p }}#}
+
+                <ui type="square">
+                    {% for set in settings %}
+                        <li><input type="text" name="field_{{ set.field }}" value="{{ set.field }} "> &nbsp;&nbsp;&nbsp;&nbsp;
+                            <input name="{{ set.field }}" type="text" value="{{ set.value }}"></li>
+                    {% endfor %}
+                </ui>
+                <input type="submit">
+            </form>
+
+
+        </div>
+    {% else %}
+        <script type="text/javascript">
+            alert("Увійдіть");
+            document.location.href = '/accounts/login/';
+
+        </script>
+
+    {% endif %}
+
+
+{% endblock %}

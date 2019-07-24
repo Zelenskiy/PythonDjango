@@ -1,0 +1,74 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Головна{% endblock %} - АРМ</title>
+    {#<link type="text/css" href="{% static "style.css" %}" rel="stylesheet">#}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../../static/js/scripts.js"></script>
+</head>
+<body>
+
+
+<style>
+    img.resize {
+        width: 100px; /* you can use % */
+        height: auto;
+    }
+
+    .menu {
+        position: fixed;
+        right: 10px;
+        top: 20%;
+        padding: 10px;
+        background: #e3f2fd;
+        border: 1px solid #333;
+    }
+
+    .text {
+        height: 1000px;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-light"
+     style="position: fixed; z-index: 2; right: 2px; left: 2px; top: 2px; padding: 10px; background: #e3f2fd; border: 0px solid #333;">
+
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'view' %}">Головна <span class="sr-only">(current)</span></a>
+            </li>
+            <li>
+                <a class="nav-link" href="{% url 'importasc' %}">Імпорт <span class="sr-only">(current)</span></a>
+            </li>
+
+        </ul>
+        {% if user.is_authenticated %}
+                {{ user.username.title }}&nbsp;&nbsp;
+                <a href="{% url 'logout' %}?next={{ request.path }}">Вийти</a>&nbsp;&nbsp;
+            {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}">Увійти</a>&nbsp;&nbsp;
+            {% endif %}
+    &nbsp;&nbsp;&nbsp;
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+
+<div class="row mt-lg-3 ml-3 mr-3">
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+
+
+</html>

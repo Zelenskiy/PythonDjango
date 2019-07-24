@@ -23,11 +23,12 @@ from plan.views import index, imp_from_excel, view, postr,  \
 
 #
 #
-from timetable.views import importasc, importgo
+from timetable.views import importasc, importgo, viewteachers
 
 urlpatterns = [
 
                   path('importasc/', importasc, name='importasc'),
-                  path('importgo/', importgo, name='importgo'),
+                  path('viewteachers/', viewteachers, name='viewteachers'),
+                  # path('importgo/', importgo, name='importgo'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
