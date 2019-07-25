@@ -10,11 +10,12 @@ from plan.views import index, imp_from_excel, view, postr,  \
 #
 #
 from timetable.views import importasc, importgo, viewteachers
-from worktime.views import setting
+from worktime.views import setting, vacation
 
 urlpatterns = [
 
                   path('settings/', setting, name='settings_url'),
+                  path('vacations/', vacation, name='vacation_url'),
 
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

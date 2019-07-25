@@ -49,7 +49,7 @@
 
         </ul>
         {% if user.is_authenticated %}
-                {{ user.username.title }}&nbsp;&nbsp;
+                {{ user.username.first_name }}&nbsp;&nbsp;
                 <a href="{% url 'logout' %}?next={{ request.path }}">Вийти</a>&nbsp;&nbsp;
             {% else %}
                 <a href="{% url 'login' %}?next={{ request.path }}">Увійти</a>&nbsp;&nbsp;

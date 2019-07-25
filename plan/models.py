@@ -1,9 +1,11 @@
 from django.db import models
+from worktime.models import Academyear
 
 
 class Plantable(models.Model):  # Таблиця містить вказівники на плани, які є в базі
     name = models.CharField(null=True, blank=True, max_length=150)
-    # ident = models.IntegerField()
+    acyear_id = models.ForeignKey('worktime.Academyear', default=None, blank=True, null=True, on_delete=models.PROTECT)
+
 
 
 class Plan(models.Model):

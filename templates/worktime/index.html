@@ -1,0 +1,28 @@
+{% extends "layout/basic_tt.html" %}
+{% load static %}
+{#{% import os %}#}
+{% block title %}
+    Робочі дні
+{% endblock %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+
+        <div class="container-fluid mt-lg-5 ml-1">
+            <form method="post"> {% csrf_token %}
+
+
+            </form>
+        </div>
+    {% else %}
+        <script type="text/javascript">
+            alert("Увійдіть");
+            document.location.href = '/accounts/login/';
+
+        </script>
+
+    {% endif %}
+
+
+{% endblock %}

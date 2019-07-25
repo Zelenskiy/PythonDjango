@@ -23,11 +23,6 @@ LOGIN_REDIRECT_URL = '/'
 # STATIC_ROOT = '/static/'
 
 
-
-
-
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -37,8 +32,7 @@ SECRET_KEY = '-bm=-*qe*jmn)z!_%odpgdu0t-)-$20i8dski7!ior*s)r=u4!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.3']
-
+ALLOWED_HOSTS = ['192.168.0.3', '127.0.0.1']
 
 # Application definition
 
@@ -84,16 +78,13 @@ os.makedirs(STATIC_TMP, exist_ok=True)
 os.makedirs(STATIC_ROOT, exist_ok=True)
 
 STATICFILES_DIRS = (
-os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static'),
 )
-
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates',),
-
-
+        'DIRS': [os.path.join(BASE_DIR, 'templates', ),
 
                  ]
         ,
@@ -111,7 +102,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'PythonDjango.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -135,7 +125,6 @@ DATABASES = {
     # }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -154,7 +143,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -169,9 +157,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-

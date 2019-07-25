@@ -124,23 +124,10 @@ class Post_delete(View):
 
     def post(self, request, id):
         post = Plan.objects.get(pk=id)
-        # print("Вилучаємо " + str(id))
         post.delete()
         context = {}
         return render(request, 'plan/post.html', context)
-        # return redirect(reverse('index'))
 
-
-# def del_plan(request, id):
-#     plan = Plan.objects.get(pk=id)
-#     if plan is None:
-#         print("Нет такого")
-#     else:
-#         print("Вилучаємо "+str(plan))
-#         plan.delete()
-#         plan.save()
-#     context = {}
-#     return render(request, 'plan/post_empty.html', context)
 
 
 def postr(request, r_id, num):

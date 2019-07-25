@@ -9,17 +9,31 @@
 
     {% if user.is_authenticated %}
 
-        <div class="row mt-lg-5 ">
+        <div class="container-fluid mt-lg-5 ml-1">
+
+
             <form method="post"> {% csrf_token %}
                 {#                {{ form.as_p }}#}
+                {#                <h2 id="sav" hidden>Зміни збережено...</h2>#}
+                <p>
+                <h3>Налаштування</h3></p>
+                <table border="0">
 
-                <ui type="square">
                     {% for set in settings %}
-                        <li><input type="text" name="field_{{ set.field }}" value="{{ set.field }} "> &nbsp;&nbsp;&nbsp;&nbsp;
-                            <input name="{{ set.field }}" type="text" value="{{ set.value }}"></li>
+                        <tr>
+
+                            <td>{{ set.verbose }}<input hidden type="text" name="field_{{ set.field }}"
+                                                    value="{{ set.field }} "> </td>
+                            <td><input name="{{ set.field }}" type="text" value="{{ set.value }}"></td>
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+
+                        </tr>
                     {% endfor %}
-                </ui>
-                <input type="submit">
+
+                </table>
+                <p></p>
+                <button type="submit"> Зберегти</button>
             </form>
 
 
@@ -33,5 +47,13 @@
 
     {% endif %}
 
+    <script type="text/javascript">
+        var flag = 0{{ flag }};
+        if (flag == 1) {
+            alert("Зміни збережено")
+            {#setTimeout(function () {jQuery('#sav').attr('hidden', false);}, 50000);#}
+            {#jQuery('#sav').attr('hidden', true);#}
+        }
+    </script>
 
 {% endblock %}

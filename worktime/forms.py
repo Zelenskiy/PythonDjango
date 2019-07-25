@@ -6,7 +6,7 @@ from plan.models import Plan
 from django.views.generic.edit import FormView
 from django.contrib.auth.forms import UserCreationForm
 
-from worktime.models import Settings
+from worktime.models import Settings, Vacat
 
 
 class SettingsForm(ModelForm):
@@ -14,16 +14,15 @@ class SettingsForm(ModelForm):
         model = Settings
         fields = {'field', 'value'}
         widgets = {
-            # 'content': Textarea(attrs={'rows': '7', 'placeholder': 'Впишіть сюди зміст заходу'}),
-            # 'termin': TextInput(attrs={'placeholder': 'Впишіть сюди дату чи період',  'class': 'form-control'}),
-            # 'responsible': TextInput(attrs={ 'placeholder': 'Впишіть сюди відповідального за захід',  'class': 'form-control'}),
-            # 'generalization': TextInput(attrs={ 'placeholder': 'Впишіть сюди документ, у якому захід узагальниться',  'class': 'form-control'}),
+          }
 
-            # 'content': forms.Textarea({'class': 'form-control'}),
-            # 'termin': forms.TextInput({'class': 'form-control'}),
-            # 'generalization': forms.TextInput({'class': 'form-control'}),
-            # 'responsible': forms.TextInput({'class': 'form-control'}),
-            # 'note': forms.TextInput({'class': 'form-control'}),
+class VacationForm(ModelForm):
+    class Meta:
+        model = Vacat
+        fields = {'date', 'name', 'deleted'}
+        widgets = {
+            'date': TextInput(attrs={'placeholder': 'dd.mm.yyyy', 'class': 'form-control'}),
+            'name': TextInput(attrs={'placeholder': 'Впишіть сюди свято', 'class': 'form-control'}),
         }
 
 
