@@ -1,9 +1,10 @@
 import datetime
+from datetime import timedelta, date
 
 from django.shortcuts import render
 
 from worktime.forms import SettingsForm, VacationForm
-from worktime.models import Settings, Academyear, Vacat
+from worktime.models import Settings, Academyear, Vacat, Workday
 
 
 def str_to_datestr(ss1):
@@ -17,6 +18,76 @@ def str_to_datestr(ss1):
     if n == 1:
         ss1 = ss1 + '.' + str(datetime.datetime.today().year)
     return ss1
+
+
+def daterange(start_date, end_date):
+    for n in range(int((end_date - start_date).days + 1)):
+        yield start_date + timedelta(n)
+
+
+def generatewd(request):
+    ay = Settings.objects.filter(field='academic_year')[0].value.strip()
+    workdays = Workday.objects.filter(acyear_id__name__iexact=ay)
+    vacations = Vacat.objects.filter(acyear_id__name__iexact=ay, deleted=False)
+    start = Settings.objects.filter(field='startacyear')[0].value.strip()
+    end = Settings.objects.filter(field='endacyear')[0].value.strip()
+    if request.POST:
+        # вилучаємо робочі дні за поточний навчальний рік
+
+        Workday.objects.filter(acyear_id__name__iexact=ay).delete()
+
+        # Формуємо нову таблицю робочих днів
+
+        d1 = datetime.datetime.strptime(start, '%d.%m.%Y')
+        d2 = datetime.datetime.strptime(end, '%d.%m.%Y')
+
+        # delta = (d2 - d1)
+        # count = delta.days
+        i = 0
+        nw = 1
+        for d in daterange(d1, d2):
+            # print (d.strftime("%Y-%m-%d"))
+            day = Workday()
+
+            day.wday = d
+
+            # Перевіряємо в таблиці Vacat
+            count = len(Vacat.objects.filter(date=d))
+            if count == 0:
+                d_week = d.weekday() + 1
+                day.dayweek = d_week
+            else:
+                d_week = 6
+                day.dayweek = d.weekday() + 1
+
+            if d_week == 6:
+                day.numworkweek = 0
+                day.num = 0
+                day.weekchzn = 0
+            elif d_week == 7:
+                day.numworkweek = 0
+                day.num = 0
+                day.weekchzn = 0
+                nw += 1
+            else:
+                day.numworkweek = nw
+                i += 1
+                day.num = i
+                day.weekchzn = (nw + 1) % 2 + 1
+
+            day.acyear_id = Academyear.objects.get(pk=Vacat.objects.filter(acyear_id__name__iexact=ay)[0].id)
+            day.save()
+
+    context = {'workdays': workdays, 'vacations': vacations, 'year': ay, 'start': start, 'end': end}
+    return render(request, 'worktime/generatewd.html', context)
+
+
+def index(request):
+    ay = Settings.objects.filter(field='academic_year')[0].value.strip()
+    workdays = Workday.objects.filter(acyear_id__name__iexact=ay)
+    # vacations = Vacat.objects.filter(acyear_id__name__iexact=ay, deleted=False)
+    context = {'workdays': workdays, 'year': ay}
+    return render(request, 'worktime/index.html', context)
 
 
 def vacation(request):

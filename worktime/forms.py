@@ -6,7 +6,7 @@ from plan.models import Plan
 from django.views.generic.edit import FormView
 from django.contrib.auth.forms import UserCreationForm
 
-from worktime.models import Settings, Vacat
+from worktime.models import Settings, Vacat, Workday
 
 
 class SettingsForm(ModelForm):
@@ -23,6 +23,17 @@ class VacationForm(ModelForm):
         widgets = {
             'date': TextInput(attrs={'placeholder': 'dd.mm.yyyy', 'class': 'form-control'}),
             'name': TextInput(attrs={'placeholder': 'Впишіть сюди свято', 'class': 'form-control'}),
+        }
+
+
+class WorkdayForm(ModelForm):
+    class Meta:
+        model = Workday
+        fields = {'num', 'wday', 'numworkweek', 'dayweek', 'weekchzn'}
+
+
+        widgets = {
+
         }
 
 

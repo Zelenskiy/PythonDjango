@@ -13,12 +13,13 @@
 
 
             <p><strong>Навчальний рік:</strong>&nbsp;{{ year }}</p>
+            <p><strong>Перший навчальний день року:</strong>&nbsp;{{ start }}</p>
+            <p><strong>Останній навчальний день року:</strong>&nbsp;{{ end }}</p>
             <p><strong>Список святкових та канікулярних днів: </strong>&nbsp;
 
-                {% for wd in workdays %}
-                    &nbsp;{{ wd.date|date:"d.m.Y" }},
+                {% for vac in vacations %}
+                    &nbsp;{{ vac.date|date:"d.m.Y" }},
                 {% endfor %}
-{#'num', 'wday', 'numworkweek', 'dayweek', 'weekchzn', 'worktimeable'#}
 
             </p>
             <p><a href="{% url 'vacation_url' %}">Змінити святкові та канікулярні дні</a> </p>

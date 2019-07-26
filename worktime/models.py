@@ -10,7 +10,8 @@ class Workday(models.Model):
     numworkweek = models.IntegerField(null=False)
     dayweek = models.IntegerField(null=False)
     weekchzn = models.IntegerField(null=False, verbose_name="1-чис., 2-зн., 0-вихідний")
-    worktimeable = models.ForeignKey('Worktimetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
+    # worktimeable = models.ForeignKey('Worktimetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
+    acyear_id = models.ForeignKey('Academyear', default=None, blank=True, null=True, on_delete=models.PROTECT)
 
 class Academyear(models.Model):
     name = models.CharField(null=False, blank=False, max_length=15)
