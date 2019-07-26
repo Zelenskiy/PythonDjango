@@ -1,10 +1,39 @@
 import datetime
-import parser
 
 from django.shortcuts import render
 
 from worktime.forms import SettingsForm, VacationForm
 from worktime.models import Settings, Academyear, Vacat
+
+def str_to_date(ss1):
+    ss = ss1.split()
+
+    try:
+        return datetime.datetime.strptime(ss1, '%d.%m.%Y')
+    except:
+        try:
+            return datetime.datetime.strptime(ss1, '%d,%m,%Y')
+        except:
+            try:
+                return datetime.datetime.strptime(ss1, '%d/%m/%Y')
+            except:
+                try:
+                    return datetime.datetime.strptime(ss1, '%d %m %Y')
+                except:
+                    try:
+                        return datetime.datetime.strptime(ss1, '%d.%m.%y')
+                    except:
+                        try:
+                            return datetime.datetime.strptime(ss1, '%d,%m,%y')
+                        except:
+                            try:
+                                return datetime.datetime.strptime(ss1, '%d/%m/%y')
+                            except:
+                                try:
+                                    return datetime.datetime.strptime(ss1, '%d %m %y')
+                                except:
+                                    print("Невірний формат дати")
+                                    return None
 
 
 def vacation(request):
@@ -14,8 +43,6 @@ def vacation(request):
     vacations = Vacat.objects.filter(acyear_id__name__iexact=ay, deleted=False)
     if request.POST:
         flag = 1
-        # ay = Settings.objects.filter(field='academic_year')[0].value.strip()
-        # vacations = Vacat.objects.filter(acyear_id__name__iexact=ay, deleted=False)
         for vac in vacations:
             s = request.POST['n_' + str(vac.id)]
             # існуючий запис
@@ -33,12 +60,15 @@ def vacation(request):
             if ss1 !='' and ss2 != '':
                 v = Vacat()
                 v.name = ss2
+                # v.date = str_to_date(ss1)
                 v.date = datetime.datetime.strptime(ss1, '%d.%m.%Y')
+
                 v.acyear_id = Academyear.objects.get(pk=Vacat.objects.filter(acyear_id__name__iexact=ay)[0].id)
                 v.save()
-
         ay = Settings.objects.filter(field='academic_year')[0].value.strip()
         vacations = Vacat.objects.filter(acyear_id__name__iexact=ay, deleted=False)
+        Vacat.objects.filter(deleted=True).delete()
+
     context = {'vacations': vacations, 'form': form, 'flag': flag}
     return render(request, 'worktime/vacations.html', context)
 
