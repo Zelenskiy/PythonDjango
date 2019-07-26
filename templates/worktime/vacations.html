@@ -7,7 +7,27 @@
 
 {% block content %}
 
+    <script type="text/javascript">
+        num = 0;
 
+        function add() {
+            num += 1;
+            {#console.log($('#table').html());#}
+            $('#table').html($('#table').html() +
+                '<tr>  <td>&nbsp;<input style="border: hidden" name="n-' + String(num) + '" type="text" value="-" size="6"> &nbsp;' +
+                ' </td>' +
+                '<td>&nbsp;<input style="border: hidden" name="dat-' + String(num) + '" class="dat_" type="text"' +
+                'value="" ' + 'size="10"  placeholder="Дата"></td>' +
+                '<td>&nbsp;<input style="border: hidden" name="nam-' + String(num) + '" type="text"' + 'value="" size="30"  placeholder="Назва"></td>' +
+                '<td>&nbsp;<input style="border: hidden" name="del-' + String(num) + '" class="del_" type="checkbox"' + 'value="false">' +
+                '</td>' +
+                '&nbsp;&nbsp;&nbsp;&nbsp;' +
+                ' </tr>'
+            );
+        };
+
+
+    </script>
 
     {% if user.is_authenticated %}
 
@@ -32,10 +52,10 @@
                                              value="{{ vac.id }}" size="6"> &nbsp;
                             </td>
                             <td>&nbsp;<input style="border: hidden" name="dat_{{ vac.id }}" class="dat_" type="text"
-                                             value="{{ vac.date|date:"d.m.Y" }}" placeholder="Впишіть сюди дату"
+                                             value="{{ vac.date|date:"d.m.Y" }}" placeholder="Дата"
                                              size="10"></td>
                             <td>&nbsp;<input style="border: hidden" name="nam_{{ vac.id }}" type="text"
-                                             value="{{ vac.name }}" size="30"></td>
+                                             value="{{ vac.name }}" size="30"  placeholder="Назва"></td>
                             <td>&nbsp;<input style="border: hidden" name="del_{{ vac.id }}" class="del_" type="checkbox"
                                              value="{{ vac.deleted }}">
                             </td>
@@ -47,11 +67,14 @@
 
                 </table>
                 <p></p>
+                <button id="add_btn0" type="button" onclick="add()" style="width: 80px;"> Додати</button>
+                &nbsp;
+                <button id="subm" type="submit" style="width: 80px;"> Зберегти</button>
 
-                <button id="submit" type="submit"> Зберегти</button>
+
             </form>
-            <button id="add" onclick="add()"> Додати</button>
 
+            {#<button id="add_btn" type="button" onclick="add()" style="width: 80px;"> Додати</button>#}
         </div>
     {% else %}
         <script type="text/javascript">
@@ -70,45 +93,14 @@
         }
     </script>
 
-        <script type="text/javascript">
-        num = 0
 
-        function add() {
-            num += 1;
-
-            $('#table').html($('#table').html() +
-                    '<tr>  <td>&nbsp;<input style="border: hidden" name="n-'+String(num)+'" type="text" value="new-'+String(num)+'" size="6"> &nbsp;'+
-                           ' </td>'+
-                            '<td>&nbsp;<input style="border: hidden" name="dat-'+String(num)+'" class="dat_" type="text"'+
-                                             'value="" placeholder="Впишіть сюди дату"'+
-                                             'size="10"></td>'+
-                            '<td>&nbsp;<input style="border: hidden" name="nam-'+String(num)+'" type="text"'+
-                                             'value="" size="30"></td>'+
-                            '<td>&nbsp;<input style="border: hidden" name="del-'+String(num)+'" class="del_" type="checkbox"'+
-                                             'value="false">'+
-                            '</td>'+
-
-                            '&nbsp;&nbsp;&nbsp;&nbsp;'+
-
-                       ' </tr>'
-            );
-
-            {#var dat = prompt("Дата","");#}
-            {#var name = prompt("Назва","");#}
-
-
-        };
-
-
-
-    </script>
 
 {% endblock %}
 
 
 
 {#        function beforeSend() {#}
-            {#Очистимо поля date всіх відмічених полів#}
+{#Очистимо поля date всіх відмічених полів#}
 {#            $.each($("input[class='del_']:checked"), function () {#}
 {#                row = $(this).closest('tr');#}
 {#                row.find('.dat_').attr('value', '');#}

@@ -5,35 +5,18 @@ from django.shortcuts import render
 from worktime.forms import SettingsForm, VacationForm
 from worktime.models import Settings, Academyear, Vacat
 
-def str_to_date(ss1):
-    ss = ss1.split()
 
-    try:
-        return datetime.datetime.strptime(ss1, '%d.%m.%Y')
-    except:
-        try:
-            return datetime.datetime.strptime(ss1, '%d,%m,%Y')
-        except:
-            try:
-                return datetime.datetime.strptime(ss1, '%d/%m/%Y')
-            except:
-                try:
-                    return datetime.datetime.strptime(ss1, '%d %m %Y')
-                except:
-                    try:
-                        return datetime.datetime.strptime(ss1, '%d.%m.%y')
-                    except:
-                        try:
-                            return datetime.datetime.strptime(ss1, '%d,%m,%y')
-                        except:
-                            try:
-                                return datetime.datetime.strptime(ss1, '%d/%m/%y')
-                            except:
-                                try:
-                                    return datetime.datetime.strptime(ss1, '%d %m %y')
-                                except:
-                                    print("Невірний формат дати")
-                                    return None
+def str_to_datestr(ss1):
+    mapping = [' ', ',', '.', '/', '-', '+', '*']
+    for v in mapping:
+        ss1 = ss1.replace(v, '.')
+    ss1 = ss1.strip('.')
+    while ss1.find('..') > -1:
+        ss1 = ss1.replace('..', '.')
+    n = ss1.count('.')
+    if n == 1:
+        ss1 = ss1 + '.' + str(datetime.datetime.today().year)
+    return ss1
 
 
 def vacation(request):
@@ -57,11 +40,17 @@ def vacation(request):
         for n in range(1, 5):
             ss1 = request.POST.get('dat-' + str(n), '')
             ss2 = request.POST.get('nam-' + str(n), '')
-            if ss1 !='' and ss2 != '':
+            if ss1 != '' and ss2 != '':
                 v = Vacat()
                 v.name = ss2
-                # v.date = str_to_date(ss1)
-                v.date = datetime.datetime.strptime(ss1, '%d.%m.%Y')
+                ss1 = str_to_datestr(ss1)
+                try:
+                    v.date = datetime.datetime.strptime(ss1, '%d.%m.%Y')
+                except:
+                    try:
+                        v.date = datetime.datetime.strptime(ss1, '%d.%m.%y')
+                    except:
+                        print("Формат дати невірний")
 
                 v.acyear_id = Academyear.objects.get(pk=Vacat.objects.filter(acyear_id__name__iexact=ay)[0].id)
                 v.save()
