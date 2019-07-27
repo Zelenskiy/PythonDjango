@@ -22,6 +22,7 @@ IMAGES_PREV_URL = os.path.join(MEDIA_ROOT, 'user_images/../media/user_images_pre
 LOGIN_REDIRECT_URL = '/'
 # STATIC_ROOT = '/static/'
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 5000
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/

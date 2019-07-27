@@ -56,4 +56,21 @@
         }
     </script>
 
+    <script type="text/javascript">
+
+                {#$.datepicker.setDefaults($.datepicker.regional['fr']);#}
+                $("#datepicker").datepicker();
+                {#$("#datepicker").datepicker("option", "dateFormat", "dd.mm.yy");#}
+                {#$("#datepicker").datepicker("option", "dateFormat", "dd.mm.yy");#}
+                $.datepicker.setDefaults({dayNames: [ "Неділя", "Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Субота" ],
+                    dayNamesShort: [ "Нед", "Пон", "Вів", "Сер", "Чет", "П'я", "Суб" ],
+                    dayNamesMin: [ "Нд","Пн","Вт","Ср","Чт","Пт","Сб" ],
+                    dateFormat: "dd.mm.yy",
+                    firstDay: 1,
+                    monthNames: [ "Січень","Лютий","Березень","Квітень","Травень","Червень","Липень","Серпень","Вересень","Жовтень","Листопад","Грудень" ],
+                    monthNamesShort: [ "Січ", "Лют", "Бер", "Кві", "Тра", "Чер", "Лип", "Сер", "Вер", "Жов", "Лис", "Гру" ],
+                });
+            </script>
+
+
 {% endblock %}
