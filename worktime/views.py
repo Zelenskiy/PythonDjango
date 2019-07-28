@@ -4,6 +4,7 @@ from distutils.command import register
 
 
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from django_extensions.db.fields import json
 
 from worktime.forms import SettingsForm, VacationForm
@@ -123,14 +124,13 @@ def index(request):
 
     return render(request, 'worktime/index.html', context)
 
-# def getmonth(request, m):
-#     if request.POST:
-#         ay = Settings.objects.filter(field='academic_year')[0].value.strip()
-#         workdays = Workday.objects.filter(acyear_id__name__iexact=ay)
-#
-#
-#     context = {'workdays': workdays}
-#     return render(request, 'worktime/index.html', context)
+
+@csrf_exempt
+def setchzn(request, id, chzn):
+    workday = Workday.objects.get(pk=id)
+    workday.weekchzn = chzn
+    workday.save()
+    return render(request, 'worktime/index.html')
 
 def vacation(request):
     flag = 0

@@ -9,7 +9,7 @@ from PythonDjango import settings
 #
 #
 from timetable.views import importasc, importgo, viewteachers
-from worktime.views import setting, vacation, index, generatewd
+from worktime.views import setting, vacation, index, generatewd,setchzn
 
 urlpatterns = [
 
@@ -18,6 +18,7 @@ urlpatterns = [
                   path('index/', index, name='index_url'),
                   # path('getmonth/<int:m>/', getmonth, name='getmonth_url'),
                   path('generatewd/', generatewd, name='generatewd_url'),
+                  path('setchzn/<int:id>/<int:chzn>/', setchzn, name='setchzn_url'),
 
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

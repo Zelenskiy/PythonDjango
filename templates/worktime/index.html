@@ -9,34 +9,33 @@
 
 {% block content %}
     <link type="text/css" href="{% static "css/jquery-ui.css" %}" rel="Stylesheet"/>
-            <script type="text/javascript" src="{% static "js/jquery-ui.js" %}"></script>
-            <script type="text/javascript" src="{% static "js/jquery-ui-min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery-ui.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery-ui-min.js" %}"></script>
 
     <style>
         .td-cal {
             width: 80px;
-            {#font-style: italic;#}
+        {#font-style: italic;#}
         }
 
         .tr-cal {
             height: 50px;
-            {#background-color: yellow;#}
-            color: blue;
+        {#background-color: yellow;#} color: blue;
         }
 
         .red-cal {
             color: red;
         }
 
-       .orange-cal {
+        .orange-cal {
             color: orange;
         }
 
-       .green-cal {
+        .green-cal {
             color: green;
         }
 
-       .blue-cal {
+        .blue-cal {
             color: blue;
         }
 
@@ -57,13 +56,36 @@
             background-color: #E3F2FD;
         }
 
+        .div-menu {
+
+            position: fixed;
+            width: 165px;
+            height: 55px;
+            z-index: 3;
+            background-color: #6f42c1;
+        }
+
         .div-nofix-1 {
         {#top: 130px;#}{#left: 650px;#}{#width: 650px ;#}{#height: 550px ;#}{#z-index: 2;#} background-color: #E3F2FD;
         }
     </style>
     {% if user.is_authenticated %}
+
+
         <div id="cont" class="div-fix-1">
             <p> Блок для календаря </p>
+
+            <div id="div-mnu" hidden class="div-menu">
+                {#        Блок для меню#}
+                <select id="sel-mnu" style="width: 100%;border-color: #d39e00;overflow: hidden;border: none" size="3" multiple>
+                    <option id="mn-1" style="background-color: green;">Зробити чисельник</option>
+                    <option id="mn-2" style="background-color: orange;">Зробити знаменник</option>
+                    <option id="mn-0" style="background-color: red;">Зробити вихідний</option>
+                </select>
+
+
+            </div>
+
             <select id="sel_month" class=" ml-5 mb-2">
                 <option>Вересень</option>
                 <option>Жовтень</option>
@@ -78,74 +100,73 @@
             </select> &nbsp;&nbsp;&nbsp; <span id="year"></span>
 
             {#            http://jquery.page2page.ru/index.php5/%D0%9A%D0%B0%D0%BB%D0%B5%D0%BD%D0%B4%D0%B0%D1%80%D1%8C_UI#}
-            <table class=" ml-5 mb-5" border = 1>
+            <table class=" ml-5 mb-5" border=1>
                 <tr class="tr-cal bg-info">
                     <td class="td-cal">Пн</td>
                     <td class="td-cal">Вт</td>
                     <td class="td-cal">Ср</td>
                     <td class="td-cal">Чт</td>
                     <td class="td-cal">Пт</td>
-                    <td class="td-cal red-cal" >Сб</td>
-                    <td class="td-cal red-cal" >Нд</td>
+                    <td class="td-cal red-cal">Сб</td>
+                    <td class="td-cal red-cal">Нд</td>
                 </tr>
                 <tr class="tr-cal">
-                    <td id="0"></td>
-                    <td id="1"></td>
-                    <td id="2"></td>
-                    <td id="3"></td>
-                    <td id="4"></td>
-                    <td id="5" ></td>
-                    <td id="6" ></td>
+                    <td class="td-cal" id="0" ></td>
+                    <td class="td-cal" id="1" ></td>
+                    <td class="td-cal" id="2" ></td>
+                    <td class="td-cal" id="3" ></td>
+                    <td class="td-cal" id="4" ></td>
+                    <td class="td-cal" id="5" ></td>
+                    <td class="td-cal" id="6" ></td>
                 </tr>
                 <tr class="tr-cal">
-                    <td id="7"></td>
-                    <td id="8"></td>
-                    <td id="9"></td>
-                    <td id="10"></td>
-                    <td id="11"></td>
-                    <td id="12" ></td>
-                    <td id="13" ></td>
+                    <td class="td-cal" id="7" ></td>
+                    <td class="td-cal" id="8" ></td>
+                    <td class="td-cal" id="9" ></td>
+                    <td class="td-cal" id="10"></td>
+                    <td class="td-cal" id="11"></td>
+                    <td class="td-cal" id="12"></td>
+                    <td class="td-cal" id="13"></td>
                 </tr>
                 <tr class="tr-cal">
-                    <td id="14"></td>
-                    <td id="15"></td>
-                    <td id="16"></td>
-                    <td id="17"></td>
-                    <td id="18"></td>
-                    <td id="19" ></td>
-                    <td id="20" ></td>
+                    <td class="td-cal" id="14"></td>
+                    <td class="td-cal" id="15"></td>
+                    <td class="td-cal" id="16"></td>
+                    <td class="td-cal" id="17"></td>
+                    <td class="td-cal" id="18"></td>
+                    <td class="td-cal" id="19"></td>
+                    <td class="td-cal" id="20"></td>
                 </tr>
                 <tr class="tr-cal">
-                    <td id="21"></td>
-                    <td id="22"></td>
-                    <td id="23"></td>
-                    <td id="24"></td>
-                    <td id="25"></td>
-                    <td id="26" ></td>
-                    <td id="27" ></td>
+                    <td class="td-cal" id="21" ></td>
+                    <td class="td-cal" id="22" ></td>
+                    <td class="td-cal" id="23" ></td>
+                    <td class="td-cal" id="24" ></td>
+                    <td class="td-cal" id="25" ></td>
+                    <td class="td-cal" id="26" ></td>
+                    <td class="td-cal" id="27" ></td>
                 </tr>
                 <tr class="tr-cal">
-                    <td id="28"></td>
-                    <td id="29"></td>
-                    <td id="30"></td>
-                    <td id="31"></td>
-                    <td id="32"></td>
-                    <td id="33" ></td>
-                    <td id="34" ></td>
+                    <td class="td-cal" id="28" ></td>
+                    <td class="td-cal" id="29" ></td>
+                    <td class="td-cal" id="30" ></td>
+                    <td class="td-cal" id="31" ></td>
+                    <td class="td-cal" id="32" ></td>
+                    <td class="td-cal" id="33" ></td>
+                    <td class="td-cal" id="34" ></td>
                 </tr>
                 <tr id="lastRow" class="tr-cal">
-                    <td id="35"></td>
-                    <td id="36"></td>
-                    <td id="37"></td>
-                    <td id="38"></td>
-                    <td id="39"></td>
-                    <td id="40" ></td>
-                    <td id="41" ></td>
+                    <td class="td-cal" id="35" ></td>
+                    <td class="td-cal" id="36" ></td>
+                    <td class="td-cal" id="37" ></td>
+                    <td class="td-cal" id="38" ></td>
+                    <td class="td-cal" id="39" ></td>
+                    <td class="td-cal" id="40" ></td>
+                    <td class="td-cal" id="41" ></td>
                 </tr>
 
 
             </table>
-
 
 
             <p>Дата: <input type="text" id="datepicker"></p>
@@ -158,7 +179,9 @@
 
             <p><strong>Навчальний рік:</strong>&nbsp;{{ year }}</p>
             <p><strong>Список робочих днів: </strong>&nbsp;</p>
-            <form method="post"> {% csrf_token %}
+            <form method="post">
+                {% csrf_token %}
+            <button id="btn" type="submit">Зберегти зміни</button>
                 <table id="pnl">
                     <tr>
                         <td>&nbsp;</td>
@@ -170,22 +193,23 @@
                     </tr>
                     {% for wd in workdays %}
                         <tr class="tr_wday">
-                            <td>&nbsp; <input name="i-{{ wd.id }}" hidden type="text" value="{{ wd.id }}" size="8">&nbsp;
+                            <td>&nbsp; <input class="i" name="i-{{ wd.id }}" hidden type="text" value="{{ wd.id }}" size="8">&nbsp;
                             </td>
                             <td>&nbsp; <input class="n" name="n-{{ wd.id }}" type="text" value="{{ wd.num }}"
                                               oldvalue="{{ wd.num }}" size="8">&nbsp;
                             </td>
-                            <td>&nbsp; <input class="w"  name="w-{{ wd.id }}" type="text" value="{{ wd.wday|date:"d.m.Y" }}"
+                            <td>&nbsp; <input class="w" name="w-{{ wd.id }}" type="text"
+                                              value="{{ wd.wday|date:"d.m.Y" }}"
                                               oldvalue="{{ wd.wday|date:"d.m.Y" }}" size="8" class="calendar_my">&nbsp;
                             </td>
-                            <td>&nbsp; <input class="u"  name="u-{{ wd.id }}" type="text" value="{{ wd.numworkweek }}"
+                            <td>&nbsp; <input class="u" name="u-{{ wd.id }}" type="text" value="{{ wd.numworkweek }}"
                                               oldvalue="{{ wd.numworkweek }}"
                                               size="8">&nbsp;
                             </td>
-                            <td>&nbsp; <input class="d"  name="d-{{ wd.id }}" type="text" value="{{ wd.dayweek }}"
+                            <td>&nbsp; <input class="d" name="d-{{ wd.id }}" type="text" value="{{ wd.dayweek }}"
                                               oldvalue="{{ wd.dayweek }}" size="8">&nbsp;
                             </td>
-                            <td>&nbsp; <input class="e"  name="e-{{ wd.id }}" type="text" value="{{ wd.weekchzn }}"
+                            <td>&nbsp; <input class="e" name="e-{{ wd.id }}" type="text" value="{{ wd.weekchzn }}"
                                               oldvalue="{{ wd.weekchzn }}" size="8">&nbsp;
                             </td>
 
@@ -216,130 +240,245 @@
     {% endif %}
 
 
-               <script type="text/javascript">
-                var month = {
-                    'Вересень': 9,
-                    'Жовтень': 10,
-                    'Листопад': 11,
-                    'Грудень': 12,
-                    'Січень': 1,
-                    'Лютий': 2,
-                    'Березень': 3,
-                    'Квітень': 4,
-                    'Травень': 5
-                }
-                var stDate = '{{ start }}';
-                var endDate = '{{ end }}';
-
-                function getDaysInMonth(m, y) {
-                    return /8|3|5|10/.test(--m) ? 30 : m == 1 ? (!(y % 4) && y % 100) || !(y % 400) ? 29 : 28 : 31;
-                }
-
-                var lengthWorkdays = parseInt("{{workdays|length}}");
-                {#alert(lengthWorkdays);#}
+    <script type="text/javascript">
+        {#showDropdown = function (element) {#}
+        {#    var event;#}
+        {#    event = document.createEvent('MouseEvents');#}
+        {#    event.initMouseEvent('mousedown', true, true, window);#}
+        {#    element.dispatchEvent(event);#}
+        {# };#}
+        {##}
+        {#$('#sel-mnu').on('mouseover', function () {#}
+        {#    var dropdown = document.getElementById('sel-mnu');#}
+        {#    showDropdown(dropdown);#}
+        {# });#}
+        {#$('#sel-mnu').on('mouseout', function () {#}
+        {#    var dropdown = document.getElementById('sel-mnu');#}
+        {#    showDropdown(dropdown);#}
+        {# });#}
 
 
-                {#var someVar = {{ workdays | js }};#}
-                {#console.log(someVar);#}
-                {#alert(someVar);#}
-                    function chzn_1(month, day) {
-                        r = 0;
-                        jQuery('.tr_wday').each(function (index, value) {
-                            d = ($(this).find('.w').attr('value'));
+        var month = {
+            'Вересень': 9,
+            'Жовтень': 10,
+            'Листопад': 11,
+            'Грудень': 12,
+            'Січень': 1,
+            'Лютий': 2,
+            'Березень': 3,
+            'Квітень': 4,
+            'Травень': 5
+        }
+        var stDate = '{{ start }}';
+        var endDate = '{{ end }}';
 
-                            if ((parseInt(d.substr(3, 5)) == month)&&
-                                (parseInt(d.substr(0, 2)) == day) ){
+        function changeChZn(date, cz){
+            //Шукаємо поле з записом потрібної дати й замінюємо поле chzn
+            jQuery('.tr_wday').each(function (index, value) {
 
-                                    chzn = ($(this).find('.e').attr('value'));
-                                    {#console.log(parseInt(d.substr(3, 5)));#}
-                                    {#console.log(parseInt(d.substr(1, 3)));#}
-                                    {#console.log("----");#}
-                                    {##}
-                                    {#console.log('-->'+d + ' ' + String(chzn));#}
-                                    r = chzn;
-                                    return r;
+                d = ($(this).find('.w').attr('value'));
+                id_ = parseInt($(this).find('.i').attr('value'));
+
+
+                if (d==date) {
+
+                    console.log(id_);
+                    jQuery(this).find('.e').attr('value',String(cz));
+
+                    //Відправити Аджаксом на збереження
+                    $.ajax({
+                            url: "../setchzn/" + String(id_) + "/"+ String(cz)+"/",
+                            type: "POST",
+                            data: {},
+                            error: function () {
+                                console.log("Щось не те");
+                            },
+                            success: function () {
+                                console.log("Все Ok");
                             }
-                        });
-                        return r
-                    }
-
-                function fillCalendar(m, y) {
-
-                    d1 = new Date(y, m - 1, 1);
-                    dw = d1.getDay();
-
-                    {#alert(dw);#}
-                    for (i = 0; i < 43; i++) {
-                        nam = '#' + String(i);
-                        {#console.log(nam);#}
-                        jQuery(nam).text("");
-                    }
-                    cd = getDaysInMonth(m, y)
-                    {#alert (cd);#}
-                    n = (dw + 5) % 7;
-                    for (i = 1; i <= cd; i++) {
-                        jQuery('#' + String(i + n)).text(String(i));
-                        {#jQuery('#' + String(i + n)).text(String(i)+'-'+String(chzn_1(m, i)));#}
-                        chzn = chzn_1(m, i);
-                        if (chzn==0){
-                        {#if ((((i+n+2)%7==0))||(((i+n+1)%7==0))){#}
-                            jQuery('#' + String(i + n)).attr("class","red-cal")
-                         } else if (chzn==1){
-                            jQuery('#' + String(i + n)).removeAttr("class");
-                            jQuery('#' + String(i + n)).attr("class","green-cal")
-                         } else if (chzn==2){
-                            jQuery('#' + String(i + n)).removeAttr("class");
-                            jQuery('#' + String(i + n)).attr("class","orange-cal")
-                         }
-
-                    }
-                    if ( cd + n<35){
-                        jQuery("#lastRow").attr('hidden', true)
-                    } else {
-                        jQuery("#lastRow").attr('hidden', false)
-                    }
-                    jQuery('#year').text(String(y) + " рік");
-
-                    // Тут починаємо експерименти
-
-
-                    {#console.log("Місяць "+String(m)+" " + String(chzn_1(m, 1)));#}
-
-                    {#var data = $("#update-form").serialize();#}
-                    {#$.ajax({#}
-                    {#        url: "../getmonth/" + String(m) + "/",#}
-                    {#        type: "POST",#}
-                    {#        //data: m,#}
-                    {#        error: function () {#}
-                    {#            console.log("Щось не те");#}
-                    {#        },#}
-                    {#        success: function () {#}
-                    {#            s = "" + a + "/" + n;#}
-                    {#            $('#pl').load(s);#}
-                    {#        }#}
-                    {#    }#}
-                    {# ); #}
+                        }
+                    );
 
 
                 }
+            });
+            y = parseInt(date.substring(6));
+            m = parseInt(date.substring(3, 5));
+            fillCalendar(m, y);
+
+        }
+
+        var date;
+
+        {#$('#cont').bind('contextmenu', function (e) {#}
+        {#    return false;#}
+        {# });#}
+
+        jQuery('#sel-mnu').on('change', function () {
+
+            a = jQuery(this).find(":selected").attr('id');
+            if (a=='mn-0'){
+                //Встановити вихідний
+                changeChZn(date, 0);
+            } else if (a=='mn-1'){
+                //Встановити чисельник
+                changeChZn(date, 1);
+            } else {
+                //Встановити знаменник
+                changeChZn(date, 2);
+
+            }
+            jQuery('#div-mnu').attr("hidden", true);
+            {#jQuery('#mn-0').attr("selected", false);#}
+            {#jQuery('#mn-1').attr("selected", false);#}
+            {#jQuery('#mn-2').attr("selected", false);#}
+
+         });
+
+        jQuery('.td-cal').on('click', function () {
+            jQuery('#div-mnu').attr("hidden", true);
+        });
+
+        jQuery('.td-cal').bind('contextmenu', function () {
 
 
-                jQuery("#sel_month").on('change', function () {
-                    el = jQuery(this).find(":selected");
-                    s = el.val();
-                    m = month[s];
-                    if (m > 8) {
-                        y = parseInt(stDate.substring(6));
-                    } else {
-                        y = parseInt(endDate.substring(6));
-                    }
-                    jQuery('#year').text(String(y) + " рік");
-                    // Формуємо календар на місяць в таблиці
-                    fillCalendar(m, y);
+            td = jQuery(this).attr('id');
+            d = jQuery('#' + String(td)).text();
+            if (d.length > 0) {
+                date = jQuery('#' + String(td)).attr("date");
+                chzna = jQuery('#' + String(td)).attr("chzn1");
+                //Тут промалюємо контекстре меню
+                top_ = $('#' + String(td)).offset().top;
+                left_ = $('#' + String(td)).offset().left;
+
+                {#console.log("top=" + String(top_) + " left=" + String(left_));#}
 
 
-                });
+                {#jQuery('#div-mnu').attr("style", 'top:' + String(top_) + ';left:' + String(left) + ';"');#}
+                jQuery('#div-mnu').offset({top: top_ + 25, left: left_ + 40})
+                jQuery('#div-mnu').attr("hidden", false);
+            } else {
+                jQuery('#div-mnu').attr("hidden", true);
+            }
+            return false;
 
+        })
+
+
+        function getDaysInMonth(m, y) {
+            return /8|3|5|10/.test(--m) ? 30 : m == 1 ? (!(y % 4) && y % 100) || !(y % 400) ? 29 : 28 : 31;
+        }
+
+        var lengthWorkdays = parseInt("{{workdays|length}}");
+        {#alert(lengthWorkdays);#}
+
+        {#var someVar = {{ workdays | js }};#}
+        {#console.log(someVar);#}
+        {#alert(someVar);#}
+
+        function chzn_1(month, day) {
+            r = 0;
+            jQuery('.tr_wday').each(function (index, value) {
+                d = ($(this).find('.w').attr('value'));
+
+                if ((parseInt(d.substr(3, 5)) == month) &&
+                    (parseInt(d.substr(0, 2)) == day)) {
+
+                    chzn = ($(this).find('.e').attr('value'));
+                    {#console.log(parseInt(d.substr(3, 5)));#}
+                    {#console.log(parseInt(d.substr(1, 3)));#}
+                    {#console.log("----");#}
+                    {##}
+                    {#console.log('-->'+d + ' ' + String(chzn));#}
+                    r = chzn;
+                    return r;
+                }
+            });
+            return r
+        }
+
+        function NumToStr2(s) {
+            if (s < 10)
+                return '0' + String(s);
+            else
+                return String(s);
+
+
+        }
+
+        function fillCalendar(m, y) {
+            d1 = new Date(y, m - 1, 1);
+            dw = d1.getDay();
+            for (i = 0; i < 43; i++) {
+                nam = '#' + String(i);
+                {#console.log(nam);#}
+                jQuery(nam).text("");
+            }
+            cd = getDaysInMonth(m, y)
+            n = (dw + 5) % 7;
+            for (i = 1; i <= cd; i++) {
+                jQuery('#' + String(i + n)).text(String(i));
+                {#jQuery('#' + String(i + n)).text(String(i)+'-'+String(chzn_1(m, i)));#}
+                chzn = chzn_1(m, i);
+                jQuery('#' + String(i + n)).attr("date", NumToStr2(i) + '.' + NumToStr2(m) + '.' + NumToStr2(y))
+                jQuery('#' + String(i + n)).attr("chzn1", String(chzn));
+                if (chzn == 0) {
+                    jQuery('#' + String(i + n)).attr("class", "red-cal")
+                } else if (chzn == 1) {
+                    jQuery('#' + String(i + n)).removeAttr("class");
+                    jQuery('#' + String(i + n)).attr("class", "green-cal")
+                } else if (chzn == 2) {
+                    jQuery('#' + String(i + n)).removeAttr("class");
+                    jQuery('#' + String(i + n)).attr("class", "orange-cal")
+                }
+
+            }
+            if (cd + n < 35) {
+                jQuery("#lastRow").attr('hidden', true)
+            } else {
+                jQuery("#lastRow").attr('hidden', false)
+            }
+            jQuery('#year').text(String(y) + " рік");
+
+            // Тут починаємо експерименти
+
+
+            {#console.log("Місяць "+String(m)+" " + String(chzn_1(m, 1)));#}
+
+            {#var data = $("#update-form").serialize();#}
+            {#$.ajax({#}
+            {#        url: "../getmonth/" + String(m) + "/",#}
+            {#        type: "POST",#}
+            {#        //data: m,#}
+            {#        error: function () {#}
+            {#            console.log("Щось не те");#}
+            {#        },#}
+            {#        success: function () {#}
+            {#            s = "" + a + "/" + n;#}
+            {#            $('#pl').load(s);#}
+            {#        }#}
+            {#    }#}
+            {# ); #}
+
+
+        }
+
+
+        jQuery("#sel_month").on('change', function () {
+            el = jQuery(this).find(":selected");
+            s = el.val();
+            m = month[s];
+            if (m > 8) {
+                y = parseInt(stDate.substring(6));
+            } else {
+                y = parseInt(endDate.substring(6));
+            }
+            jQuery('#year').text(String(y) + " рік");
+            // Формуємо календар на місяць в таблиці
+            fillCalendar(m, y);
+
+
+        });
 
 
         {#style="background-color: deeppink;"#}
@@ -397,17 +536,17 @@
         {#alert(stDate);#}
         jQuery(document).ready(function () {
             {#alert("sssssssssssssssssssss");#}
-                y = parseInt(stDate.substring(6));
-                fillCalendar(9, y);
+            y = parseInt(stDate.substring(6));
+            fillCalendar(9, y);
         });
 
     </script>
 
-{#    {% if DJworkdays %}#}
-{#    <script type="text/javascript">#}
-{#        (function () {window.DJworkdays = {{DJworkdays|safe}};})();#}
-{#    </script>#}
-{#{% endif %}#}
+    {#    {% if DJworkdays %}#}
+    {#    <script type="text/javascript">#}
+    {#        (function () {window.DJworkdays = {{DJworkdays|safe}};})();#}
+    {#    </script>#}
+    {#{% endif %}#}
 
 
 {% endblock %}
