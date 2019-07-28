@@ -1,7 +1,10 @@
 import datetime
 from datetime import timedelta
+from distutils.command import register
+
 
 from django.shortcuts import render
+from django_extensions.db.fields import json
 
 from worktime.forms import SettingsForm, VacationForm
 from worktime.models import Settings, Academyear, Vacat, Workday
@@ -113,10 +116,21 @@ def index(request):
             if flag:
                 w.save()
                 print("Збережено")
+    # print(len(workdays))
+
 
     context = {'workdays': workdays, 'year': ay, 'start': start, 'end': end}
+
     return render(request, 'worktime/index.html', context)
 
+# def getmonth(request, m):
+#     if request.POST:
+#         ay = Settings.objects.filter(field='academic_year')[0].value.strip()
+#         workdays = Workday.objects.filter(acyear_id__name__iexact=ay)
+#
+#
+#     context = {'workdays': workdays}
+#     return render(request, 'worktime/index.html', context)
 
 def vacation(request):
     flag = 0

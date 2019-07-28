@@ -1,6 +1,8 @@
 {% extends "layout/basic_tt.html" %}
 {% load static %}
-{#{% import os %}#}
+{% load js %}
+
+
 {% block title %}
     Робочі дні
 {% endblock %}
@@ -24,6 +26,14 @@
 
         .red-cal {
             color: red;
+        }
+
+       .orange-cal {
+            color: orange;
+        }
+
+       .green-cal {
+            color: green;
         }
 
        .blue-cal {
@@ -137,78 +147,6 @@
             </table>
 
 
-            <script type="text/javascript">
-                var month = {
-                    'Вересень': 9,
-                    'Жовтень': 10,
-                    'Листопад': 11,
-                    'Грудень': 12,
-                    'Січень': 1,
-                    'Лютий': 2,
-                    'Березень': 3,
-                    'Квітень': 4,
-                    'Травень': 5
-                }
-                var stDate = '{{ start }}';
-                var endDate = '{{ end }}';
-
-                function getDaysInMonth(m, y) {
-                    return /8|3|5|10/.test(--m) ? 30 : m == 1 ? (!(y % 4) && y % 100) || !(y % 400) ? 29 : 28 : 31;
-                }
-
-
-
-                function fillCalendar(m, y) {
-                    d1 = new Date(y, m - 1, 1);
-                    dw = d1.getDay();
-
-                    {#alert(dw);#}
-                    for (i = 0; i < 43; i++) {
-                        nam = '#' + String(i);
-                        {#console.log(nam);#}
-                        jQuery(nam).text("");
-                    }
-                    cd = getDaysInMonth(m, y)
-                    {#alert (cd);#}
-                    n = (dw + 5) % 7;
-                    for (i = 1; i <= cd; i++) {
-                        jQuery('#' + String(i + n)).text(String(i));
-                        if ((((i+n+2)%7==0))||(((i+n+1)%7==0))){
-                            jQuery('#' + String(i + n)).attr("class","red-cal")
-                         } else {
-                            jQuery('#' + String(i + n)).removeAttr("class");
-                            jQuery('#' + String(i + n)).attr("class","blue-cal")
-                         }
-
-                    }
-                    if ( cd + n<35){
-                        jQuery("#lastRow").attr('hidden', true)
-                    } else {
-                        jQuery("#lastRow").attr('hidden', false)
-                    }
-                    jQuery('#year').text(String(y) + " рік");
-
-                }
-
-
-                jQuery("#sel_month").on('change', function () {
-                    el = jQuery(this).find(":selected");
-                    s = el.val();
-                    m = month[s];
-                    if (m > 8) {
-                        y = parseInt(stDate.substring(6));
-                    } else {
-                        y = parseInt(endDate.substring(6));
-                    }
-                    jQuery('#year').text(String(y) + " рік");
-                    // Формуємо календар на місяць в таблиці
-                    fillCalendar(m, y);
-
-
-                });
-
-
-            </script>
 
             <p>Дата: <input type="text" id="datepicker"></p>
 
@@ -231,23 +169,23 @@
                         <td>&nbsp; Непарний/<br/>&nbsp; парний</td>
                     </tr>
                     {% for wd in workdays %}
-                        <tr>
+                        <tr class="tr_wday">
                             <td>&nbsp; <input name="i-{{ wd.id }}" hidden type="text" value="{{ wd.id }}" size="8">&nbsp;
                             </td>
-                            <td>&nbsp; <input name="n-{{ wd.id }}" type="text" value="{{ wd.num }}"
+                            <td>&nbsp; <input class="n" name="n-{{ wd.id }}" type="text" value="{{ wd.num }}"
                                               oldvalue="{{ wd.num }}" size="8">&nbsp;
                             </td>
-                            <td>&nbsp; <input name="w-{{ wd.id }}" type="text" value="{{ wd.wday|date:"d.m.Y" }}"
+                            <td>&nbsp; <input class="w"  name="w-{{ wd.id }}" type="text" value="{{ wd.wday|date:"d.m.Y" }}"
                                               oldvalue="{{ wd.wday|date:"d.m.Y" }}" size="8" class="calendar_my">&nbsp;
                             </td>
-                            <td>&nbsp; <input name="u-{{ wd.id }}" type="text" value="{{ wd.numworkweek }}"
+                            <td>&nbsp; <input class="u"  name="u-{{ wd.id }}" type="text" value="{{ wd.numworkweek }}"
                                               oldvalue="{{ wd.numworkweek }}"
                                               size="8">&nbsp;
                             </td>
-                            <td>&nbsp; <input name="d-{{ wd.id }}" type="text" value="{{ wd.dayweek }}"
+                            <td>&nbsp; <input class="d"  name="d-{{ wd.id }}" type="text" value="{{ wd.dayweek }}"
                                               oldvalue="{{ wd.dayweek }}" size="8">&nbsp;
                             </td>
-                            <td>&nbsp; <input name="e-{{ wd.id }}" type="text" value="{{ wd.weekchzn }}"
+                            <td>&nbsp; <input class="e"  name="e-{{ wd.id }}" type="text" value="{{ wd.weekchzn }}"
                                               oldvalue="{{ wd.weekchzn }}" size="8">&nbsp;
                             </td>
 
@@ -277,7 +215,133 @@
 
     {% endif %}
 
-    <script type="text/javascript">
+
+               <script type="text/javascript">
+                var month = {
+                    'Вересень': 9,
+                    'Жовтень': 10,
+                    'Листопад': 11,
+                    'Грудень': 12,
+                    'Січень': 1,
+                    'Лютий': 2,
+                    'Березень': 3,
+                    'Квітень': 4,
+                    'Травень': 5
+                }
+                var stDate = '{{ start }}';
+                var endDate = '{{ end }}';
+
+                function getDaysInMonth(m, y) {
+                    return /8|3|5|10/.test(--m) ? 30 : m == 1 ? (!(y % 4) && y % 100) || !(y % 400) ? 29 : 28 : 31;
+                }
+
+                var lengthWorkdays = parseInt("{{workdays|length}}");
+                {#alert(lengthWorkdays);#}
+
+
+                {#var someVar = {{ workdays | js }};#}
+                {#console.log(someVar);#}
+                {#alert(someVar);#}
+                    function chzn_1(month, day) {
+                        r = 0;
+                        jQuery('.tr_wday').each(function (index, value) {
+                            d = ($(this).find('.w').attr('value'));
+
+                            if ((parseInt(d.substr(3, 5)) == month)&&
+                                (parseInt(d.substr(0, 2)) == day) ){
+
+                                    chzn = ($(this).find('.e').attr('value'));
+                                    {#console.log(parseInt(d.substr(3, 5)));#}
+                                    {#console.log(parseInt(d.substr(1, 3)));#}
+                                    {#console.log("----");#}
+                                    {##}
+                                    {#console.log('-->'+d + ' ' + String(chzn));#}
+                                    r = chzn;
+                                    return r;
+                            }
+                        });
+                        return r
+                    }
+
+                function fillCalendar(m, y) {
+
+                    d1 = new Date(y, m - 1, 1);
+                    dw = d1.getDay();
+
+                    {#alert(dw);#}
+                    for (i = 0; i < 43; i++) {
+                        nam = '#' + String(i);
+                        {#console.log(nam);#}
+                        jQuery(nam).text("");
+                    }
+                    cd = getDaysInMonth(m, y)
+                    {#alert (cd);#}
+                    n = (dw + 5) % 7;
+                    for (i = 1; i <= cd; i++) {
+                        jQuery('#' + String(i + n)).text(String(i));
+                        {#jQuery('#' + String(i + n)).text(String(i)+'-'+String(chzn_1(m, i)));#}
+                        chzn = chzn_1(m, i);
+                        if (chzn==0){
+                        {#if ((((i+n+2)%7==0))||(((i+n+1)%7==0))){#}
+                            jQuery('#' + String(i + n)).attr("class","red-cal")
+                         } else if (chzn==1){
+                            jQuery('#' + String(i + n)).removeAttr("class");
+                            jQuery('#' + String(i + n)).attr("class","green-cal")
+                         } else if (chzn==2){
+                            jQuery('#' + String(i + n)).removeAttr("class");
+                            jQuery('#' + String(i + n)).attr("class","orange-cal")
+                         }
+
+                    }
+                    if ( cd + n<35){
+                        jQuery("#lastRow").attr('hidden', true)
+                    } else {
+                        jQuery("#lastRow").attr('hidden', false)
+                    }
+                    jQuery('#year').text(String(y) + " рік");
+
+                    // Тут починаємо експерименти
+
+
+                    {#console.log("Місяць "+String(m)+" " + String(chzn_1(m, 1)));#}
+
+                    {#var data = $("#update-form").serialize();#}
+                    {#$.ajax({#}
+                    {#        url: "../getmonth/" + String(m) + "/",#}
+                    {#        type: "POST",#}
+                    {#        //data: m,#}
+                    {#        error: function () {#}
+                    {#            console.log("Щось не те");#}
+                    {#        },#}
+                    {#        success: function () {#}
+                    {#            s = "" + a + "/" + n;#}
+                    {#            $('#pl').load(s);#}
+                    {#        }#}
+                    {#    }#}
+                    {# ); #}
+
+
+                }
+
+
+                jQuery("#sel_month").on('change', function () {
+                    el = jQuery(this).find(":selected");
+                    s = el.val();
+                    m = month[s];
+                    if (m > 8) {
+                        y = parseInt(stDate.substring(6));
+                    } else {
+                        y = parseInt(endDate.substring(6));
+                    }
+                    jQuery('#year').text(String(y) + " рік");
+                    // Формуємо календар на місяць в таблиці
+                    fillCalendar(m, y);
+
+
+                });
+
+
+
         {#style="background-color: deeppink;"#}
         jQuery('input').on('exit', function () {
             jQuery(this).attr('style', 'background-color: deeppink;');
@@ -338,6 +402,12 @@
         });
 
     </script>
+
+{#    {% if DJworkdays %}#}
+{#    <script type="text/javascript">#}
+{#        (function () {window.DJworkdays = {{DJworkdays|safe}};})();#}
+{#    </script>#}
+{#{% endif %}#}
 
 
 {% endblock %}
