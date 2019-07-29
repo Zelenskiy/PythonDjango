@@ -1,6 +1,14 @@
+import os
+from xml.dom.minidom import Document
+
+import docx
+from django.http import HttpResponse, FileResponse
 from django.views import View
 from django.views.generic.edit import FormView
 from django.db.models import Max
+from docx.table import Table
+
+from PythonDjango.settings import MEDIA_DIR
 from scripts.import_from_excel import start_import
 from worktime.models import Settings
 from .forms import PlanForm, UserRegistrationForm
@@ -8,9 +16,38 @@ from .models import Plan, Rubric, Direction, Purpose, Plantable
 from django.utils.html import escape
 from .utils import *
 
+from docxtpl import DocxTemplate
+
 
 def index(request):
     return render(request, 'plan/index.html')
+
+
+def ribbon(request):
+    s = Settings.objects.filter(field='plantable')[0].value
+    table = Plantable.objects.get(pk=int(s))
+    rubrics = Rubric.objects.filter(plantable_id=table)
+    rubr_id_max = Rubric.objects.aggregate(Max('id'))
+    context = {'rubrics': rubrics, 'rubr_id_max': rubr_id_max}
+    return render(request, 'plan/ribbon.html', context)
+
+
+# def updplan (request, id):
+#     data = request.POST
+#     p = Plan.objects.get(pk=id)
+#
+#
+#
+#     context = {}
+#     return render(request, 'plan/ribbview.html', context)
+
+def ribbview(request, r_id):
+    # form = PlanForm()
+    s = Settings.objects.filter(field='plantable')[0].value
+    table = Plantable.objects.get(pk=int(s))
+    plans = Plan.objects.filter(plantable_id=table, r_id=r_id)
+    context = {'plans': plans}
+    return render(request, 'plan/ribbview.html', context)
 
 
 def login(request):
@@ -32,53 +69,6 @@ def make_rubrics(rubrics):
     return escape(rubrics_code)
 
 
-# def add(request, r_id):
-#     plan = Plan
-#     plan.content = ''
-#     plan.responsible = ''
-#     plan.termin = ''
-#     plan.generalization = ''
-#     plan.note = ''
-#     plan.r_id = r_id
-#     plan.direction_id = None
-#     plan.purpose_id = None
-#
-#     if request.method == "POST":
-#         form = PlanForm(request.POST)
-#         if form.is_valid():
-#             print("ssssssssss")
-#
-#
-#     else:
-#         form = PlanForm(instance=plan)
-#         context = {'form': form}
-#     return render(request, 'plan/post.html', context)
-#
-
-#
-# def add_7(request, r_id):
-#     post = Plan
-#     post.content = ''
-#     post.responsible = ''
-#     post.termin = ''
-#     post.generalization = ''
-#     post.note = ''
-#     post.r_id = r_id
-#     post.direction_id = None
-#     post.purpose_id = None
-#     form = PlanForm(request.POST)
-#     if request.method == "POST":
-#         if form.is_valid():
-#             post = form.save(commit=False)
-#             post.moder = 0
-#             post.save()
-#
-#             return redirect('../')
-#     else:
-#         form = PlanForm(instance=post)
-#         return render(request, 'http://127.0.0.1:8000/add/'+str(r_id), {'form': form})
-
-
 def view(request):
     s = Settings.objects.filter(field='plantable')[0].value
     table = Plantable.objects.get(pk=int(s))
@@ -97,13 +87,6 @@ def post(request, id):
     plans = Plan.objects.filter(plantable_id=table)
     context = {'plans': plans}
     return render(request, 'plan/post.html', context)
-
-
-# def add_ajax(request, id):
-#     print("update update update update update update update update update update update update update update update ")
-#     plans = Plan.objects.filter(id=id)
-#     context = {'plans': plans}
-#     return render(request, 'plan/post.html', context)
 
 
 def verification_user_permission_for_write(request):
@@ -127,7 +110,6 @@ class Post_delete(View):
         post.delete()
         context = {}
         return render(request, 'plan/post.html', context)
-
 
 
 def postr(request, r_id, num):
@@ -183,6 +165,55 @@ def imp_from_excel(request):
     return render(request, 'plan/import_end.html')
 
 
+def rib_update_plan(request, id, num_field):
+    if request.POST and request.is_ajax() and request.user.has_perm('plan.change_plan'):
+        data = request.POST
+        p = Plan.objects.get(pk=id)
+        map = {1: 'id', 2: 'direction_id', 3: 'purpose_id', 4: 'content', 5: 'termin', 6: 'generalization',
+               7: 'responsible', 8: 'note'}
+
+        if num_field == 4:
+            p.content = data['content']
+            p.save()
+        elif num_field == 5:
+            p.termin = data['termin']
+            p.save()
+        elif num_field == 6:
+            p.generalization = data['generalization']
+            p.save()
+        elif num_field == 7:
+            p.responsible = data['responsible']
+            p.save()
+        elif num_field == 8:
+            p.note = data['note']
+            p.save()
+        elif num_field == 0:
+            p.content = data['content']
+            p.termin = data['termin']
+            p.generalization = data['generalization']
+            p.responsible = data['responsible']
+            p.note = data['note']
+            p.save()
+
+        # print(map[num_field])
+
+        # if data['direction_id'] == '':
+        #     p.direction_id = Direction.objects.get(pk=0)
+        # else:
+        #     p.direction_id = Direction.objects.get(pk=int(data['direction_id']))
+        # if data['purpose_id'] == '':
+        #     p.purpose_id = Purpose.objects.get(pk=0)
+        # else:
+        #     p.purpose_id = Purpose.objects.get(pk=int(data['purpose_id']))
+        # p.content = data['content']
+        # p.generalization = data['generalization']
+        # p.responsible = data['responsible']
+        # p.termin = data['termin']
+        # p.note = data['note']
+
+    return render(request, 'plan/ribbview.html', {})
+
+
 def update_plan(request, id):
     if request.POST and request.is_ajax() and request.user.has_perm('plan.change_plan'):
         data = request.POST
@@ -195,9 +226,6 @@ def update_plan(request, id):
             p.purpose_id = Purpose.objects.get(pk=0)
         else:
             p.purpose_id = Purpose.objects.get(pk=int(data['purpose_id']))
-
-        # p.direction_id = Direction.objects.get(pk=int(data['direction_id']))
-        # p.purpose_id = Purpose.objects.get(pk=int(data['purpose_id']))
         p.content = data['content']
         p.generalization = data['generalization']
         p.responsible = data['responsible']
@@ -221,3 +249,18 @@ class MyRegisterFormView(FormView):
 
     def form_invalid(self, form):
         return super(MyRegisterFormView, self).form_invalid(form)
+
+
+def export_word(request):
+    #     http://www.ilnurgi1.ru/docs/python/modules_user/docx.html
+
+
+    doc = docx.Document()
+    doc.add_paragraph('Hello world')
+    doc.add_table(4, 4)
+
+    filename = os.path.join(MEDIA_DIR, 'report','plan.docx')    # r'd:/MyDoc/PythonDjango/plan.docx'
+
+    doc.save(filename)
+    # return render(request, 'plan/ribbon.html', {})
+    return FileResponse (open(filename, 'rb'), as_attachment=True)

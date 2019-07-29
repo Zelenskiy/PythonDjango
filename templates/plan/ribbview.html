@@ -1,0 +1,152 @@
+{% if count != 0 %}
+    <style>
+        .finger {
+            cursor: pointer;
+        }
+
+        .cross {
+            cursor: crosshair;
+        }
+
+        .progress {
+            cursor: progress;
+        }
+
+
+        .help {
+            cursor: help;
+        }
+    </style>
+
+
+    <style>
+        td {
+            vertical-align: top;
+            horiz-align: left;
+            padding-left: 5px;
+            padding-right: 5px;
+        {#padding-top: 1px;#}{#padding-bottom: 1px;#}
+        }
+
+    </style>
+
+    <script type="text/javascript">
+        var oldArrea;
+        var n;
+        {#alert(n);#}
+    </script>
+    <div style="background-color: #E3F2FD">
+        <form id="update-form" method="post"> {% csrf_token %}
+            {% if plans|length > 0 %}
+                <table border="1">
+                    <tr>
+                        <td style="width: 3%;"><b>№</b></td>
+                        <td hidden></td>
+                        <td hidden></td>
+                        <td style="width: 50%;"><b>Зміст роботи</b></td>
+                        <td style="width: 10%;"><b>Строки виконання</b></td>
+                        <td style="width: 10%;"><b>Форма узагальнення</b></td>
+                        <td style="width: 20%;"><b>Відповідальні</b></td>
+                        <td style="width: 7%;"><b>Примітка</b></td>
+                    </tr>
+                    {% for plan in plans %}
+
+                        <tr id="r{{ plan.id }}">
+                            <td>
+                                {{ forloop.counter }}
+
+                            </td>
+                            <td id="d{{ plan.id }}" hidden class="content" name="direction_id"><input type="text"
+                                                                                                      name="direction_id"/>
+                            </td>
+                            <td id="p{{ plan.id }}" hidden class="content" name="purpose_id"><input type="text"
+                                                                                                    name="purpose_id"/>
+                            </td>
+
+                            <td id="c{{ plan.id }}" class="content" name="content">
+                                <p style="white-space: pre-line;">
+                                    {{ plan.content }}
+                                </p>
+                                {#                            <textarea style="border: none;" cols="80" >#}
+                                {#                            {{ plan.content}}#}
+                                {#                            </textarea>#}
+                            </td>
+                            <td id="t{{ plan.id }}" class="content" name="termin">{{ plan.termin }}</td>
+                            <td id="g{{ plan.id }}" class="content" name="generalization">{{ plan.generalization }}</td>
+                            <td id="r{{ plan.id }}" class="content" name="responsible">{{ plan.responsible }}</td>
+                            <td id="n{{ plan.id }}" class="content" name="note">{{ plan.note }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </form>
+
+    </div>
+
+{% endif %}
+
+<script type="text/javascript">
+
+    function goEdit(e) {
+
+        if (oldArrea == undefined) {
+            nam = jQuery(e).attr('name');
+            text = jQuery(e).text().trim();
+            w = jQuery(e).outerWidth(true)
+            h = jQuery(e).outerHeight(true);
+            jQuery(e).html('<textarea name="' + nam + '"  cols="' + String(parseInt(w / 8) + 10) + '" rows = "' + String(parseInt(h / 28) + 2) + '"> ' + text + '</textarea> ');
+            oldArrea = jQuery(e);
+        } else {
+
+            {#console.log("Зайшов");#}
+
+
+            if (oldArrea.attr("id") != jQuery(e).attr("id")) {
+                w = jQuery(e).outerWidth(true)
+                h = jQuery(e).outerHeight(true);
+
+                //Тут зберігаємо за допомогою Ajax
+                id = parseInt(oldArrea.parent('tr').attr('id').substring(1));
+                nam = oldArrea.attr('name');
+
+                var map = new Object();
+                map = {'id':1, 'direction_id':2, 'purpose_id':3, 'content':4, 'termin':5, 'generalization':6, 'responsible':7,'note':8};
+
+                var data = $("#update-form").serialize();
+                $.ajax({
+                        url: "../rib_update_plan/" + id + "/"+ map[nam] + "/",
+                        type: "POST",
+                        data: data,
+                        error: function () {
+                            console.log("Щось не те");
+                        },
+                        success: function () {
+                            console.log("Все Ok");
+                        }
+                    }
+                 );
+                text = oldArrea.find('textarea').val();
+                text = text.trim();
+                {#console.log(text);#}
+                {#text = oldArrea.text();#}
+                oldArrea.text(text);
+
+                nam = jQuery(e).attr('name');
+                text = jQuery(e).text().trim();
+                jQuery(e).html('<textarea name="' + nam + '"  cols="' + String(parseInt(w / 8) + 10) + '" rows = "' + String(parseInt(h / 28) + 2) + '"> ' + text + '</textarea> ');
+                oldArrea = jQuery(e);
+            }
+        }
+    }
+
+    jQuery('.content').on('click', function () {
+        goEdit(this);
+    })
+
+
+</script>
+
+
+
+
+

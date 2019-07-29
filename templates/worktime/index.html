@@ -77,10 +77,12 @@
 
             <div id="div-mnu" hidden class="div-menu">
                 {#        Блок для меню#}
-                <select id="sel-mnu" style="width: 100%;border-color: #d39e00;overflow: hidden;border: none" size="3" multiple>
-                    <option id="mn-1" style="background-color: green;">Зробити чисельник</option>
-                    <option id="mn-2" style="background-color: orange;">Зробити знаменник</option>
-                    <option id="mn-0" style="background-color: red;">Зробити вихідний</option>
+                <select id="sel-mnu"
+                        style="outline:none;  width: 100%;border-color: #d39e00;overflow: hidden;border: none" size="3"
+                        multiple>
+                    <option id="mn-1" style="color: green;">Зробити чисельник</option>
+                    <option id="mn-2" style="color: orange;">Зробити знаменник</option>
+                    <option id="mn-0" style="color: red;">Зробити вихідний</option>
                 </select>
 
 
@@ -100,7 +102,7 @@
             </select> &nbsp;&nbsp;&nbsp; <span id="year"></span>
 
             {#            http://jquery.page2page.ru/index.php5/%D0%9A%D0%B0%D0%BB%D0%B5%D0%BD%D0%B4%D0%B0%D1%80%D1%8C_UI#}
-            <table class=" ml-5 mb-5" border=1>
+            <table id="cal-table" class=" ml-5 mb-5" border=1>
                 <tr class="tr-cal bg-info">
                     <td class="td-cal">Пн</td>
                     <td class="td-cal">Вт</td>
@@ -111,18 +113,18 @@
                     <td class="td-cal red-cal">Нд</td>
                 </tr>
                 <tr class="tr-cal">
-                    <td class="td-cal" id="0" ></td>
-                    <td class="td-cal" id="1" ></td>
-                    <td class="td-cal" id="2" ></td>
-                    <td class="td-cal" id="3" ></td>
-                    <td class="td-cal" id="4" ></td>
-                    <td class="td-cal" id="5" ></td>
-                    <td class="td-cal" id="6" ></td>
+                    <td class="td-cal" id="0"></td>
+                    <td class="td-cal" id="1"></td>
+                    <td class="td-cal" id="2"></td>
+                    <td class="td-cal" id="3"></td>
+                    <td class="td-cal" id="4"></td>
+                    <td class="td-cal" id="5"></td>
+                    <td class="td-cal" id="6"></td>
                 </tr>
                 <tr class="tr-cal">
-                    <td class="td-cal" id="7" ></td>
-                    <td class="td-cal" id="8" ></td>
-                    <td class="td-cal" id="9" ></td>
+                    <td class="td-cal" id="7"></td>
+                    <td class="td-cal" id="8"></td>
+                    <td class="td-cal" id="9"></td>
                     <td class="td-cal" id="10"></td>
                     <td class="td-cal" id="11"></td>
                     <td class="td-cal" id="12"></td>
@@ -138,31 +140,31 @@
                     <td class="td-cal" id="20"></td>
                 </tr>
                 <tr class="tr-cal">
-                    <td class="td-cal" id="21" ></td>
-                    <td class="td-cal" id="22" ></td>
-                    <td class="td-cal" id="23" ></td>
-                    <td class="td-cal" id="24" ></td>
-                    <td class="td-cal" id="25" ></td>
-                    <td class="td-cal" id="26" ></td>
-                    <td class="td-cal" id="27" ></td>
+                    <td class="td-cal" id="21"></td>
+                    <td class="td-cal" id="22"></td>
+                    <td class="td-cal" id="23"></td>
+                    <td class="td-cal" id="24"></td>
+                    <td class="td-cal" id="25"></td>
+                    <td class="td-cal" id="26"></td>
+                    <td class="td-cal" id="27"></td>
                 </tr>
                 <tr class="tr-cal">
-                    <td class="td-cal" id="28" ></td>
-                    <td class="td-cal" id="29" ></td>
-                    <td class="td-cal" id="30" ></td>
-                    <td class="td-cal" id="31" ></td>
-                    <td class="td-cal" id="32" ></td>
-                    <td class="td-cal" id="33" ></td>
-                    <td class="td-cal" id="34" ></td>
+                    <td class="td-cal" id="28"></td>
+                    <td class="td-cal" id="29"></td>
+                    <td class="td-cal" id="30"></td>
+                    <td class="td-cal" id="31"></td>
+                    <td class="td-cal" id="32"></td>
+                    <td class="td-cal" id="33"></td>
+                    <td class="td-cal" id="34"></td>
                 </tr>
                 <tr id="lastRow" class="tr-cal">
-                    <td class="td-cal" id="35" ></td>
-                    <td class="td-cal" id="36" ></td>
-                    <td class="td-cal" id="37" ></td>
-                    <td class="td-cal" id="38" ></td>
-                    <td class="td-cal" id="39" ></td>
-                    <td class="td-cal" id="40" ></td>
-                    <td class="td-cal" id="41" ></td>
+                    <td class="td-cal" id="35"></td>
+                    <td class="td-cal" id="36"></td>
+                    <td class="td-cal" id="37"></td>
+                    <td class="td-cal" id="38"></td>
+                    <td class="td-cal" id="39"></td>
+                    <td class="td-cal" id="40"></td>
+                    <td class="td-cal" id="41"></td>
                 </tr>
 
 
@@ -176,12 +178,14 @@
 
         <div class="container-fluid mt-lg-5 ml-1 div-nofix-1">
 
+            <button onclick="changeChZn('15.09.2019', 0)">555</button>
+
 
             <p><strong>Навчальний рік:</strong>&nbsp;{{ year }}</p>
             <p><strong>Список робочих днів: </strong>&nbsp;</p>
             <form method="post">
                 {% csrf_token %}
-            <button id="btn" type="submit">Зберегти зміни</button>
+                <button id="btn" type="submit">Зберегти зміни</button>
                 <table id="pnl">
                     <tr>
                         <td>&nbsp;</td>
@@ -192,8 +196,9 @@
                         <td>&nbsp; Непарний/<br/>&nbsp; парний</td>
                     </tr>
                     {% for wd in workdays %}
-                        <tr class="tr_wday">
-                            <td>&nbsp; <input class="i" name="i-{{ wd.id }}" hidden type="text" value="{{ wd.id }}" size="8">&nbsp;
+                        <tr class="tr_wday" id="trid_{{ forloop.counter }}">
+                            <td>&nbsp; <input class="i" name="i-{{ wd.id }}" hidden type="text" value="{{ wd.id }}"
+                                              size="8">&nbsp;
                             </td>
                             <td>&nbsp; <input class="n" name="n-{{ wd.id }}" type="text" value="{{ wd.num }}"
                                               oldvalue="{{ wd.num }}" size="8">&nbsp;
@@ -271,20 +276,54 @@
         }
         var stDate = '{{ start }}';
         var endDate = '{{ end }}';
+        var id_00 = 0;
 
-        function changeChZn(date, cz){
+        function datediff(first, second) {
+            // Take the difference between the dates and divide by milliseconds per day.
+            // Round to nearest whole number to deal with DST.
+            return Math.round((second - first) / (1000 * 60 * 60 * 24));
+        }
+
+        function changeChZn(date, cz) {
             //Шукаємо поле з записом потрібної дати й замінюємо поле chzn
-            jQuery('.tr_wday').each(function (index, value) {
+            //Визначаємо кількість днів від першого дня року до дати date
+            day_ = parseInt(date.substring(0, 2));
+            month_ = parseInt(date.substring(3, 5));
+            year_ = parseInt(date.substring(6));
+            dateF = new Date(year_, month_ - 1, day_, 0, 0, 0, 0);
 
+            day_ = parseInt(stDate.substring(0, 2));
+            month_ = parseInt(stDate.substring(3, 5));
+            year_ = parseInt(stDate.substring(6));
+            dateS = new Date(year_, month_ - 1, day_, 0, 0, 0, 0);
+
+
+            var diffDays = datediff(dateS, dateF);
+
+            {#jQuery('.tr_wday').find('#' + String(diffDays)).find('.e').attr('value', String(cz));#}
+            jQuery('#trid_' + String(diffDays + 1)).find('.e').attr('value', String(cz));
+            id_ = jQuery('#trid_' + String(diffDays + 1)).find('.i').attr('value');
+
+            $.ajax({
+                    url: "../setchzn/" + id_ + "/" + String(cz) + "/",
+                    type: "POST",
+                    data: {},
+                    error: function () {
+                        console.log("Щось не те");
+                    },
+                    success: function () {
+                        console.log("Все Ok");
+                    }
+                }
+            );
+
+            /*
+            jQuery('.tr_wday').each(function (index, value) {
                 d = ($(this).find('.w').attr('value'));
                 id_ = parseInt($(this).find('.i').attr('value'));
-
-
                 if (d==date) {
-
                     console.log(id_);
                     jQuery(this).find('.e').attr('value',String(cz));
-
                     //Відправити Аджаксом на збереження
                     $.ajax({
                             url: "../setchzn/" + String(id_) + "/"+ String(cz)+"/",
@@ -298,10 +337,10 @@
                             }
                         }
                     );
-
-
                 }
             });
+            */
+
             y = parseInt(date.substring(6));
             m = parseInt(date.substring(3, 5));
             fillCalendar(m, y);
@@ -310,51 +349,40 @@
 
         var date;
 
-        {#$('#cont').bind('contextmenu', function (e) {#}
-        {#    return false;#}
-        {# });#}
+
+        jQuery('#cont').on('click', function () {
+            jQuery('#div-mnu').attr("hidden", true);
+        });
+
+        jQuery('#cal-table').on('keydown', function () {
+            jQuery('#div-mnu').attr("hidden", true);
+        })
+
 
         jQuery('#sel-mnu').on('change', function () {
-
-            a = jQuery(this).find(":selected").attr('id');
-            if (a=='mn-0'){
-                //Встановити вихідний
-                changeChZn(date, 0);
-            } else if (a=='mn-1'){
-                //Встановити чисельник
-                changeChZn(date, 1);
-            } else {
-                //Встановити знаменник
-                changeChZn(date, 2);
-
-            }
             jQuery('#div-mnu').attr("hidden", true);
-            {#jQuery('#mn-0').attr("selected", false);#}
-            {#jQuery('#mn-1').attr("selected", false);#}
-            {#jQuery('#mn-2').attr("selected", false);#}
-
-         });
+            a = jQuery(this).find(":selected").attr('id');
+            jQuery(this).find(":selected").attr('selected', false);
+            a = a.substring(3);
+            changeChZn(date, parseInt(a));
+            jQuery('#div-mnu').attr("hidden", true);
+        });
 
         jQuery('.td-cal').on('click', function () {
             jQuery('#div-mnu').attr("hidden", true);
         });
 
         jQuery('.td-cal').bind('contextmenu', function () {
-
-
             td = jQuery(this).attr('id');
             d = jQuery('#' + String(td)).text();
             if (d.length > 0) {
                 date = jQuery('#' + String(td)).attr("date");
                 chzna = jQuery('#' + String(td)).attr("chzn1");
+                ident = jQuery('#' + String(td)).attr("ident");
+                id_00 = parseInt(ident);
                 //Тут промалюємо контекстре меню
                 top_ = $('#' + String(td)).offset().top;
                 left_ = $('#' + String(td)).offset().left;
-
-                {#console.log("top=" + String(top_) + " left=" + String(left_));#}
-
-
-                {#jQuery('#div-mnu').attr("style", 'top:' + String(top_) + ';left:' + String(left) + ';"');#}
                 jQuery('#div-mnu').offset({top: top_ + 25, left: left_ + 40})
                 jQuery('#div-mnu').attr("hidden", false);
             } else {
@@ -370,30 +398,44 @@
         }
 
         var lengthWorkdays = parseInt("{{workdays|length}}");
-        {#alert(lengthWorkdays);#}
-
-        {#var someVar = {{ workdays | js }};#}
-        {#console.log(someVar);#}
-        {#alert(someVar);#}
 
         function chzn_1(month, day) {
             r = 0;
-            jQuery('.tr_wday').each(function (index, value) {
-                d = ($(this).find('.w').attr('value'));
+            {#day_ = parseInt(date.substr(0, 2));#}
+            {#month_ = parseInt(date.substr(3, 5));#}
+            year_ = parseInt(stDate.substr(6));
+            if (month < 9) {
+                year_ += 1;
+            }
+            dateF = new Date(year_, month - 1, day, 0, 0, 0, 0);
 
-                if ((parseInt(d.substr(3, 5)) == month) &&
-                    (parseInt(d.substr(0, 2)) == day)) {
+            day_ = parseInt(stDate.substring(0, 2));
+            month_ = parseInt(stDate.substring(3, 5));
+            year_ = parseInt(stDate.substr(6));
+            dateS = new Date(year_, month_ - 1, day_, 0, 0, 0, 0);
 
-                    chzn = ($(this).find('.e').attr('value'));
-                    {#console.log(parseInt(d.substr(3, 5)));#}
-                    {#console.log(parseInt(d.substr(1, 3)));#}
-                    {#console.log("----");#}
-                    {##}
-                    {#console.log('-->'+d + ' ' + String(chzn));#}
-                    r = chzn;
-                    return r;
-                }
-            });
+            {#console.log(dateS);#}
+            {#console.log(dateF);#}
+
+            var diffDays = datediff(dateS, dateF)
+            {#console.log(diffDays);#}
+
+            r = jQuery('#trid_' + String(diffDays + 1)).find('.e').attr('value');
+            {#console.log(r);#}
+            {#console.log("--------")#}
+            {#jQuery('.tr_wday').each(function (index, value) {#}
+            {#    d = ($(this).find('.w').attr('value'));#}
+            {##}
+            {#    if ((parseInt(d.substr(3, 2)) == month) &&#}
+            {#        (parseInt(d.substr(0, 2)) == day)) {#}
+            {##}
+            {#        chzn = ($(this).find('.e').attr('value'));#}
+            {#ident = ($(this).find('.i').attr('value')).substring(2);#}
+            {##}
+            {#        r = chzn;#}
+            {#        return r;#}
+            {#    }#}
+            {#  });#}
             return r
         }
 
@@ -422,6 +464,7 @@
                 chzn = chzn_1(m, i);
                 jQuery('#' + String(i + n)).attr("date", NumToStr2(i) + '.' + NumToStr2(m) + '.' + NumToStr2(y))
                 jQuery('#' + String(i + n)).attr("chzn1", String(chzn));
+                {#jQuery('#' + String(i + n)).attr("ident", String(ident));#}
                 if (chzn == 0) {
                     jQuery('#' + String(i + n)).attr("class", "red-cal")
                 } else if (chzn == 1) {
@@ -481,7 +524,6 @@
         });
 
 
-        {#style="background-color: deeppink;"#}
         jQuery('input').on('exit', function () {
             jQuery(this).attr('style', 'background-color: deeppink;');
             {#if (jQuery(this).attr('value') == (jQuery(this).attr('oldvalue'))){#}
@@ -497,14 +539,6 @@
             jQuery('html').attr('style', 'cursor: progress;')
         })
 
-        {#$(this).datepicker();#}
-        {#$(this).datepicker("option", "dateFormat", "dd.mm.yy");#}
-
-
-        {#$("#format").change(function () {#}
-        {#    $("#datepicker").datepicker("option", "dateFormat", $(this).val());#}
-        {# } #}
-        {# ); #}
     </script>
     <script type="text/javascript">
         $("#cont").draggable(); // эта строка кода, которая делает элемент перетаскиваемым

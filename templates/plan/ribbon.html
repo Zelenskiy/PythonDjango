@@ -1,0 +1,119 @@
+{% extends "layout/basic_plan.html" %}
+{% load static %}
+{% block title %}
+    Річний план
+{% endblock %}
+
+{% block content %}
+    <link type="text/css" href="{% static "css/jquery-ui.css" %}" rel="Stylesheet"/>
+    <script type="text/javascript" src="{% static "js/jquery-ui.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery-ui-min.js" %}"></script>
+
+    <style type="text/css">
+        .div-fix-1 {
+            position: fixed;
+            top: 120px;
+            left: -28px;
+            width: 42px;
+            height: 32px
+            z-index: 2;;
+        }
+
+    </style>
+
+    {% if user.is_authenticated %}
+        <div class="container-fluid mt-lg-5">
+            <select class="form-control small" id="exampleFormControlSelect2" name="rozdili"
+                    style="overflow-x:auto; ">
+                {% for rubric in rubrics %}
+                    {% if rubric.riven == 1 %}
+                        <option id="{{ rubric.id }}" owner="{{ rubric.id_owner_id }}" hidden_child=true r="0">
+                            {{ rubric.n_r }}.&nbsp;{{ rubric.name }}
+                        </option>
+                        {% for rubric2 in rubrics %}
+                            {% if rubric2.riven == 2 and rubric2.id_owner_id == rubric.id %}
+                                <option id="{{ rubric2.id }}" owner="{{ rubric2.id_owner_id }}"
+                                        hidden_child=true r="0">
+                                    &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric2.name }}
+                                </option>
+
+                                {% for rubric3 in rubrics %}
+                                    {% if rubric3.riven == 3 and rubric3.id_owner_id == rubric2.id %}
+                                        <option id="{{ rubric3.id }}" owner="{{ rubric3.id_owner_id }}"
+                                                hidden_child=true r="0">
+                                            &nbsp;&nbsp;
+                                            &nbsp;&nbsp; {{ rubric.n_r }}.&nbsp;{{ rubric2.n_r }}.&nbsp;{{ rubric3.n_r }}.&nbsp;{{ rubric3.name }}
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+
+            </select>
+        </div>
+
+
+        <div id="tmp1" class="div-fix-1">
+            <button class="button small">
+                <a href="../export_word/">EW</a>
+                {#                <a href="{% url 'export_word_url' %}">EW</a>#}
+            </button>
+        </div>
+
+        <div id="pl" class="container-fluid mt-lg-5">
+
+        </div>
+
+
+
+
+    {% else %}
+        <script>
+            alert("Увійдіть");
+            document.location.href = '/accounts/login/';
+        </script>
+
+    {% endif %}
+
+    <script type="text/javascript">
+
+        function sleep(milliseconds) {
+            var start = new Date().getTime();
+            for (var i = 0; i < 1e7; i++) {
+                if ((new Date().getTime() - start) > milliseconds) {
+                    break;
+                }
+            }
+        }
+
+        jQuery('#exampleFormControlSelect2').on('change', function () {
+            n = 1;
+            a = jQuery(this).find(":selected").attr('id');
+
+            s = "" + a + "/";
+            {#alert(s);#}
+            jQuery('#pl').load(s);
+        });
+
+        jQuery('#btn1').on('click', function () {
+            alert("aaaaaaaaaaaaaaaa");
+            jQuery('html').load('../export_word');
+        })
+
+        jQuery('.div-fix-1').on('mouseenter', function () {
+            sleep(1000);
+            jQuery(this).attr('style', 'left:1px')
+        })
+        jQuery('.div-fix-1').on('mouseleave', function () {
+            sleep(2000);
+
+            jQuery(this).attr('style', 'left:-28px')
+        })
+
+    </script>
+
+
+
+{% endblock %}

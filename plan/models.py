@@ -36,7 +36,7 @@ class Plan(models.Model):
     purpose = models.CharField(null=True, blank=True, max_length=10)
 
     class Meta:
-        ordering = ['sort', 'published']
+        ordering = ['sort']
 
 
 class Direction(models.Model):
