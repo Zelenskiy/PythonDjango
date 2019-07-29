@@ -253,6 +253,7 @@ class MyRegisterFormView(FormView):
 
 def export_word(request):
     #     http://www.ilnurgi1.ru/docs/python/modules_user/docx.html
+    #   https://python-docx.readthedocs.io/en/latest/user/quickstart.html
 
 
     doc = docx.Document()
