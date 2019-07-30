@@ -258,7 +258,9 @@ def export_word(request):
 
     doc = docx.Document()
     doc.add_paragraph('Hello world')
-    doc.add_table(4, 4)
+    table = doc.add_table(rows=2, cols=2)
+
+    table.style = 'LightShading-Accent1'
 
     filename = os.path.join(MEDIA_DIR, 'report','plan.docx')    # r'd:/MyDoc/PythonDjango/plan.docx'
 

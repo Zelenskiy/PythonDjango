@@ -15,8 +15,8 @@
             top: 120px;
             left: -28px;
             width: 42px;
-            height: 32px
-            z-index: 2;;
+            height: 32px;
+            z-index: 2;
         }
 
     </style>
@@ -56,8 +56,8 @@
 
 
         <div id="tmp1" class="div-fix-1">
-            <button class="button small">
-                <a href="../export_word/">EW</a>
+            <button class="button small" onclick="location.href='../export_word/'">EW
+                {#                <a href="../export_word/">EW</a>#}
                 {#                <a href="{% url 'export_word_url' %}">EW</a>#}
             </button>
         </div>
@@ -97,10 +97,6 @@
             jQuery('#pl').load(s);
         });
 
-        jQuery('#btn1').on('click', function () {
-            alert("aaaaaaaaaaaaaaaa");
-            jQuery('html').load('../export_word');
-        })
 
         jQuery('.div-fix-1').on('mouseenter', function () {
             sleep(1000);
@@ -111,6 +107,10 @@
 
             jQuery(this).attr('style', 'left:-28px')
         })
+
+
+        {#$(".div-fix-1").animate({height: "hide"}, 1000);#}
+        {#$(".div-fix-1").animate({height: "show"}, 1000);#}
 
     </script>
 

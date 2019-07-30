@@ -48,11 +48,12 @@
                         <td style="width: 10%;"><b>Форма узагальнення</b></td>
                         <td style="width: 20%;"><b>Відповідальні</b></td>
                         <td style="width: 7%;"><b>Примітка</b></td>
+                        <td style="width: 7%;"><b>Сортування</b></td>
                     </tr>
                     {% for plan in plans %}
 
                         <tr id="r{{ plan.id }}">
-                            <td>
+                            <td class="content" name="N">
                                 {{ forloop.counter }}
 
                             </td>
@@ -75,6 +76,7 @@
                             <td id="g{{ plan.id }}" class="content" name="generalization">{{ plan.generalization }}</td>
                             <td id="r{{ plan.id }}" class="content" name="responsible">{{ plan.responsible }}</td>
                             <td id="n{{ plan.id }}" class="content" name="note">{{ plan.note }}</td>
+                            <td id="s{{ plan.id }}" class="content" name="sort">{{ plan.sort }}</td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -110,11 +112,20 @@
                 nam = oldArrea.attr('name');
 
                 var map = new Object();
-                map = {'id':1, 'direction_id':2, 'purpose_id':3, 'content':4, 'termin':5, 'generalization':6, 'responsible':7,'note':8};
+                map = {
+                    'id': 1,
+                    'direction_id': 2,
+                    'purpose_id': 3,
+                    'content': 4,
+                    'termin': 5,
+                    'generalization': 6,
+                    'responsible': 7,
+                    'note': 8
+                };
 
                 var data = $("#update-form").serialize();
                 $.ajax({
-                        url: "../rib_update_plan/" + id + "/"+ map[nam] + "/",
+                        url: "../rib_update_plan/" + id + "/" + map[nam] + "/",
                         type: "POST",
                         data: data,
                         error: function () {
@@ -124,7 +135,7 @@
                             console.log("Все Ok");
                         }
                     }
-                 );
+                );
                 text = oldArrea.find('textarea').val();
                 text = text.trim();
                 {#console.log(text);#}
@@ -132,9 +143,15 @@
                 oldArrea.text(text);
 
                 nam = jQuery(e).attr('name');
-                text = jQuery(e).text().trim();
-                jQuery(e).html('<textarea name="' + nam + '"  cols="' + String(parseInt(w / 8) + 10) + '" rows = "' + String(parseInt(h / 28) + 2) + '"> ' + text + '</textarea> ');
-                oldArrea = jQuery(e);
+                if (nam != "N") {
+
+                    text = jQuery(e).text().trim();
+                    jQuery(e).html('<textarea name="' + nam + '"  cols="' + String(parseInt(w / 8) + 10) + '" rows = "' + String(parseInt(h / 28) + 2) + '"> ' + text + '</textarea> ');
+                    oldArrea = jQuery(e);
+                } else {
+                    oldArrea = undefined;
+                }
+
             }
         }
     }
@@ -142,6 +159,15 @@
     jQuery('.content').on('click', function () {
         goEdit(this);
     })
+
+    {#jQuery('.contentN').on('click', function () {#}
+    {#    if (oldArrea != undefined) {#}
+    {#        text = oldArrea.find('textarea').val();#}
+    {#        text = text.trim();#}
+    {#        oldArrea.text(text);#}
+    {#    }#}
+    {##}
+    {# })#}
 
 
 </script>
