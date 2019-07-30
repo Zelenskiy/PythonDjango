@@ -28,6 +28,22 @@
         {#padding-top: 1px;#}{#padding-bottom: 1px;#}
         }
 
+        .div-float-button-1 {
+
+            top: 100px;
+            left: 100px;
+            width: 42px;
+            height: 64px;
+            z-index: 2;
+
+        }
+
+        .btn {
+            width: 24px;
+            height: 32px;
+
+        }
+
     </style>
 
     <script type="text/javascript">
@@ -35,7 +51,9 @@
         var n;
         {#alert(n);#}
     </script>
-    <div style="background-color: #E3F2FD">
+    <div id="pnl" style="background-color: #E3F2FD">
+
+
         <form id="update-form" method="post"> {% csrf_token %}
             {% if plans|length > 0 %}
                 <table border="1">
@@ -48,12 +66,13 @@
                         <td style="width: 10%;"><b>Форма узагальнення</b></td>
                         <td style="width: 20%;"><b>Відповідальні</b></td>
                         <td style="width: 7%;"><b>Примітка</b></td>
-                        <td style="width: 7%;"><b>Сортування</b></td>
+                        <td hidden style="width: 7%;"><b>Сортування</b></td>
+                        <td style="width: 7%;"></td>
                     </tr>
                     {% for plan in plans %}
 
                         <tr id="r{{ plan.id }}">
-                            <td class="content" name="N">
+                            <td id="i{{ plan.id }}" class="contentN" name="N" onclick="editField('i{{ plan.id }}')">
                                 {{ forloop.counter }}
 
                             </td>
@@ -64,7 +83,8 @@
                                                                                                     name="purpose_id"/>
                             </td>
 
-                            <td id="c{{ plan.id }}" class="content" name="content">
+                            <td id="c{{ plan.id }}" class="content" name="content"
+                                onclick="editField('c{{ plan.id }}')">
                                 <p style="white-space: pre-line;">
                                     {{ plan.content }}
                                 </p>
@@ -72,11 +92,29 @@
                                 {#                            {{ plan.content}}#}
                                 {#                            </textarea>#}
                             </td>
-                            <td id="t{{ plan.id }}" class="content" name="termin">{{ plan.termin }}</td>
-                            <td id="g{{ plan.id }}" class="content" name="generalization">{{ plan.generalization }}</td>
-                            <td id="r{{ plan.id }}" class="content" name="responsible">{{ plan.responsible }}</td>
-                            <td id="n{{ plan.id }}" class="content" name="note">{{ plan.note }}</td>
-                            <td id="s{{ plan.id }}" class="content" name="sort">{{ plan.sort }}</td>
+                            <td id="t{{ plan.id }}" class="content" name="termin"
+                                onclick="editField('t{{ plan.id }}')">{{ plan.termin }}</td>
+                            <td id="g{{ plan.id }}" class="content" name="generalization"
+                                onclick="editField('g{{ plan.id }}')">{{ plan.generalization }}</td>
+                            <td id="r{{ plan.id }}" class="content" name="responsible"
+                                onclick="editField('r{{ plan.id }}')">{{ plan.responsible }}</td>
+                            <td id="n{{ plan.id }}" class="content" name="note"
+                                onclick="editField('n{{ plan.id }}')">{{ plan.note }}</td>
+                            <td hidden id="s{{ plan.id }}" class="content" name="sort">{{ plan.sort }}</td>
+                            <td id="b{{ plan.id }}" class="contentBtn" name="N">
+                                <button class="btn" id="up__{{ plan.id }}" type="button"
+                                        onclick="btnClick('up__{{ plan.id }}');">
+                                    &#8593;
+                                </button>
+                                <button class="btn" id="add_{{ plan.id }}" type="button"
+                                        onclick="btnClick('add_{{ plan.id }}');">+
+                                </button>
+                                <button class="btn" id="down{{ plan.id }}" type="button"
+                                        onclick="btnClick('down{{ plan.id }}');">
+                                    &#8595;
+                                </button>
+
+                            </td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -90,11 +128,13 @@
 <script type="text/javascript">
 
     function goEdit(e) {
+        {#console.log("Зайшов у goEdit");#}
 
-        if (oldArrea == undefined) {
+
+        if ((oldArrea == undefined)) {
             nam = jQuery(e).attr('name');
             text = jQuery(e).text().trim();
-            w = jQuery(e).outerWidth(true)
+            w = jQuery(e).outerWidth(true);
             h = jQuery(e).outerHeight(true);
             jQuery(e).html('<textarea name="' + nam + '"  cols="' + String(parseInt(w / 8) + 10) + '" rows = "' + String(parseInt(h / 28) + 2) + '"> ' + text + '</textarea> ');
             oldArrea = jQuery(e);
@@ -120,7 +160,8 @@
                     'termin': 5,
                     'generalization': 6,
                     'responsible': 7,
-                    'note': 8
+                    'note': 8,
+                    'sort': 9,
                 };
 
                 var data = $("#update-form").serialize();
@@ -156,18 +197,155 @@
         }
     }
 
-    jQuery('.content').on('click', function () {
-        goEdit(this);
-    })
+    function editField(id) {
+        //Знайти за id посилання на обєкт td
+        e = jQuery('#' + id);
+        console.log(e);
+        console.log(e.attr('name'));
+        if (e.attr('name') == 'N') {
+            if (oldArrea != undefined) {
+                text = oldArrea.find('textarea').val();
+                text = text.trim();
+                oldArrea.text(text);
+            }
+            oldArrea = undefined;
+        } else {
+            goEdit(e);
+        }
 
-    {#jQuery('.contentN').on('click', function () {#}
-    {#    if (oldArrea != undefined) {#}
-    {#        text = oldArrea.find('textarea').val();#}
-    {#        text = text.trim();#}
-    {#        oldArrea.text(text);#}
-    {#    }#}
-    {##}
+
+        {#console.log(e);#}
+
+    }
+
+    {#jQuery('.content').on('click', function () {#}
+    {#    goEdit(this);#}
     {# })#}
+    {#jQuery('.contentBtn').on('click', function () {#}
+    {#    if (oldArrea != undefined)#}
+    {#        goEdit(this);#}
+    {# })#}
+    {##}
+    {#jQuery('.contentN').on('click', function () {#}
+    {#    goEdit(this);#}
+    {# })#}
+
+    jQuery.fn.swap = function (b) {
+        b = jQuery(b)[0];
+        var a = this[0],
+            a2 = a.cloneNode(true),
+            b2 = b.cloneNode(true),
+            stack = this;
+
+        a.parentNode.replaceChild(b2, a);
+        b.parentNode.replaceChild(a2, b);
+
+        stack[0] = a2;
+        return this.pushStack(stack);
+    };
+
+    function btnClick(id) {
+
+        {#console.log("Зайшов до обробника кнопок");#}
+        {#console.log('#'+id);#}
+
+        tr_prev = jQuery('#' + id).parent().parent().prev();
+        tr_this = jQuery('#' + id).parent().parent();
+        tr_next = jQuery('#' + id).parent().parent().next();
+
+        tr_this_id = tr_this.attr('id');
+        tr_next_id = tr_next.attr('id');
+        tr_prev_id = tr_prev.attr('id');
+
+        id_prev = tr_prev.attr('id');
+        if (id_prev != undefined) {
+            id_prev = id_prev.substring(1);
+        }
+
+
+        id_this = tr_this.attr('id');
+        if (id_this != undefined) {
+            id_this = id_this.substring(1);
+        }
+        id_next = tr_next.attr('id');
+        if (id_next != undefined) {
+            id_next = id_next.substring(1);
+        }
+        prev_Sort = tr_prev.find('#s' + id_prev).text();
+        this_Sort = tr_this.find('#s' + id_this).text();
+        next_Sort = tr_next.find('#s' + id_next).text();
+
+
+        oldNum = jQuery('#' + id).parent().parent().find('#i' + id_this).text();
+        oldNum = oldNum.trim();
+
+        {#    Міняємо місцями елементи#}
+        {#   https://smartideal.net/kak-pomenyat-dva-bloka-mestami/   #}
+        idBtn = jQuery('#' + id).attr('id');
+        if (idBtn != undefined) {
+            idBtn = idBtn.substring(0, 4);
+        }
+        if (idBtn == 'down') {
+            //Якщо елемент не останній
+
+            //Міняємо поле sort місцями
+            tr_next.find('#s' + id_next).text(this_Sort);
+            tr_this.find('#s' + id_this).text(next_Sort);
+            //Міняємо елементи місцями
+            jQuery('#' + tr_this_id).swap(jQuery('#' + tr_next_id));
+            // і прокрутить вгору на висоту даної комірки щоб мишка залишилася над полем, яке рухаємо
+
+            y0 = jQuery('html').scrollTop();
+            dy = jQuery('#' + id).parent().parent().next().outerHeight(true);
+            destenation = y0 + dy;
+            jQuery('html').animate({scrollTop: destenation}, 600);
+
+            //Зберігаємо
+            adj_for_sort(id_next, this_Sort);
+            adj_for_sort(id_this, next_Sort);
+        }
+
+        if (idBtn == 'up__') {
+            //Якщо елемент не останній
+
+            //Міняємо поле sort місцями
+            tr_prev.find('#s' + id_prev).text(this_Sort);
+            tr_this.find('#s' + id_this).text(prev_Sort);
+            //Міняємо елементи місцями
+            jQuery('#' + tr_this_id).swap(jQuery('#' + tr_prev_id));
+            // і прокрутить вниз на висоту даної комірки щоб мишка залишилася над полем, яке рухаємо
+
+            y0 = jQuery('html').scrollTop();
+            dy = jQuery('#' + id).parent().parent().prev().outerHeight(true);
+            destenation = y0 - dy;
+            jQuery('html').animate({scrollTop: destenation}, 600);
+
+            //Зберігаємо
+            adj_for_sort(id_prev, this_Sort);
+            adj_for_sort(id_this, prev_Sort);
+
+        }
+        {#console.log(tr_this.html());#}
+
+    }
+
+    function adj_for_sort(id, sort0) {
+        $.ajax({
+                url: "../rib_update_plan/" + id + "/9/",
+                type: "POST",
+                cache: false,
+                data: {
+                    sort: sort0
+                },
+                error: function () {
+                    console.log("Щось не те");
+                },
+                success: function () {
+                    console.log("Все Ok");
+                }
+            }
+        );
+    }
 
 
 </script>

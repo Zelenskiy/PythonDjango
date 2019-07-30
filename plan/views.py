@@ -4,6 +4,7 @@ from xml.dom.minidom import Document
 import docx
 from django.http import HttpResponse, FileResponse
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import FormView
 from django.db.models import Max
 from docx.table import Table
@@ -164,7 +165,7 @@ def imp_from_excel(request):
     start_import()
     return render(request, 'plan/import_end.html')
 
-
+@csrf_exempt
 def rib_update_plan(request, id, num_field):
     if request.POST and request.is_ajax() and request.user.has_perm('plan.change_plan'):
         data = request.POST
@@ -186,6 +187,10 @@ def rib_update_plan(request, id, num_field):
             p.save()
         elif num_field == 8:
             p.note = data['note']
+            p.save()
+        elif num_field == 9:
+            s = data['sort'].replace(",", ".")
+            p.sort = s
             p.save()
         elif num_field == 0:
             p.content = data['content']
