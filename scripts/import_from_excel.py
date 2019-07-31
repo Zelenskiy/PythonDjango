@@ -35,42 +35,57 @@ def start_import():  # Тут точка входу
     pt_id = pl_table.id
     print("Створили Plantable з id=" + str(pt_id))
 
+    rozd_ident, rozd_owner = imp_4(pt_id)
 
-
-    imp_4(pt_id)
-
-    imp_2(pt_id)
-    imp_3(pt_id)
-
-    imp_1(pt_id)
+    purpose_ident = imp_2(pt_id)
+    direction_ident = imp_3(pt_id)
+    plan_ident, plan_rubric, plan_direction, plan_purpose = imp_1(pt_id)
 
     # Випраляємо посилання на id в Rubric
     rubrics = Rubric.objects.filter(plantable_id=pt_id)
     for rubric in rubrics:
-        id_owner_old = rubric.ownertmp
-        per = Rubric.objects.filter(plantable_id=pt_id, ident=id_owner_old)[0]
-        i_id = per.id
-        rubric.id_owner = Rubric.objects.get(pk=i_id)
+        id_owner_old = rozd_owner[rubric.id]
+        ident = rozd_ident[rubric.id]
+        for key, value in rozd_ident.items():
+            if value == id_owner_old:
+                rubric.id_owner = Rubric.objects.get(pk=key)
+                break
+
+        #
+        # per = Rubric.objects.filter(plantable_id=pt_id, ident=id_owner_old)[0]
+        # i_id = per.id
+        # rubric.id_owner = Rubric.objects.get(pk=i_id)
         rubric.save()
+
+    
+        
+    
     # Випраляємо посилання в Plan
     plans = Plan.objects.filter(plantable_id=pt_id)
     for plan in plans:
-        direction_old = plan.direction
-        per = Direction.objects.filter(plantable_id=pt_id, ident=direction_old)[0]
-        i_id = per.id
-        plan.direction_id = Direction.objects.get(pk=i_id)
+        direction_old = plan_direction[plan.id]
+        for key, value in  direction_ident.items():
+            if value == direction_old:
+                plan.direction_id = Direction.objects.get(pk=key)
+                break
 
-        purpose_old = plan.purpose
-        per = Purpose.objects.filter(plantable_id=pt_id, ident=purpose_old)[0]
-        i_id = per.id
-        plan.purpose_id = Purpose.objects.get(pk=i_id)
 
-        rubric_old = plan.rubric
-        per = Rubric.objects.filter(plantable_id=pt_id, ident=rubric_old)[0]
-        i_id = per.id
-        plan.r_id = Rubric.objects.get(pk=i_id)
+        purpose_old = plan_purpose[plan.id]
+        for key, value in  purpose_ident.items():
+            if value == purpose_old:
+                plan.purpose_id = Purpose.objects.get(pk=key)
+                break
+
+        rubric_old = plan_rubric[plan.id]
+        for key, value in rozd_ident.items():
+            if value == rubric_old:
+                plan.r_id = Rubric.objects.get(pk=key)
+                break
+
 
         plan.save()
+        
+
 
 def imp_1(pt_id):
     print("Починаю експортувати")
@@ -90,11 +105,18 @@ def imp_1(pt_id):
             break
         # print(str(n)+'. '+s)
     # IDENT	ID_R	ZMIST	STROKI	FORMA	VIDPOV	PRIMITKA	SORT_	ID_NAPR	ID_META	TMP	SHOW
+
+    plan_ident = {}
+    plan_rubric = {}
+    plan_direction = {}
+    plan_purpose = {}
+
     for r in range(2, n):
         print(var_to_str(sheet['A' + str(r)].value))
         p = Plan()
-        p.ident = var_to_str(sheet['A' + str(r)].value)
-        p.rubric = int(var_to_str(sheet['B' + str(r)].value))
+        ident = var_to_str(sheet['A' + str(r)].value)
+        rubric = int(var_to_str(sheet['B' + str(r)].value))
+
         p.content = var_to_str(sheet['C' + str(r)].value)
         p.termin = var_to_str(sheet['D' + str(r)].value)
         p.generalization = var_to_str(sheet['E' + str(r)].value)
@@ -102,19 +124,24 @@ def imp_1(pt_id):
         p.note = var_to_str(sheet['G' + str(r)].value)
 
         p.sort = var_to_float(sheet['H' + str(r)].value)
-        p.direction = var_to_int(sheet['I' + str(r)].value)
-        p.purpose = var_to_int(sheet['J' + str(r)].value)
-        p.tmp = var_to_str(sheet['K' + str(r)].value)
+
+        direction = var_to_int(sheet['I' + str(r)].value)
+        purpose = var_to_int(sheet['J' + str(r)].value)
+        # p.tmp = var_to_str(sheet['K' + str(r)].value)
         p.plantable_id = Plantable.objects.get(pk=pt_id)
-        if var_to_str(sheet['K' + str(r)].value) == '1':
-            p.show = True
-        else:
-            p.show = False
+        p.show = True
 
         p.save()
+        plan_ident[p.id] = ident
+        plan_rubric[p.id] = rubric
+        plan_direction[p.id] = direction
+        plan_purpose[p.id] = purpose
+
+
     wb.close()
 
     print("Експорт завершено")
+    return plan_ident, plan_rubric, plan_direction, plan_purpose
 
 
 def imp_2(pt_id):
@@ -134,17 +161,21 @@ def imp_2(pt_id):
         except:
             break
         # print(str(n)+'. '+s)
-    # IDENT	ID_R	ZMIST	STROKI	FORMA	VIDPOV	PRIMITKA	SORT_	ID_NAPR	ID_META	TMP	SHOW
+    purpose_ident = {}
     for r in range(2, n):
         print(var_to_str(sheet['A' + str(r)].value))
         p = Purpose()
-        p.ident = var_to_str(sheet['A' + str(r)].value)
+        ident = var_to_str(sheet['A' + str(r)].value)
         p.name = var_to_str(sheet['B' + str(r)].value)
         p.plantable_id = Plantable.objects.get(pk=pt_id)
         p.save()
+        purpose_ident[p.id] = ident
+
     wb.close()
 
     print("Експорт завершено")
+    return purpose_ident
+
 
 
 def imp_3(pt_id):
@@ -164,17 +195,20 @@ def imp_3(pt_id):
         except:
             break
         # print(str(n)+'. '+s)
+    direction_ident = {}
     for r in range(2, n):
         print(var_to_str(sheet['A' + str(r)].value))
         p = Direction()
-        p.ident = var_to_int(sheet['A' + str(r)].value)
+        ident = var_to_int(sheet['A' + str(r)].value)
         p.name = var_to_str(sheet['B' + str(r)].value)
         p.plantable_id = Plantable.objects.get(pk=pt_id)
 
         p.save()
+        direction_ident[p.id] = ident
     wb.close()
 
     print("Експорт завершено")
+    return direction_ident
 
 
 def imp_4(pt_id):
@@ -194,19 +228,30 @@ def imp_4(pt_id):
         except:
             break
         # print(str(n)+'. '+s)
+    rozd_ident = {}
+    rozd_owner = {}
     for r in range(2, n):
         print(var_to_str(sheet['A' + str(r)].value))
         p = Rubric()
-        p.ident = var_to_int(sheet['A' + str(r)].value)
+        ident_tmp = var_to_int(sheet['A' + str(r)].value)
+        # p.ident = var_to_int(sheet['A' + str(r)].value)
+
         p.n_r = var_to_int(sheet['B' + str(r)].value)
         p.name = var_to_str(sheet['C' + str(r)].value)
-        # p.id_owner = var_to_int(sheet['D' + str(r)].value)
-        p.ownertmp = var_to_int(sheet['D' + str(r)].value)
+        owner_tmp = var_to_int(sheet['D' + str(r)].value)
+
+        # p.ownertmp = var_to_int(sheet['D' + str(r)].value)
         p.plantable_id = Plantable.objects.get(pk=pt_id)
         p.riven = var_to_int(sheet['E' + str(r)].value)
-
         p.save()
+
+        id = p.id
+        rozd_ident[id] = ident_tmp
+        rozd_owner[id] = owner_tmp
     wb.close()
+    return rozd_ident, rozd_owner
+
+
 
     print("Експорт завершено")
 

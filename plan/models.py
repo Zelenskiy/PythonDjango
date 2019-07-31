@@ -27,13 +27,14 @@ class Plan(models.Model):
     show = models.BooleanField(default=True, null=False, blank=True, verbose_name='Відображати у звіті')
     published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубліковано')
     done = models.BooleanField(default=False, null=False, blank=True, verbose_name='Відмітка про виконання')
-    tmp = models.CharField(max_length=50, null=True, blank=True, verbose_name='tmp')
-    tmp2 = models.CharField(max_length=50, null=True, blank=True, verbose_name='tmp')
+    #tmp = models.CharField(max_length=50, null=True, blank=True, verbose_name='tmp')
+    #tmp2 = models.CharField(max_length=50, null=True, blank=True, verbose_name='tmp')
     plantable_id = models.ForeignKey('Plantable', default=None, null=False, blank=True, on_delete=models.PROTECT)
-    published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубликовано')
-    rubric = models.CharField(null=True, blank=True, max_length=10)
-    direction = models.CharField(null=True, blank=True, max_length=10)
-    purpose = models.CharField(null=True, blank=True, max_length=10)
+    #published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубликовано')
+
+    #rubric    = models.CharField(null=True, blank=True, max_length=10)
+    #direction = models.CharField(null=True, blank=True, max_length=10)
+    #purpose   = models.CharField(null=True, blank=True, max_length=10)
 
     class Meta:
         ordering = ['sort']
@@ -41,7 +42,7 @@ class Plan(models.Model):
 
 class Direction(models.Model):
     name = models.CharField(max_length=50, verbose_name='Напрямок', null=True, blank=True, )
-    ident = models.CharField(max_length=10, null=True, blank=True)
+    #ident = models.CharField(max_length=10, null=True, blank=True)
     published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубликовано')
     plantable_id = models.ForeignKey('Plantable', default=None, null=False, blank=True, on_delete=models.PROTECT)
 
@@ -52,7 +53,7 @@ class Direction(models.Model):
 class Responsibl(models.Model):
     name = models.CharField(max_length=150, verbose_name='Мета', null=True, blank=True)
     plan_id = models.ForeignKey('Plan', null=True, on_delete=models.PROTECT, verbose_name='')
-    ident = models.CharField(max_length=10, null=True, blank=True)
+    #ident = models.CharField(max_length=10, null=True, blank=True)
     published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубликовано')
     plantable_id = models.ForeignKey('Plantable', default=None, null=False, blank=True, on_delete=models.PROTECT)
 
@@ -75,7 +76,7 @@ class Terms(models.Model):
 
 class Purpose(models.Model):
     name = models.CharField(max_length=50, verbose_name='Мета')
-    ident = models.IntegerField(null=True, blank=True, verbose_name='')
+    #ident = models.IntegerField(null=True, blank=True, verbose_name='')
     published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубликовано')
     plantable_id = models.ForeignKey('Plantable', default=None, null=False, blank=True, on_delete=models.PROTECT)
 
@@ -90,8 +91,8 @@ class Rubric(models.Model):
     n_r = models.IntegerField(null=True, blank=True, verbose_name='')
     id_owner = models.ForeignKey('self', null=True, on_delete=models.PROTECT, verbose_name='')
     riven = models.IntegerField(null=True, blank=True, verbose_name='')
-    ident = models.CharField(null=True, blank=True, max_length=10)
-    ownertmp = models.CharField(null=True, blank=True, max_length=10)
+    #ident = models.CharField(null=True, blank=True, max_length=10)
+    #ownertmp = models.CharField(null=True, blank=True, max_length=10)
     published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубликовано')
     plantable_id = models.ForeignKey('Plantable', default=None, null=False, blank=True, on_delete=models.PROTECT)
 

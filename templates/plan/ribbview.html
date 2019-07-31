@@ -38,10 +38,26 @@
 
         }
 
-        .btn {
+        .btnMy {
             width: 24px;
-            height: 32px;
+            height: 24px;
+            border-style: none;
+            font-size: small;
+            padding-bottom: 2px;
+            background-color: #E3F2FD;
 
+        }
+
+        .tdNoBord {
+            background-color: white;
+            border-top-color: white;
+            border-right-color: white;
+            border-bottom-color: white;
+
+        }
+
+        .contentN {
+            alignment: center;
         }
 
     </style>
@@ -56,8 +72,8 @@
 
         <form id="update-form" method="post"> {% csrf_token %}
             {% if plans|length > 0 %}
-                <table border="1">
-                    <tr>
+                <table border="1" style="border-style: none ; border-color: white;">
+                    <tr name="header">
                         <td style="width: 3%;"><b>№</b></td>
                         <td hidden></td>
                         <td hidden></td>
@@ -66,13 +82,15 @@
                         <td style="width: 10%;"><b>Форма узагальнення</b></td>
                         <td style="width: 20%;"><b>Відповідальні</b></td>
                         <td style="width: 7%;"><b>Примітка</b></td>
-                        <td hidden style="width: 7%;"><b>Сортування</b></td>
-                        <td style="width: 7%;"></td>
+                        <td hidden>Сортування</td>
+                        <td class="tdNoBord"></td>
                     </tr>
                     {% for plan in plans %}
 
                         <tr id="r{{ plan.id }}">
-                            <td id="i{{ plan.id }}" class="contentN" name="N" onclick="editField('i{{ plan.id }}')">
+                            <td id="i{{ plan.id }}" class="contentN" name="N"
+                                onclick="editField('i{{ plan.id }}')"
+                                title="id={{ plan.id }}">
                                 {{ forloop.counter }}
 
                             </td>
@@ -101,18 +119,25 @@
                             <td id="n{{ plan.id }}" class="content" name="note"
                                 onclick="editField('n{{ plan.id }}')">{{ plan.note }}</td>
                             <td hidden id="s{{ plan.id }}" class="content" name="sort">{{ plan.sort }}</td>
-                            <td id="b{{ plan.id }}" class="contentBtn" name="N">
-                                <button class="btn" id="up__{{ plan.id }}" type="button"
+                            <td id="b{{ plan.id }}" name="N" class="contentBtn tdNoBord">
+                                <button class="btnMy" id="up__{{ plan.id }}" type="button" title="Вгору"
                                         onclick="btnClick('up__{{ plan.id }}');">
                                     &#8593;
                                 </button>
-                                <button class="btn" id="add_{{ plan.id }}" type="button"
+                                <button class="btnMy" id="add_{{ plan.id }}" type="button" title="Додати"
                                         onclick="btnClick('add_{{ plan.id }}');">+
                                 </button>
-                                <button class="btn" id="down{{ plan.id }}" type="button"
+                                <button class="btnMy" id="down{{ plan.id }}" type="button" title="Вниз"
                                         onclick="btnClick('down{{ plan.id }}');">
                                     &#8595;
                                 </button>
+                                <p></p>
+                                <button class="btnMy" id="down{{ plan.id }}" type="button" title="Вилучити"
+                                        onclick="btnClick('del_{{ plan.id }}');">
+                                    -
+                                </button>
+                                <p></p>
+                                &nbsp;<input class="chb" id="ch_b{{ plan.id }}" type="checkbox"/>
 
                             </td>
                         </tr>
@@ -200,13 +225,23 @@
     function editField(id) {
         //Знайти за id посилання на обєкт td
         e = jQuery('#' + id);
-        console.log(e);
-        console.log(e.attr('name'));
+        tr = jQuery('#r' + id.substring(1));
+        jQuery('tr').each(function (index, value) {
+            jQuery(this).removeAttr('style');
+
+        } );
+
+        tr.attr('style','background-color:  #86cfda;')
+
+        console.log(tr);
+        console.log('============');
         if (e.attr('name') == 'N') {
             if (oldArrea != undefined) {
                 text = oldArrea.find('textarea').val();
                 text = text.trim();
                 oldArrea.text(text);
+                console.log(oldArrea.parent('tr'));
+                {#oldArrea.parent('tr').removeAttr('style');#}
             }
             oldArrea = undefined;
         } else {
@@ -245,6 +280,43 @@
     };
 
     function btnClick(id) {
+        var listId = [];
+
+        suff = id.substring(0, 4);
+
+        console.log(suff);
+        console.log(jQuery('#ch_b'+id.substring(4)));
+        jQuery('#ch_b'+id.substring(4)).attr('checked', true);
+
+
+
+        jQuery('tr').each(function (index, value) {
+            //Проходимо по таблиці, і там, де
+            if (jQuery(this).find('.chb').is(':checked')) {
+                id_ = jQuery(this).find('.chb').attr('id');
+                id_ = suff + id_.substring(4);
+                {#console.log(id_);#}
+                listId.push(id_);
+            }
+        });
+        if (suff=='down'){
+            listId.reverse();
+        }
+
+
+        console.log(listId);
+
+        listId.forEach(function (item, i) {
+            {#console.log(item);#}
+            btnClick0(item)
+        });
+
+
+    }
+
+
+
+    function btnClick0(id) {
 
         {#console.log("Зайшов до обробника кнопок");#}
         {#console.log('#'+id);#}
@@ -252,6 +324,8 @@
         tr_prev = jQuery('#' + id).parent().parent().prev();
         tr_this = jQuery('#' + id).parent().parent();
         tr_next = jQuery('#' + id).parent().parent().next();
+
+        console.log(tr_prev.prev().attr('name'));
 
         tr_this_id = tr_this.attr('id');
         tr_next_id = tr_next.attr('id');
@@ -285,7 +359,7 @@
         if (idBtn != undefined) {
             idBtn = idBtn.substring(0, 4);
         }
-        if (idBtn == 'down') {
+        if ((idBtn == 'down')) {
             //Якщо елемент не останній
 
             //Міняємо поле sort місцями
@@ -305,7 +379,7 @@
             adj_for_sort(id_this, next_Sort);
         }
 
-        if (idBtn == 'up__') {
+        if ((idBtn == 'up__')) {
             //Якщо елемент не останній
 
             //Міняємо поле sort місцями
