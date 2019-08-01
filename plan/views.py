@@ -46,8 +46,28 @@ def ribbview(request, r_id):
     # form = PlanForm()
     s = Settings.objects.filter(field='plantable')[0].value
     table = Plantable.objects.get(pk=int(s))
+    # dir_0 = Direction.objects.filter(plantable_id=table, name='')[0]
+    # pur_0 = Purpose.objects.filter(plantable_id=table, name='')[0]
     plans = Plan.objects.filter(plantable_id=table, r_id=r_id)
-    context = {'plans': plans}
+    rtable = Rubric.objects.get(pk=r_id)
+
+    pl2 = len(Plan.objects.filter(plantable_id=table, r_id=r_id,  direction_id__name__gt=''))
+    if pl2 == 0:
+        dir_no = ' hidden '
+    else:
+        dir_no = ''
+
+    pl2 = len(Plan.objects.filter(plantable_id=table, r_id=r_id,  purpose_id__name__gt=''))
+    if pl2 == 0:
+        pur_no = ' hidden '
+    else:
+        pur_no = ''
+
+    # pl2 = pl1.exclude(plantable_id=table).count()
+    # if  pl2 == 0:
+    #     dir_no = True
+
+    context = {'plans': plans, 'dir_no': dir_no, 'pur_no': pur_no}
     return render(request, 'plan/ribbview.html', context)
 
 
@@ -150,7 +170,8 @@ def postr(request, r_id, num):
             max_sort_fild = Plan.objects.filter(r_id=r_id).aggregate(Max('sort'))
             srt = max_sort_fild['sort__max']
             plan.sort = srt + 1
-            plan.plantable_id = Plantable.objects.get(pk=12)
+
+            plan.plantable_id = table
             plan.save()
             form = PlanForm(instance=plan)
             i_id = plan.id
@@ -233,6 +254,8 @@ def rib_update_plan(request, id, num_field):
 
 @csrf_exempt
 def rib_add_plan(request):
+    s = Settings.objects.filter(field='plantable')[0].value
+    table = Plantable.objects.get(pk=int(s))
     if request.POST and request.is_ajax() and request.user.has_perm('plan.change_plan'):
         data = request.POST
         p = Plan()
@@ -243,6 +266,8 @@ def rib_add_plan(request):
         p.responsible = data['responsible']
         p.sort = float(data['sort'].replace(",", "."))
         p.note = data['note']
+        p.direction_id = Direction.objects.filter(plantable_id=table, name='')[0]
+        p.purpose_id = Purpose.objects.filter(plantable_id=table, name='')[0]
 
         pltable = data['plantable']
         pt = Plantable.objects.get(pk=int(pltable))

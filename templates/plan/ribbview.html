@@ -1,3 +1,5 @@
+{% load static %}
+
 {% if count != 0 %}
     <style>
         .finger {
@@ -17,8 +19,6 @@
             cursor: help;
         }
     </style>
-
-
     <style>
         td {
             vertical-align: top;
@@ -75,16 +75,23 @@
         var rtable;
         {#alert(n);#}
     </script>
+    <a style='position: fixed; bottom: 30px; right: 1px; cursor:pointer; display:none;'
+       id='Top'>
+        <img src="{% static "images/up.png" %}" alt="Вверх" title="Вверх">
+    </a>
+    <a style='position: fixed; bottom: 30px; right: 1px; cursor:pointer; display:none;'
+       id='Bottom'>
+        <img src="{% static "images/down.png" %}" alt="Вниз" title="Вниз">
+    </a>
     <div id="pnl" style="background-color: #E3F2FD">
-
 
         <form id="update-form" method="post"> {% csrf_token %}
             {% if plans|length > 0 %}
                 <table border="1" style="border-style: none ; border-color: white;">
                     <tr name="header">
                         <td style="width: 3%;"><b>№</b></td>
-                        <td hidden></td>
-                        <td hidden></td>
+                        <td {{ dir_no }}><b>Напрям</b></td>
+                        <td {{ pur_no }}><b>Мета</b></td>
                         <td style="width: 50%;"><b>Зміст роботи</b></td>
                         <td style="width: 10%;"><b>Строки виконання</b></td>
                         <td style="width: 10%;"><b>Форма узагальнення</b></td>
@@ -103,11 +110,11 @@
                                 {{ forloop.counter }}
 
                             </td>
-                            <td id="d{{ plan.id }}" hidden class="content" name="direction_id"><input type="text"
-                                                                                                      name="direction_id"/>
+                            <td {{ dir_no }} id="d{{ plan.id }}"  class="content" name="direction_id">
+                                {{ plan.direction_id }}
                             </td>
-                            <td id="p{{ plan.id }}" hidden class="content" name="purpose_id"><input type="text"
-                                                                                                    name="purpose_id"/>
+                            <td {{ pur_no }} id="p{{ plan.id }}"  class="content" name="purpose_id">
+                                {{ plan.purpose_id }}
                             </td>
 
                             <td id="c{{ plan.id }}" class="content" name="content"
@@ -174,6 +181,8 @@
 {% endif %}
 
 <script type="text/javascript">
+
+    {#$('#navbarSupportedContent').delay(5000).fadeOut('slow');#}
 
 
     function goEdit(e) {
@@ -256,7 +265,7 @@
 
         });
 
-        tr.attr('style', 'background-color:  #86cfda;');
+        tr.attr('style', 'background-color:  yellow;');
 
         suff = id.substring(0, 1);
         s_id = id.substring(1);
@@ -311,35 +320,25 @@
 
     function btnClickDel(id) {
         if (confirm("Вилучити запис?")) {
-
-
             suff = id.substring(0, 4);
             id = id.substring(4);
             tr_this = jQuery('#r' + id);
-
             $.ajax({
                     url: "../rib_del_plan/" + id + "/",
                     type: "POST",
                     cache: false,
-                    {#data: data,#}
                     data: {sort: true},
                     error: function () {
                         console.log("Щось не те");
                     },
                     success: function () {
-                        {#console.log("Все Ok");#}
                         //З textarea переносимо до td
                         a = jQuery('#exampleFormControlSelect2').find(":selected").attr('id');
                         s = "" + a + "/";
-                        {#console.log("s->  "+s);#}
                         jQuery('#pl').load(s);
                     }
                 }
             );
-
-            {#console.log(id);#}
-            {#console.log(tr_this);#}
-
         }
     }
 
@@ -383,8 +382,8 @@
 
         tr_this.after('<tr id="newRow" style="background-color: red;">' +
             '                        <td class="contentN" name="N" style="width: 3%;color:white;">new</td>' +
-            '                        <td hidden class="content" name="direction_id"></td>' +
-            '                        <td hidden hidden class="content" name="purpose_id"></td>' +
+            '                        <td {{ dir_no }} class="content" name="direction_id"></td>' +
+            '                        <td {{ pur_no }} hidden class="content" name="purpose_id"></td>' +
             '                        <td  class="content" name="content"><textarea  id="contNew" cols="80" rows = "2"></textarea> </td>' +
             '                        <td  class="content" name="termin"><textarea  id="termNew"  cols="10" rows = "2"></textarea> </td>' +
             '                        <td  class="content" name="generalization"><textarea  id="genNew"  cols="10" rows = "2"></textarea> </td>' +
@@ -594,6 +593,32 @@
             }
         );
     }
+
+
+
+    jQuery(function () {
+        $("#Top").hide().removeAttr("href");
+        if ($(window).scrollTop() >= "200") $("#Top").fadeIn("slow")
+        $(window).scroll(function () {
+            if ($(window).scrollTop() <= "200") $("#Top").fadeOut("slow")
+            else $("#Top").fadeIn("slow")
+        });
+
+        $("#Bottom").hide().removeAttr("href");
+        if ($(window).scrollTop() <= $(document).height() - "999") $("#Bottom").fadeIn("slow")
+        $(window).scroll(function () {
+            if ($(window).scrollTop() >= $(document).height() - "999") $("#Bottom").fadeOut("slow")
+            else $("#Bottom").fadeIn("slow")
+        });
+
+        $("#Top").click(function () {
+            $("html, body").animate({scrollTop: 0}, "slow")
+        })
+        $("#Bottom").click(function () {
+            $("html, body").animate({scrollTop: $(document).height()}, "slow")
+        })
+    });
+
 
 
 </script>
