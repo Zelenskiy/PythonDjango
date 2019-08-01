@@ -122,8 +122,8 @@
                                 onclick="editField('t{{ plan.id }}')">{{ plan.termin }}</td>
                             <td id="g{{ plan.id }}" class="content" name="generalization"
                                 onclick="editField('g{{ plan.id }}')">{{ plan.generalization }}</td>
-                            <td id="r{{ plan.id }}" class="content" name="responsible"
-                                onclick="editField('r{{ plan.id }}')">{{ plan.responsible }}</td>
+                            <td id="v{{ plan.id }}" class="content" name="responsible"
+                                onclick="editField('v{{ plan.id }}')">{{ plan.responsible }}</td>
                             <td id="n{{ plan.id }}" class="content" name="note"
                                 onclick="editField('n{{ plan.id }}')">{{ plan.note }}</td>
                             <td id="s{{ plan.id }}" class="content" name="sort">{{ plan.sort }}</td>
@@ -239,7 +239,11 @@
 
     function editField(id) {
         //Знайти за id посилання на обєкт td
+        console.log("===================");
+        console.log(id);
         e = jQuery('#' + id);
+        suff = id.substring(0,1);
+        console.log(e);
         tr = jQuery('#r' + id.substring(1));
         jQuery('tr').each(function (index, value) {
             jQuery(this).removeAttr('style');
