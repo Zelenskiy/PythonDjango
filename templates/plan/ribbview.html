@@ -71,8 +71,8 @@
     <script type="text/javascript">
         var oldArrea;
         var n;
-        var plantable ;
-        var rtable ;
+        var plantable;
+        var rtable;
         {#alert(n);#}
     </script>
     <div id="pnl" style="background-color: #E3F2FD">
@@ -148,11 +148,11 @@
                                 &nbsp;<input class="chb" id="ch_b{{ plan.id }}" type="checkbox"/>
 
                             </td>
-                        <script type="text/javascript">
-                            plantable = String(0{{ plan.plantable_id_id }});
-                            rtable = "{{ plan.r_id }}";
-                            console.log("->"+rtable);
-                        </script>
+                            <script type="text/javascript">
+                                plantable = String(0{{ plan.plantable_id_id }});
+                                rtable = "{{ plan.r_id }}";
+                                console.log("->" + rtable);
+                            </script>
                         </tr>
 
                     {% endfor %}
@@ -268,17 +268,6 @@
 
     }
 
-    {#jQuery('.content').on('click', function () {#}
-    {#    goEdit(this);#}
-    {# })#}
-    {#jQuery('.contentBtn').on('click', function () {#}
-    {#    if (oldArrea != undefined)#}
-    {#        goEdit(this);#}
-    {# })#}
-    {##}
-    {#jQuery('.contentN').on('click', function () {#}
-    {#    goEdit(this);#}
-    {# })#}
 
     jQuery.fn.swap = function (b) {
         b = jQuery(b)[0];
@@ -305,7 +294,7 @@
 
         {#console.log(id);#}
         {#console.log(tr_this.html());#}
-        console.log(tr_next.html());
+        {#console.log(tr_next.html());#}
 
         tr_this_id = tr_this.attr('id');
         tr_next_id = tr_next.attr('id');
@@ -322,7 +311,7 @@
             sortNext = tr_next.children('#' + suff + next_id).text();
             ne = parseFloat(sortNext.replace(',', '.'));
         } else {
-            console.log("-undefined-");
+            {#console.log("-undefined-");#}
             ne = th + 2;
         }
         av = (th + ne) / 2;
@@ -330,8 +319,6 @@
         {#console.log(sortThis);#}
         {#console.log(sortNext);#}
         {#console.log(sort);#}
-
-
 
 
         tr_this.after('<tr id="newRow" style="background-color: red;">' +
@@ -346,9 +333,11 @@
             '                        <td  class="content" name="sort"   id="sortNew" >' + sort + '</td>' +
             '                        <td  name="N" class="contentBtn tdNoBord">' +
             '                           <button class="btnMy" type="button" onclick="SaveNew();">+</button>' +
-            '                           <textarea  id="plantableNew" hidden >'+plantable+'</textarea>                ' +
+            '                           <textarea  id="plantableNew" hidden >' + plantable + '</textarea>                ' +
             '                        </td>' +
             '                    </tr>');
+        //Ставимо фокус ввода на Content
+        jQuery('#contNew').focus();
 
 
     }
@@ -372,7 +361,7 @@
                 type: "POST",
                 cache: false,
                 {#data: data,#}
-               data: {
+                data: {
                     content: content_,
                     termin: termin_,
                     generalization: generalization_,
@@ -389,7 +378,15 @@
                     console.log("Щось не те");
                 },
                 success: function () {
-                    console.log("Все Ok");
+                    {#console.log("Все Ok");#}
+                    //З textarea переносимо до td
+                    a = jQuery('#exampleFormControlSelect2').find(":selected").attr('id');
+
+                    s = "" + a + "/";
+                    {#console.log("s->  "+s);#}
+                    jQuery('#pl').load(s);
+
+
                 }
             }
         );
