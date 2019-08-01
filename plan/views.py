@@ -168,9 +168,10 @@ def imp_from_excel(request):
 
 @csrf_exempt
 def rib_del_plan(request, id):
-    print("Вилучамо id=", id)
-    Plan.objects.get(pk=id).delete()
-    return render(request, 'plan/ribbview.html', {})
+    if request.POST and request.is_ajax() and request.user.has_perm('plan.change_plan'):
+        print("Вилучамо id=", id)
+        Plan.objects.get(pk=id).delete()
+        return render(request, 'plan/ribbview.html', {})
 
 
 @csrf_exempt

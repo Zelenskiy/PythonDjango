@@ -262,7 +262,7 @@
         s_id = id.substring(1);
         if (suff == 'h') {
             $.ajax({
-                    url: '../rib_update_plan/'+s_id+'/10/',
+                    url: '../rib_update_plan/' + s_id + '/10/',
                     type: "POST",
                     data: {show: true},
                     error: function () {
@@ -310,33 +310,37 @@
     };
 
     function btnClickDel(id) {
-        suff = id.substring(0, 4);
-        id = id.substring(4);
-        tr_this = jQuery('#r' + id);
+        if (confirm("Вилучити запис?")) {
 
-        $.ajax({
-                url: "../rib_del_plan/"+id+"/",
-                type: "POST",
-                cache: false,
-                {#data: data,#}
-                data: { },
-                error: function () {
-                    console.log("Щось не те");
-                },
-                success: function () {
-                    {#console.log("Все Ok");#}
-                    //З textarea переносимо до td
-                    a = jQuery('#exampleFormControlSelect2').find(":selected").attr('id');
-                    s = "" + a + "/";
-                    {#console.log("s->  "+s);#}
-                    jQuery('#pl').load(s);
+
+            suff = id.substring(0, 4);
+            id = id.substring(4);
+            tr_this = jQuery('#r' + id);
+
+            $.ajax({
+                    url: "../rib_del_plan/" + id + "/",
+                    type: "POST",
+                    cache: false,
+                    {#data: data,#}
+                    data: {sort: true},
+                    error: function () {
+                        console.log("Щось не те");
+                    },
+                    success: function () {
+                        {#console.log("Все Ok");#}
+                        //З textarea переносимо до td
+                        a = jQuery('#exampleFormControlSelect2').find(":selected").attr('id');
+                        s = "" + a + "/";
+                        {#console.log("s->  "+s);#}
+                        jQuery('#pl').load(s);
+                    }
                 }
-            }
-        );
+            );
 
-        {#console.log(id);#}
-        {#console.log(tr_this);#}
+            {#console.log(id);#}
+            {#console.log(tr_this);#}
 
+        }
     }
 
 
