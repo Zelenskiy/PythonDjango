@@ -70,6 +70,12 @@ class Terms(models.Model):
     published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубликовано')
     plantable_id = models.ForeignKey('Plantable', default=None, null=False, blank=True, on_delete=models.PROTECT)
 
+    # Якщо  start не None а finish = None                           До 01.09.19
+    # Якщо  start None а finish не None                             01.09.19
+    # Якщо  start не None і finish не None                          З 01.09.19 по 05.09.19
+    # Якщо  start є першим днем року, а finish - останнім           Протягом року
+    # Якщо  start пешрий день місяця, а finish останній             Вересень 2019
+
     def __str__(self):
         return self.name
 

@@ -25,7 +25,12 @@
             horiz-align: left;
             padding-left: 5px;
             padding-right: 5px;
+        {#padding-bottom: 10px;#} padding-top: 10px;
         {#padding-top: 1px;#}{#padding-bottom: 1px;#}
+        }
+
+        textarea {
+            padding-top: 2px;
         }
 
         .div-float-button-1 {
@@ -43,6 +48,7 @@
             height: 24px;
             border-style: none;
             font-size: small;
+
             padding-bottom: 2px;
             background-color: #E3F2FD;
 
@@ -65,6 +71,8 @@
     <script type="text/javascript">
         var oldArrea;
         var n;
+        var plantable ;
+        var rtable ;
         {#alert(n);#}
     </script>
     <div id="pnl" style="background-color: #E3F2FD">
@@ -87,7 +95,7 @@
                     </tr>
                     {% for plan in plans %}
 
-                        <tr id="r{{ plan.id }}">
+                        <tr id="r{{ plan.id }}" class="{{ forloop.counter }}">
                             <td id="i{{ plan.id }}" class="contentN" name="N"
                                 onclick="editField('i{{ plan.id }}')"
                                 title="id={{ plan.id }}">
@@ -118,14 +126,14 @@
                                 onclick="editField('r{{ plan.id }}')">{{ plan.responsible }}</td>
                             <td id="n{{ plan.id }}" class="content" name="note"
                                 onclick="editField('n{{ plan.id }}')">{{ plan.note }}</td>
-                            <td hidden id="s{{ plan.id }}" class="content" name="sort">{{ plan.sort }}</td>
+                            <td id="s{{ plan.id }}" class="content" name="sort">{{ plan.sort }}</td>
                             <td id="b{{ plan.id }}" name="N" class="contentBtn tdNoBord">
                                 <button class="btnMy" id="up__{{ plan.id }}" type="button" title="Вгору"
                                         onclick="btnClick('up__{{ plan.id }}');">
                                     &#8593;
                                 </button>
                                 <button class="btnMy" id="add_{{ plan.id }}" type="button" title="Додати"
-                                        onclick="btnClick('add_{{ plan.id }}');">+
+                                        onclick="btnClickAdd('add_{{ plan.id }}');">+
                                 </button>
                                 <button class="btnMy" id="down{{ plan.id }}" type="button" title="Вниз"
                                         onclick="btnClick('down{{ plan.id }}');">
@@ -140,7 +148,13 @@
                                 &nbsp;<input class="chb" id="ch_b{{ plan.id }}" type="checkbox"/>
 
                             </td>
+                        <script type="text/javascript">
+                            plantable = String(0{{ plan.plantable_id_id }});
+                            rtable = "{{ plan.r_id }}";
+                            console.log("->"+rtable);
+                        </script>
                         </tr>
+
                     {% endfor %}
                 </table>
             {% endif %}
@@ -151,6 +165,7 @@
 {% endif %}
 
 <script type="text/javascript">
+
 
     function goEdit(e) {
         {#console.log("Зайшов у goEdit");#}
@@ -229,9 +244,9 @@
         jQuery('tr').each(function (index, value) {
             jQuery(this).removeAttr('style');
 
-        } );
+        });
 
-        tr.attr('style','background-color:  #86cfda;')
+        tr.attr('style', 'background-color:  #86cfda;')
 
         console.log(tr);
         console.log('============');
@@ -279,15 +294,117 @@
         return this.pushStack(stack);
     };
 
+
+    function btnClickAdd(id) {
+        //Додати елемент знизу
+
+        {#tr_next = jQuery('#' + id).parent().parent().next();#}
+
+        tr_this = jQuery('#' + id).parent().parent();
+        tr_next = tr_this.next();
+
+        {#console.log(id);#}
+        {#console.log(tr_this.html());#}
+        console.log(tr_next.html());
+
+        tr_this_id = tr_this.attr('id');
+        tr_next_id = tr_next.attr('id');
+        console.log("tr_next_id");
+        console.log(tr_next_id);
+
+        suff = 's';
+        this_id = tr_this_id.substring(1);
+        sortThis = tr_this.children('#' + suff + this_id).text();
+        th = parseFloat(sortThis.replace(',', '.'));
+        if (tr_next_id != undefined) {
+
+            next_id = tr_next_id.substring(1);
+            sortNext = tr_next.children('#' + suff + next_id).text();
+            ne = parseFloat(sortNext.replace(',', '.'));
+        } else {
+            console.log("-undefined-");
+            ne = th + 2;
+        }
+        av = (th + ne) / 2;
+        sort = String(av).replace('.', ',');
+        {#console.log(sortThis);#}
+        {#console.log(sortNext);#}
+        {#console.log(sort);#}
+
+
+
+
+        tr_this.after('<tr id="newRow" style="background-color: red;">' +
+            '                        <td class="contentN" name="N" style="width: 3%;color:white;">new</td>' +
+            '                        <td hidden class="content" name="direction_id"></td>' +
+            '                        <td hidden hidden class="content" name="purpose_id"></td>' +
+            '                        <td  class="content" name="content"><textarea  id="contNew" cols="80" rows = "2"></textarea> </td>' +
+            '                        <td  class="content" name="termin"><textarea  id="termNew"  cols="10" rows = "2"></textarea> </td>' +
+            '                        <td  class="content" name="generalization"><textarea  id="genNew"  cols="10" rows = "2"></textarea> </td>' +
+            '                        <td  class="content" name="responsible"><textarea  id="respNew"  cols="20" rows = "2"></textarea> </td>' +
+            '                        <td  class="content" name="note"><textarea  id="noteNew"  cols="10" rows = "2"></textarea> </td>' +
+            '                        <td  class="content" name="sort"   id="sortNew" >' + sort + '</td>' +
+            '                        <td  name="N" class="contentBtn tdNoBord">' +
+            '                           <button class="btnMy" type="button" onclick="SaveNew();">+</button>' +
+            '                           <textarea  id="plantableNew" hidden >'+plantable+'</textarea>                ' +
+            '                        </td>' +
+            '                    </tr>');
+
+
+    }
+
+
+    //Збереження нового запису
+    function SaveNew() {
+        content_ = jQuery('#contNew').val();
+        termin_ = jQuery('#termNew').val();
+        generalization_ = jQuery('#genNew').val();
+        responsible_ = jQuery('#respNew').val();
+        sort_ = jQuery('#sortNew').text();
+        note_ = jQuery('#noteNew').val();
+
+        {#console.log(sort_);#}
+
+        {#var data = $("#update-form").serialize();#}
+
+        $.ajax({
+                url: "../rib_add_plan/",
+                type: "POST",
+                cache: false,
+                {#data: data,#}
+               data: {
+                    content: content_,
+                    termin: termin_,
+                    generalization: generalization_,
+                    responsible: responsible_,
+
+                    sort: sort_,
+                    note: note_,
+                    plantable: plantable,
+                    rtable: rtable,
+
+
+                },
+                error: function () {
+                    console.log("Щось не те");
+                },
+                success: function () {
+                    console.log("Все Ok");
+                }
+            }
+        );
+
+    }
+
+
     function btnClick(id) {
         var listId = [];
 
         suff = id.substring(0, 4);
 
         console.log(suff);
-        console.log(jQuery('#ch_b'+id.substring(4)));
-        jQuery('#ch_b'+id.substring(4)).attr('checked', true);
-
+        console.log(jQuery('#ch_b' + id.substring(4)));
+        jQuery('#ch_b' + id.substring(4)).attr('checked', true);
 
 
         jQuery('tr').each(function (index, value) {
@@ -299,7 +416,7 @@
                 listId.push(id_);
             }
         });
-        if (suff=='down'){
+        if (suff == 'down') {
             listId.reverse();
         }
 
@@ -313,7 +430,6 @@
 
 
     }
-
 
 
     function btnClick0(id) {

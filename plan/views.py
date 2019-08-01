@@ -189,7 +189,7 @@ def rib_update_plan(request, id, num_field):
             p.note = data['note']
             p.save()
         elif num_field == 9:
-            s = data['sort'].replace(",", ".")
+            s = float(data['sort'].replace(",", "."))
             p.sort = s
             p.save()
         elif num_field == 0:
@@ -199,6 +199,47 @@ def rib_update_plan(request, id, num_field):
             p.responsible = data['responsible']
             p.note = data['note']
             p.save()
+
+        # print(map[num_field])
+
+        # if data['direction_id'] == '':
+        #     p.direction_id = Direction.objects.get(pk=0)
+        # else:
+        #     p.direction_id = Direction.objects.get(pk=int(data['direction_id']))
+        # if data['purpose_id'] == '':
+        #     p.purpose_id = Purpose.objects.get(pk=0)
+        # else:
+        #     p.purpose_id = Purpose.objects.get(pk=int(data['purpose_id']))
+        # p.content = data['content']
+        # p.generalization = data['generalization']
+        # p.responsible = data['responsible']
+        # p.termin = data['termin']
+        # p.note = data['note']
+
+    return render(request, 'plan/ribbview.html', {})
+
+@csrf_exempt
+def rib_add_plan(request):
+    if request.POST and request.is_ajax() and request.user.has_perm('plan.change_plan'):
+        data = request.POST
+        p = Plan()
+
+        p.content = data['content']
+        p.termin = data['termin']
+        p.generalization = data['generalization']
+        p.responsible = data['responsible']
+        p.sort = float(data['sort'].replace(",", "."))
+        p.note = data['note']
+
+        pltable = data['plantable']
+        pt = Plantable.objects.get(pk=int(pltable))
+        p.plantable_id = pt
+
+        rtable = data['rtable']
+        rt = Rubric.objects.filter(name=rtable)[0]
+
+        p.r_id = rt
+        p.save()
 
         # print(map[num_field])
 
