@@ -19,7 +19,7 @@ from django.urls import path
 from PythonDjango import settings
 
 from plan.views import index, imp_from_excel, view, postr,  \
-    update_plan, Post_delete, ribbon, ribbview,rib_update_plan, export_word, rib_add_plan
+    update_plan, Post_delete, ribbon, ribbview,rib_update_plan, export_word, rib_add_plan, rib_del_plan
 
 #
 #
@@ -33,6 +33,7 @@ urlpatterns = [
                   path('import/', imp_from_excel, name='imp_from_excel'),
                   path('rib_update_plan/<int:id>/<int:num_field>/', rib_update_plan, name='rib_update_plan_url'),
                   path('rib_add_plan/', rib_add_plan, name='rib_add_plan_url'),
+                  path('rib_del_plan/<int:id>/', rib_del_plan, name='rib_del_plan_url'),
                   path('view/<int:r_id>/<int:num>/', postr, name='postr'),
                   path('ribbon/<int:r_id>/', ribbview, name='ribbview_url'),
                   path('view/', view, name='view'),

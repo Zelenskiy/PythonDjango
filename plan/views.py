@@ -165,6 +165,14 @@ def imp_from_excel(request):
     start_import()
     return render(request, 'plan/import_end.html')
 
+
+@csrf_exempt
+def rib_del_plan(request, id):
+    print("Вилучамо id=", id)
+    Plan.objects.get(pk=id).delete()
+    return render(request, 'plan/ribbview.html', {})
+
+
 @csrf_exempt
 def rib_update_plan(request, id, num_field):
     if request.POST and request.is_ajax() and request.user.has_perm('plan.change_plan'):
@@ -192,6 +200,9 @@ def rib_update_plan(request, id, num_field):
             s = float(data['sort'].replace(",", "."))
             p.sort = s
             p.save()
+        elif num_field == 10:
+            p.show = not p.show
+            p.save()
         elif num_field == 0:
             p.content = data['content']
             p.termin = data['termin']
@@ -217,6 +228,7 @@ def rib_update_plan(request, id, num_field):
         # p.note = data['note']
 
     return render(request, 'plan/ribbview.html', {})
+
 
 @csrf_exempt
 def rib_add_plan(request):
@@ -301,15 +313,14 @@ def export_word(request):
     #     http://www.ilnurgi1.ru/docs/python/modules_user/docx.html
     #   https://python-docx.readthedocs.io/en/latest/user/quickstart.html
 
-
     doc = docx.Document()
     doc.add_paragraph('Hello world')
     table = doc.add_table(rows=2, cols=2)
 
     table.style = 'LightShading-Accent1'
 
-    filename = os.path.join(MEDIA_DIR, 'report','plan.docx')    # r'd:/MyDoc/PythonDjango/plan.docx'
+    filename = os.path.join(MEDIA_DIR, 'report', 'plan.docx')  # r'd:/MyDoc/PythonDjango/plan.docx'
 
     doc.save(filename)
     # return render(request, 'plan/ribbon.html', {})
-    return FileResponse (open(filename, 'rb'), as_attachment=True)
+    return FileResponse(open(filename, 'rb'), as_attachment=True)

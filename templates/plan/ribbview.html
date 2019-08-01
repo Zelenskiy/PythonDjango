@@ -90,6 +90,7 @@
                         <td style="width: 10%;"><b>Форма узагальнення</b></td>
                         <td style="width: 20%;"><b>Відповідальні</b></td>
                         <td style="width: 7%;"><b>Примітка</b></td>
+                        <td style="width: 7%;"><b></b></td>
                         <td hidden>Сортування</td>
                         <td class="tdNoBord"></td>
                     </tr>
@@ -126,7 +127,15 @@
                                 onclick="editField('v{{ plan.id }}')">{{ plan.responsible }}</td>
                             <td id="n{{ plan.id }}" class="content" name="note"
                                 onclick="editField('n{{ plan.id }}')">{{ plan.note }}</td>
-                            <td id="s{{ plan.id }}" class="content" name="sort">{{ plan.sort }}</td>
+                            <td hidden id="s{{ plan.id }}" class="content" name="sort">{{ plan.sort }}</td>
+                            {% if plan.show %}
+                                <td id="h{{ plan.id }}" class="content" name="show"
+                                    onclick="editField('h{{ plan.id }}')"> &#10004;
+                                </td>
+                            {% else %}
+                                <td id="h{{ plan.id }}" class="content" name="show"
+                                    onclick="editField('h{{ plan.id }}')"></td>
+                            {% endif %}
                             <td id="b{{ plan.id }}" name="N" class="contentBtn tdNoBord">
                                 <button class="btnMy" id="up__{{ plan.id }}" type="button" title="Вгору"
                                         onclick="btnClick('up__{{ plan.id }}');">
@@ -141,7 +150,7 @@
                                 </button>
                                 <p></p>
                                 <button class="btnMy" id="down{{ plan.id }}" type="button" title="Вилучити"
-                                        onclick="btnClick('del_{{ plan.id }}');">
+                                        onclick="btnClickDel('del_{{ plan.id }}');">
                                     -
                                 </button>
                                 <p></p>
@@ -151,7 +160,7 @@
                             <script type="text/javascript">
                                 plantable = String(0{{ plan.plantable_id_id }});
                                 rtable = "{{ plan.r_id }}";
-                                console.log("->" + rtable);
+                                {#console.log("->" + rtable);#}
                             </script>
                         </tr>
 
@@ -239,10 +248,7 @@
 
     function editField(id) {
         //Знайти за id посилання на обєкт td
-        console.log("===================");
-        console.log(id);
         e = jQuery('#' + id);
-        suff = id.substring(0,1);
         console.log(e);
         tr = jQuery('#r' + id.substring(1));
         jQuery('tr').each(function (index, value) {
@@ -250,25 +256,41 @@
 
         });
 
-        tr.attr('style', 'background-color:  #86cfda;')
+        tr.attr('style', 'background-color:  #86cfda;');
 
-        console.log(tr);
-        console.log('============');
-        if (e.attr('name') == 'N') {
-            if (oldArrea != undefined) {
-                text = oldArrea.find('textarea').val();
-                text = text.trim();
-                oldArrea.text(text);
-                console.log(oldArrea.parent('tr'));
-                {#oldArrea.parent('tr').removeAttr('style');#}
-            }
-            oldArrea = undefined;
+        suff = id.substring(0, 1);
+        s_id = id.substring(1);
+        if (suff == 'h') {
+            $.ajax({
+                    url: '../rib_update_plan/'+s_id+'/10/',
+                    type: "POST",
+                    data: {show: true},
+                    error: function () {
+                        console.log("Щось не те");
+                    },
+                    success: function () {
+                        console.log("Все Ok");
+                    }
+                }
+            );
+            jQuery('#pl').load(s);
         } else {
-            goEdit(e);
+
+            if (e.attr('name') == 'N') {
+                if (oldArrea != undefined) {
+                    text = oldArrea.find('textarea').val();
+                    text = text.trim();
+                    oldArrea.text(text);
+                    console.log(oldArrea.parent('tr'));
+                    {#oldArrea.parent('tr').removeAttr('style');#}
+                }
+                oldArrea = undefined;
+            } else {
+                goEdit(e);
+            }
+
         }
 
-
-        {#console.log(e);#}
 
     }
 
@@ -286,6 +308,36 @@
         stack[0] = a2;
         return this.pushStack(stack);
     };
+
+    function btnClickDel(id) {
+        suff = id.substring(0, 4);
+        id = id.substring(4);
+        tr_this = jQuery('#r' + id);
+
+        $.ajax({
+                url: "../rib_del_plan/"+id+"/",
+                type: "POST",
+                cache: false,
+                {#data: data,#}
+                data: { },
+                error: function () {
+                    console.log("Щось не те");
+                },
+                success: function () {
+                    {#console.log("Все Ok");#}
+                    //З textarea переносимо до td
+                    a = jQuery('#exampleFormControlSelect2').find(":selected").attr('id');
+                    s = "" + a + "/";
+                    {#console.log("s->  "+s);#}
+                    jQuery('#pl').load(s);
+                }
+            }
+        );
+
+        {#console.log(id);#}
+        {#console.log(tr_this);#}
+
+    }
 
 
     function btnClickAdd(id) {
@@ -334,7 +386,8 @@
             '                        <td  class="content" name="generalization"><textarea  id="genNew"  cols="10" rows = "2"></textarea> </td>' +
             '                        <td  class="content" name="responsible"><textarea  id="respNew"  cols="20" rows = "2"></textarea> </td>' +
             '                        <td  class="content" name="note"><textarea  id="noteNew"  cols="10" rows = "2"></textarea> </td>' +
-            '                        <td  class="content" name="sort"   id="sortNew" >' + sort + '</td>' +
+            '                        <td  hidden class="content" name="sort"   id="sortNew" >' + sort + '</td>' +
+            '                        <td  class="content" name="show"   id="showtNew" >' + '' + '</td>' +
             '                        <td  name="N" class="contentBtn tdNoBord">' +
             '                           <button class="btnMy" type="button" onclick="SaveNew();">+</button>' +
             '                           <textarea  id="plantableNew" hidden >' + plantable + '</textarea>                ' +
