@@ -87,7 +87,7 @@
 
         <form id="update-form" method="post"> {% csrf_token %}
             {% if plans|length > 0 %}
-                <table border="1" style="border-style: none ; border-color: white;">
+                <table border="1" style="border-style: none ; border-color: white;" id="tableId">
                     <tr name="header">
                         <td style="width: 3%;"><b>№</b></td>
                         <td {{ dir_no }}><b>Напрям</b></td>
@@ -110,17 +110,17 @@
                                 {{ forloop.counter }}
 
                             </td>
-                            <td {{ dir_no }} id="d{{ plan.id }}"  class="content" name="direction_id">
+                            <td {{ dir_no }} id="d{{ plan.id }}" class="content" name="direction_id">
                                 {{ plan.direction_id }}
                             </td>
-                            <td {{ pur_no }} id="p{{ plan.id }}"  class="content" name="purpose_id">
+                            <td {{ pur_no }} id="p{{ plan.id }}" class="content" name="purpose_id">
                                 {{ plan.purpose_id }}
                             </td>
 
                             <td id="c{{ plan.id }}" class="content" name="content"
                                 onclick="editField('c{{ plan.id }}')">
                                 <p style="white-space: pre-line;">
-                                    {{ plan.content }}
+                                    {{plan.content}}
                                 </p>
                                 {#                            <textarea style="border: none;" cols="80" >#}
                                 {#                            {{ plan.content}}#}
@@ -183,7 +183,11 @@
 <script type="text/javascript">
 
     {#$('#navbarSupportedContent').delay(5000).fadeOut('slow');#}
-
+    {#$("#tableId").keypress(function(e) {#}
+    {#      if (e.which == 27) {#}
+    {#          console.log("ESC")#}
+    {#      }#}
+    {# });#}
 
     function goEdit(e) {
         {#console.log("Зайшов у goEdit");#}
@@ -194,8 +198,19 @@
             text = jQuery(e).text().trim();
             w = jQuery(e).outerWidth(true);
             h = jQuery(e).outerHeight(true);
-            jQuery(e).html('<textarea name="' + nam + '"  cols="' + String(parseInt(w / 8) + 10) + '" rows = "' + String(parseInt(h / 28) + 2) + '"> ' + text + '</textarea> ');
+            jQuery(e).html('<textarea id="ta_edit" name="' + nam +
+                '  ' +
+                '" cols="' + String(parseInt(w / 8) + 10) +
+                '" rows = "' + String(parseInt(h / 28) + 2) + '"> ' +
+                text + '</textarea> ');
             oldArrea = jQuery(e);
+
+            jQuery(e).children('#ta_edit').focus();
+            //------------
+            var textarea = $('#ta_edit'),
+                data = textarea.val();
+            textarea.focus().val('').val(data);
+            //------------
         } else {
 
             {#console.log("Зайшов");#}
@@ -245,7 +260,13 @@
                 if (nam != "N") {
 
                     text = jQuery(e).text().trim();
-                    jQuery(e).html('<textarea name="' + nam + '"  cols="' + String(parseInt(w / 8) + 10) + '" rows = "' + String(parseInt(h / 28) + 2) + '"> ' + text + '</textarea> ');
+                    jQuery(e).html('<textarea id="ta_edit" name="' + nam + '"  cols="' + String(parseInt(w / 8) + 10) + '" rows = "' + String(parseInt(h / 28) + 2) + '"> ' + text + '</textarea> ');
+                    jQuery(e).children('#ta_edit').focus();
+                    //------------
+                    var textarea = $('#ta_edit'),
+                        data = textarea.val();
+                    textarea.focus().val('').val(data);
+                    //------------
                     oldArrea = jQuery(e);
                 } else {
                     oldArrea = undefined;
@@ -595,7 +616,6 @@
     }
 
 
-
     jQuery(function () {
         $("#Top").hide().removeAttr("href");
         if ($(window).scrollTop() >= "200") $("#Top").fadeIn("slow")
@@ -618,7 +638,6 @@
             $("html, body").animate({scrollTop: $(document).height()}, "slow")
         })
     });
-
 
 
 </script>
