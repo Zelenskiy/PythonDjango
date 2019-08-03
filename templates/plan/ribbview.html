@@ -186,7 +186,8 @@
 
 
     function goEdit(e, id_) {
-        {#console.log("Зайшов у goEdit");#}
+        {#console.log("Зайшов у  => " + id_);#}
+        {#console.log("oldArrea  => " + oldArrea);#}
 
 
         if ((oldArrea == undefined)) {
@@ -195,11 +196,11 @@
             w = jQuery(e).outerWidth(true);
             h = jQuery(e).outerHeight(true);
             id_s = "'" +id_+"'";
-            nam_s = "'" +nam+"'";
+
             jQuery(e).html('<textarea id="ta_edit" name="' + nam +'"'+
                 ' cols="' + String(parseInt(w / 8) + 10) +'"'+
                 ' rows = "' + String(parseInt(h / 28) + 2) +'"'+
-                ' onkeydown="keyTextArea(event, '+id_s+','+nam_s+');"> ' +
+                ' onkeydown="keyTextArea(event, '+id_s+');"> ' +
                 text + '</textarea> ');
             oldArrea = jQuery(e);
 
@@ -217,9 +218,11 @@
             if (oldArrea.attr("id") != jQuery(e).attr("id")) {
                 w = jQuery(e).outerWidth(true)
                 h = jQuery(e).outerHeight(true);
-
+                console.log("-->"+oldArrea.parent('tr').attr('id'));
                 //Тут зберігаємо за допомогою Ajax
-                id = parseInt(oldArrea.parent('tr').attr('id').substring(1));
+                id0 = oldArrea.parent('tr').attr('id');
+                {#console.log(id0);#}
+                id0 = id0.substring(1);
                 nam = oldArrea.attr('name');
 
                 var map = new Object();
@@ -237,7 +240,7 @@
 
                 var data = $("#update-form").serialize();
                 $.ajax({
-                        url: "../rib_update_plan/" + id + "/" + map[nam] + "/",
+                        url: "../rib_update_plan/" + id0 + "/" + map[nam] + "/",
                         type: "POST",
                         data: data,
                         error: function () {
@@ -259,12 +262,12 @@
 
                     text = jQuery(e).text().trim();
                     id_s = "'" +id_+"'";
-                    nam_s = "'" +nam+"'";
+                    {#nam_s = "'" +nam+"'";#}
                     jQuery(e).html('<textarea id="ta_edit" ' +
                         'name="' + nam +'"'+
                         ' cols="' + String(parseInt(w / 8) + 10) +'"'+
                         ' rows = "' + String(parseInt(h / 28) + 2) + '"' +
-                        ' onkeydown="keyTextArea(event, '+id_s+','+nam_s+');"> ' + text + '</textarea> ');
+                        ' onkeydown="keyTextArea(event, '+id_s+');"> ' + text + '</textarea> ');
                     jQuery(e).children('#ta_edit').focus();
                     //------------
                     var textarea = $('#ta_edit'),
@@ -283,7 +286,7 @@
     function editField(id) {
         //Знайти за id посилання на обєкт td
         e = jQuery('#' + id);
-        console.log(e);
+        {#console.log(e);#}
         tr = jQuery('#r' + id.substring(1));
         jQuery('tr').each(function (index, value) {
             jQuery(this).removeAttr('style');
@@ -320,6 +323,8 @@
                 }
                 oldArrea = undefined;
             } else {
+                {#console.log(" => " + id);#}
+                {#console.log(" => " + e);#}
                 goEdit(e, id);
             }
 
@@ -335,14 +340,29 @@
         oldArrea = undefined;
     }
 
-    function tab_with_save(id, nam) {
-        console.log(id);
-        console.log(nam);
+    function tab_with_save(id_s) {
 
+        suff = id_s.substring(0,1);
+        id = id_s.substring(1);
+        if (suff=='c'){
+            suffNew = 't';
+        } else if (suff=='t'){
+            suffNew = 'g';
+        } else if (suff=='g'){
+            suffNew = 'r';
+        }  else if (suff=='r'){
+            suffNew = 'n';
+        } else if (suff=='n'){
+            suffNew = 'i';
+        }
+        {#editField(suffNew+'id');#}
+
+        console.log(id);
+        console.log(suff);
         {#editField(id);#}
     }
 
-    function keyTextArea(e,id,nam) {
+    function keyTextArea(e,id) {
         {#console.log("Зайшов keyTextArea");#}
         {#console.log(e);#}
           if (e.key === "Escape") {
