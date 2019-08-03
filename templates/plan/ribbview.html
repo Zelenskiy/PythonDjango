@@ -116,7 +116,6 @@
                             <td {{ pur_no }} id="p{{ plan.id }}" class="content" name="purpose_id">
                                 {{ plan.purpose_id }}
                             </td>
-
                             <td id="c{{ plan.id }}" class="content" name="content"
                                 onclick="editField('c{{ plan.id }}')">
                                 <p style="white-space: pre-line;">
@@ -185,7 +184,7 @@
     {#$('#navbarSupportedContent').delay(5000).fadeOut('slow');#}
 
 
-    function goEdit(e, id_) {
+    function __goEdit(e, id_) {
         {#console.log("Зайшов у  => " + id_);#}
         {#console.log("oldArrea  => " + oldArrea);#}
 
@@ -278,23 +277,146 @@
                 } else {
                     oldArrea = undefined;
                 }
-
             }
         }
     }
 
+    function openTextarea(e) {
+        w = jQuery(e).outerWidth(true)
+        h = jQuery(e).outerHeight(true);
+        id_s = jQuery(e).attr('id');
+        suff = id_s.substring(0, 1);
+        text = jQuery(e).text().trim();
+        id_sss = '"'+jQuery(e).attr('id')+'"';
+        console.log("id_s -> "+id_s);
+        var map1 = new Object();
+            map1 = {
+                'i':'id', 'c':'content', 't':'termin',
+                'g':'generalization', 'v':'responsible', 'n':'note'
+            };
+        if ((suff == 'c')||(suff == 't')||(suff == 'g')||(suff == 'v')||(suff == 'n')){
+            jQuery(e).html('<textarea id="ta_edit" name="' + map1[suff] +'"'+
+                    ' cols="' + String(parseInt(w / 8) + 10) +'"'+
+                    ' rows = "' + String(parseInt(h / 28) + 2) +'"'+
+                    ' onkeydown="keyTextArea(event, \''+id_s+'\'); '+
+                    ' "> ' +
+                    text + '</textarea> ');
+            //Ставимо фокус вводу і курсор в кінець
+            var textarea = $('#ta_edit'),
+                        dat = textarea.val();
+            textarea.focus().val('').val(dat);
+                    //------------
+
+        } else {
+            oldArrea = undefined;
+        }
+
+    }
+
+    function saveOld() {
+        var map1 = new Object();
+            map1 = {
+                'i':'',
+                'c':'4',
+                't':'5',
+                'g':'6',
+                'v':'7',
+                'n':'8'
+            };
+        id = oldArrea.attr('id');
+        console.log("id = "+ id);
+        suff = id.substring(0,1);
+        s_id = id.substring(1);
+        cc = map1[suff];
+        console.log("s_id = "+ s_id);
+        console.log("cc = "+ cc);
+        var data = $("#update-form").serialize();
+        $.ajax({
+                url: '../rib_update_plan/' + s_id + '/'+cc+'/',
+                type: "POST",
+                data: data,
+                error: function () {
+                    console.log("Щось не те");
+                },
+                success: function () {
+                    console.log("Все Ok");
+                }
+            }
+        );
+        {#jQuery('#pl').load(s);#}
+    }
+
+    function closeOld() {
+        {#console.log("in closeOld oldArrea---->"+oldArrea);#}
+        text = oldArrea.find('textarea').val();
+        if ((text != '')&&(text !=undefined)){
+            {#console.log("text---->"+text);#}
+            text = text.trim();
+        } else if (text == '') {
+        }
+        oldArrea.text(text);
+    }
+
     function editField(id) {
+        e = jQuery('#' + id);
+        suff = id.substring(0, 1);
+        id_s = id.substring(1);
+        if (suff == 'h'){
+            $.ajax({
+                    url: '../rib_update_plan/' + id_s + '/10/',
+                    type: "POST",
+                    data: {show: true},
+                    error: function () {
+                        console.log("Щось не те");
+                    },
+                    success: function () {
+                        console.log("Все Ok");
+                    }
+                }
+            );
+
+            jQuery('#pl').load(s);
+            return 1;
+        }
+
+        if ((oldArrea != undefined)&&(e.attr('id') == oldArrea.attr('id'))){
+            console.log("-=-=-=-=-=-=-=-=-=-");
+            return false;
+        }
+
+
+
+        if ((oldArrea == undefined && (suff!='i'))){
+            //Відкриваємо textarea
+            openTextarea(e);
+            oldArrea = jQuery(e);
+        } else if ((oldArrea == undefined) && (suff=='i')) {
+            //Нічого не робимо
+
+        } else if (suff=='i') {
+            saveOld();
+            closeOld();
+            oldArrea = undefined;
+        } else {
+            //Закриваємо старе
+            saveOld();
+            closeOld();
+            openTextarea(e);
+            oldArrea = jQuery(e);
+        }
+    }
+
+
+
+    function _editField(id) {
         //Знайти за id посилання на обєкт td
         e = jQuery('#' + id);
-        {#console.log(e);#}
+        console.log(e);
         tr = jQuery('#r' + id.substring(1));
         jQuery('tr').each(function (index, value) {
             jQuery(this).removeAttr('style');
-
         });
-
         tr.attr('style', 'background-color:  yellow;');
-
         suff = id.substring(0, 1);
         s_id = id.substring(1);
         if (suff == 'h') {
@@ -312,26 +434,22 @@
             );
             jQuery('#pl').load(s);
         } else {
-
             if (e.attr('name') == 'N') {
                 if (oldArrea != undefined) {
                     text = oldArrea.find('textarea').val();
                     text = text.trim();
                     oldArrea.text(text);
                     console.log(oldArrea.parent('tr'));
-                    {#oldArrea.parent('tr').removeAttr('style');#}
+                    oldArrea.parent('tr').removeAttr('style');
                 }
                 oldArrea = undefined;
             } else {
-                {#console.log(" => " + id);#}
-                {#console.log(" => " + e);#}
+                console.log(" => " + id);
+                console.log(" => " + e);
                 goEdit(e, id);
             }
-
         }
-
-
-    }
+     }
 
     function esc_without_save() {
         text = oldArrea.find('textarea').val();
@@ -341,37 +459,27 @@
     }
 
     function tab_with_save(id_s) {
-
+        console.log("tab-"+id_s);
+        saveOld();
+        closeOld();
         suff = id_s.substring(0,1);
         id = id_s.substring(1);
-        if (suff=='c'){
-            suffNew = 't';
-        } else if (suff=='t'){
-            suffNew = 'g';
-        } else if (suff=='g'){
-            suffNew = 'r';
-        }  else if (suff=='r'){
-            suffNew = 'n';
-        } else if (suff=='n'){
-            suffNew = 'i';
-        }
-        {#editField(suffNew+'id');#}
-
-        console.log(id);
-        console.log(suff);
-        {#editField(id);#}
+        map = {'c':'t', 't':'g', 'g':'v', 'v':'n', 'n':'i'};
+        suffNew =  map[suff]
+        e = jQuery('#' + suffNew + id);
+        openTextarea(e);
+        oldArrea = jQuery(e);
     }
 
-    function keyTextArea(e,id) {
-        {#console.log("Зайшов keyTextArea");#}
-        {#console.log(e);#}
+    function keyTextArea(e,id_s) {
           if (e.key === "Escape") {
-              console.log("ESC")
+              console.log("ESC");
               esc_without_save();
           } else
           if (e.key === "Tab") {
-              console.log("Tab")
-              tab_with_save(id,nam);
+              console.log("Tab");
+              console.log("tab-"+id_s);
+              tab_with_save(id_s);
           }
           return false;
      }

@@ -240,6 +240,7 @@ def rib_update_plan(request, id, num_field):
             p.note = data['note']
             p.save()
 
+
         # print(map[num_field])
 
         # if data['direction_id'] == '':
