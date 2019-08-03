@@ -73,6 +73,7 @@
         var n;
         var plantable;
         var rtable;
+        var flagForTab = true;
         {#alert(n);#}
     </script>
     <a style='position: fixed; bottom: 30px; right: 1px; cursor:pointer; display:none;'
@@ -184,111 +185,112 @@
     {#$('#navbarSupportedContent').delay(5000).fadeOut('slow');#}
 
 
-    function __goEdit(e, id_) {
+    {#function __goEdit(e, id_) {#}
         {#console.log("Зайшов у  => " + id_);#}
         {#console.log("oldArrea  => " + oldArrea);#}
-
-
-        if ((oldArrea == undefined)) {
-            nam = jQuery(e).attr('name');
-            text = jQuery(e).text().trim();
-            w = jQuery(e).outerWidth(true);
-            h = jQuery(e).outerHeight(true);
-            id_s = "'" +id_+"'";
-
-            jQuery(e).html('<textarea id="ta_edit" name="' + nam +'"'+
-                ' cols="' + String(parseInt(w / 8) + 10) +'"'+
-                ' rows = "' + String(parseInt(h / 28) + 2) +'"'+
-                ' onkeydown="keyTextArea(event, '+id_s+');"> ' +
-                text + '</textarea> ');
-            oldArrea = jQuery(e);
-
-            jQuery(e).children('#ta_edit').focus();
-            //------------
-            var textarea = $('#ta_edit'),
-                data = textarea.val();
-            textarea.focus().val('').val(data);
-            //------------
-        } else {
-
+    {##}
+    {##}
+    {#    if ((oldArrea == undefined)) {#}
+    {#        nam = jQuery(e).attr('name');#}
+    {#        text = jQuery(e).text().trim();#}
+    {#        w = jQuery(e).outerWidth(true);#}
+    {#        h = jQuery(e).outerHeight(true);#}
+    {#        id_s = "'" +id_+"'";#}
+    {##}
+    {#        jQuery(e).html('<textarea id="ta_edit" name="' + nam +'"'+#}
+    {#            ' cols="' + String(parseInt(w / 8) + 10) +'"'+#}
+    {#            ' rows = "' + String(parseInt(h / 28) + 2) +'"'+#}
+    {#            ' onkeydown="keyTextArea(event, '+id_s+');"> ' +#}
+    {#            text + '</textarea> ');#}
+    {#        oldArrea = jQuery(e);#}
+    {##}
+    {#        jQuery(e).children('#ta_edit').focus();#}
+    {#        //------------#}
+    {#        var textarea = $('#ta_edit'),#}
+    {#            data = textarea.val();#}
+    {#        textarea.focus().val('').val(data);#}
+    {#        //------------#}
+    {#    } else {#}
+    {##}
             {#console.log("Зайшов");#}
-
-
-            if (oldArrea.attr("id") != jQuery(e).attr("id")) {
-                w = jQuery(e).outerWidth(true)
-                h = jQuery(e).outerHeight(true);
-                console.log("-->"+oldArrea.parent('tr').attr('id'));
-                //Тут зберігаємо за допомогою Ajax
-                id0 = oldArrea.parent('tr').attr('id');
+    {##}
+    {##}
+    {#        if (oldArrea.attr("id") != jQuery(e).attr("id")) {#}
+    {#            w = jQuery(e).outerWidth(true)#}
+    {#            h = jQuery(e).outerHeight(true);#}
+    {#            console.log("-->"+oldArrea.parent('tr').attr('id'));#}
+    {#            //Тут зберігаємо за допомогою Ajax#}
+    {#            id0 = oldArrea.parent('tr').attr('id');#}
                 {#console.log(id0);#}
-                id0 = id0.substring(1);
-                nam = oldArrea.attr('name');
-
-                var map = new Object();
-                map = {
-                    'id': 1,
-                    'direction_id': 2,
-                    'purpose_id': 3,
-                    'content': 4,
-                    'termin': 5,
-                    'generalization': 6,
-                    'responsible': 7,
-                    'note': 8,
-                    'sort': 9,
-                };
-
-                var data = $("#update-form").serialize();
-                $.ajax({
-                        url: "../rib_update_plan/" + id0 + "/" + map[nam] + "/",
-                        type: "POST",
-                        data: data,
-                        error: function () {
-                            console.log("Щось не те");
-                        },
-                        success: function () {
-                            console.log("Все Ok");
-                        }
-                    }
-                );
-                text = oldArrea.find('textarea').val();
-                text = text.trim();
+    {#            id0 = id0.substring(1);#}
+    {#            nam = oldArrea.attr('name');#}
+    {##}
+    {#            var map = new Object();#}
+    {#            map = {#}
+    {#                'id': 1,#}
+    {#                'direction_id': 2,#}
+    {#                'purpose_id': 3,#}
+    {#                'content': 4,#}
+    {#                'termin': 5,#}
+    {#                'generalization': 6,#}
+    {#                'responsible': 7,#}
+    {#                'note': 8,#}
+    {#                'sort': 9,#}
+    {#            };#}
+    {##}
+    {#            var data = $("#update-form").serialize();#}
+    {#            $.ajax({#}
+    {#                    url: "../rib_update_plan/" + id0 + "/" + map[nam] + "/",#}
+    {#                    type: "POST",#}
+    {#                    data: data,#}
+    {#                    error: function () {#}
+    {#                        console.log("Щось не те");#}
+    {#                    },#}
+    {#                    success: function () {#}
+    {#                        console.log("Все Ok");#}
+    {#                    }#}
+    {#                }#}
+    {#            );#}
+    {#            text = oldArrea.find('textarea').val();#}
+    {#            text = text.trim();#}
                 {#console.log(text);#}
                 {#text = oldArrea.text();#}
-                oldArrea.text(text);
-
-                nam = jQuery(e).attr('name');
-                if (nam != "N") {
-
-                    text = jQuery(e).text().trim();
-                    id_s = "'" +id_+"'";
+    {#            oldArrea.text(text);#}
+    {##}
+    {#            nam = jQuery(e).attr('name');#}
+    {#            if (nam != "N") {#}
+    {##}
+    {#                text = jQuery(e).text().trim();#}
+    {#                id_s = "'" +id_+"'";#}
                     {#nam_s = "'" +nam+"'";#}
-                    jQuery(e).html('<textarea id="ta_edit" ' +
-                        'name="' + nam +'"'+
-                        ' cols="' + String(parseInt(w / 8) + 10) +'"'+
-                        ' rows = "' + String(parseInt(h / 28) + 2) + '"' +
-                        ' onkeydown="keyTextArea(event, '+id_s+');"> ' + text + '</textarea> ');
-                    jQuery(e).children('#ta_edit').focus();
-                    //------------
-                    var textarea = $('#ta_edit'),
-                        data = textarea.val();
-                    textarea.focus().val('').val(data);
-                    //------------
-                    oldArrea = jQuery(e);
-                } else {
-                    oldArrea = undefined;
-                }
-            }
-        }
-    }
+    {#                jQuery(e).html('<textarea id="ta_edit" ' +#}
+    {#                    'name="' + nam +'"'+#}
+    {#                    ' cols="' + String(parseInt(w / 8) + 10) +'"'+#}
+    {#                    ' rows = "' + String(parseInt(h / 28) + 2) + '"' +#}
+    {#                    ' onkeydown="keyTextArea(event, '+id_s+');"> ' + text + '</textarea> ');#}
+    {#                jQuery(e).children('#ta_edit').focus();#}
+    {#                //------------#}
+    {#                var textarea = $('#ta_edit'),#}
+    {#                    data = textarea.val();#}
+    {#                textarea.focus().val('').val(data);#}
+    {#                //------------#}
+    {#                oldArrea = jQuery(e);#}
+    {#            } else {#}
+    {#                oldArrea = undefined;#}
+    {#            }#}
+    {#        }#}
+    {#    }#}
+    {#}#}
 
     function openTextarea(e) {
+        console.log("Входжу в openTextarea");
         w = jQuery(e).outerWidth(true)
         h = jQuery(e).outerHeight(true);
         id_s = jQuery(e).attr('id');
         suff = id_s.substring(0, 1);
         text = jQuery(e).text().trim();
         id_sss = '"'+jQuery(e).attr('id')+'"';
-        console.log("id_s -> "+id_s);
+        {#console.log("id_s -> "+id_s);#}
         var map1 = new Object();
             map1 = {
                 'i':'id', 'c':'content', 't':'termin',
@@ -302,6 +304,7 @@
                     ' "> ' +
                     text + '</textarea> ');
             //Ставимо фокус вводу і курсор в кінець
+            {#console.log('Ставимо фокус вводу і курсор в кінець');#}
             var textarea = $('#ta_edit'),
                         dat = textarea.val();
             textarea.focus().val('').val(dat);
@@ -314,6 +317,7 @@
     }
 
     function saveOld() {
+        console.log('Входжу в saveOld');
         var map1 = new Object();
             map1 = {
                 'i':'',
@@ -324,12 +328,12 @@
                 'n':'8'
             };
         id = oldArrea.attr('id');
-        console.log("id = "+ id);
+        {#console.log("id = "+ id);#}
         suff = id.substring(0,1);
         s_id = id.substring(1);
         cc = map1[suff];
-        console.log("s_id = "+ s_id);
-        console.log("cc = "+ cc);
+        {#console.log("s_id = "+ s_id);#}
+        {#console.log("cc = "+ cc);#}
         var data = $("#update-form").serialize();
         $.ajax({
                 url: '../rib_update_plan/' + s_id + '/'+cc+'/',
@@ -339,7 +343,7 @@
                     console.log("Щось не те");
                 },
                 success: function () {
-                    console.log("Все Ok");
+                    console.log("Все Ok_(saveOld)");
                 }
             }
         );
@@ -347,7 +351,7 @@
     }
 
     function closeOld() {
-        {#console.log("in closeOld oldArrea---->"+oldArrea);#}
+        console.log('Входжу в closeOld');
         text = oldArrea.find('textarea').val();
         if ((text != '')&&(text !=undefined)){
             {#console.log("text---->"+text);#}
@@ -370,7 +374,7 @@
                         console.log("Щось не те");
                     },
                     success: function () {
-                        console.log("Все Ok");
+                        console.log("Все Ok_editField");
                     }
                 }
             );
@@ -379,7 +383,12 @@
             return 1;
         }
 
-        if ((oldArrea != undefined)&&(e.attr('id') == oldArrea.attr('id'))){
+        if (!flagForTab){
+            console.log("+=+=+=+=+=+=+=++=+=+=+");
+            flagForTab = true;
+            return false;
+        }
+       if ((oldArrea != undefined)&&(e.attr('id') == oldArrea.attr('id'))){
             console.log("-=-=-=-=-=-=-=-=-=-");
             return false;
         }
@@ -408,48 +417,48 @@
 
 
 
-    function _editField(id) {
-        //Знайти за id посилання на обєкт td
-        e = jQuery('#' + id);
-        console.log(e);
-        tr = jQuery('#r' + id.substring(1));
-        jQuery('tr').each(function (index, value) {
-            jQuery(this).removeAttr('style');
-        });
-        tr.attr('style', 'background-color:  yellow;');
-        suff = id.substring(0, 1);
-        s_id = id.substring(1);
-        if (suff == 'h') {
-            $.ajax({
-                    url: '../rib_update_plan/' + s_id + '/10/',
-                    type: "POST",
-                    data: {show: true},
-                    error: function () {
-                        console.log("Щось не те");
-                    },
-                    success: function () {
-                        console.log("Все Ok");
-                    }
-                }
-            );
-            jQuery('#pl').load(s);
-        } else {
-            if (e.attr('name') == 'N') {
-                if (oldArrea != undefined) {
-                    text = oldArrea.find('textarea').val();
-                    text = text.trim();
-                    oldArrea.text(text);
-                    console.log(oldArrea.parent('tr'));
-                    oldArrea.parent('tr').removeAttr('style');
-                }
-                oldArrea = undefined;
-            } else {
-                console.log(" => " + id);
-                console.log(" => " + e);
-                goEdit(e, id);
-            }
-        }
-     }
+    {#function _editField(id) {#}
+    {#    //Знайти за id посилання на обєкт td#}
+    {#    e = jQuery('#' + id);#}
+    {#    console.log(e);#}
+    {#    tr = jQuery('#r' + id.substring(1));#}
+    {#    jQuery('tr').each(function (index, value) {#}
+    {#        jQuery(this).removeAttr('style');#}
+    {#    });#}
+    {#    tr.attr('style', 'background-color:  yellow;');#}
+    {#    suff = id.substring(0, 1);#}
+    {#    s_id = id.substring(1);#}
+    {#    if (suff == 'h') {#}
+    {#        $.ajax({#}
+    {#                url: '../rib_update_plan/' + s_id + '/10/',#}
+    {#                type: "POST",#}
+    {#                data: {show: true},#}
+    {#                error: function () {#}
+    {#                    console.log("Щось не те");#}
+    {#                },#}
+    {#                success: function () {#}
+    {#                    console.log("Все Ok");#}
+    {#                }#}
+    {#            }#}
+    {#        );#}
+    {#        jQuery('#pl').load(s);#}
+    {#    } else {#}
+    {#        if (e.attr('name') == 'N') {#}
+    {#            if (oldArrea != undefined) {#}
+    {#                text = oldArrea.find('textarea').val();#}
+    {#                text = text.trim();#}
+    {#                oldArrea.text(text);#}
+    {#                console.log(oldArrea.parent('tr'));#}
+    {#                oldArrea.parent('tr').removeAttr('style');#}
+    {#            }#}
+    {#            oldArrea = undefined;#}
+    {#        } else {#}
+    {#            console.log(" => " + id);#}
+    {#            console.log(" => " + e);#}
+    {#            goEdit(e, id);#}
+    {#        }#}
+    {#    }#}
+    {# }#}
 
     function esc_without_save() {
         text = oldArrea.find('textarea').val();
@@ -459,7 +468,7 @@
     }
 
     function tab_with_save(id_s) {
-        console.log("tab-"+id_s);
+        console.log('Входжу в tab_with_save');
         saveOld();
         closeOld();
         suff = id_s.substring(0,1);
@@ -468,6 +477,13 @@
         suffNew =  map[suff]
         e = jQuery('#' + suffNew + id);
         openTextarea(e);
+        //Ставимо фокус вводу і курсор в кінець
+            console.log('Ставимо фокус вводу і курсор в кінець');
+            var textarea = $('#ta_edit'),
+                        dat = textarea.val();
+            textarea.focus().val('').val(dat);
+                    //------------
+        flagForTab = false
         oldArrea = jQuery(e);
     }
 
@@ -537,8 +553,8 @@
 
         tr_this_id = tr_this.attr('id');
         tr_next_id = tr_next.attr('id');
-        console.log("tr_next_id");
-        console.log(tr_next_id);
+        {#console.log("tr_next_id");#}
+        {#console.log(tr_next_id);#}
 
         suff = 's';
         this_id = tr_this_id.substring(1);
@@ -618,7 +634,7 @@
                     console.log("Щось не те");
                 },
                 success: function () {
-                    {#console.log("Все Ok");#}
+                    {#console.log("Все Ok_SaveNew");#}
                     //З textarea переносимо до td
                     a = jQuery('#exampleFormControlSelect2').find(":selected").attr('id');
 
@@ -658,7 +674,7 @@
         }
 
 
-        console.log(listId);
+        {#console.log(listId);#}
 
         listId.forEach(function (item, i) {
             {#console.log(item);#}
@@ -678,7 +694,7 @@
         tr_this = jQuery('#' + id).parent().parent();
         tr_next = jQuery('#' + id).parent().parent().next();
 
-        console.log(tr_prev.prev().attr('name'));
+        {#console.log(tr_prev.prev().attr('name'));#}
 
         tr_this_id = tr_this.attr('id');
         tr_next_id = tr_next.attr('id');
