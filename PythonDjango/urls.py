@@ -13,10 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+# import patterns as patterns
 from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.urls import path, include
+from django.views.generic.base import TemplateView
+
 
 import worktime
 from PythonDjango import settings
@@ -31,8 +34,8 @@ urlpatterns = [
 
                   path('timetable/', include('timetable.urls')),
                   path('worktime/', include('worktime.urls')),
-
-                  path('/', include('plan.urls')),
+                  path('', TemplateView.as_view(template_name='index.html')),
+                  # path('/', include('plan.urls')),
                   # url(r'^flowers/', include('flowers.urls')),
                   path('registration/register/', MyRegisterFormView.as_view(), name="register"),
 
@@ -43,3 +46,5 @@ urlpatterns += [
     url(r'^accounts/', include('django.contrib.auth.urls')),
 
 ]
+
+

@@ -1,6 +1,6 @@
 {% extends "layout/basic_plan.html" %}
 {% load static %}
-{#{% import os %}#}
+
 
 {% block content %}
 
@@ -76,113 +76,94 @@
 
 
 
-    <div class="ml-5">
-
-    <script>
+    <script type="text/javascript">
         {#var count = {{ count }};#}
-        var n;
 
+        var a;
+        var n = 1;
+        var rubr_id_max = 57;
 
-    </script>
+        {# Блок скриптів для роботи з деревом розділів #}
 
-
-    {# Блок скриптів для роботи з деревом розділів #}
-    <div>
-        <script type="text/javascript">
-            var n = 1;
-            var rubr_id_max = 57;
-
-            jQuery(document).ready(function () {
-                    n = 1;
-                    $('#goEditPanel').attr('hidden', true);
-                }
-            );
-        </script>
-        <script type="text/javascript">
-
-
-            var a;
-
-            function isDno(el) {
-                dno = true;
-                var k = 0;
-                $('option').each(function (i, elem) {
-                    k = k + 1;
-                    if (($(elem).attr("owner") == el.attr('id')) && ($(elem).attr("r") == "0")) {
-                        dno = false;
-                    }
-                    ;
-                });
-                return dno;
+        jQuery(document).ready(function () {
+                n = 1;
+                $('#goEditPanel').attr('hidden', true);
             }
+        );
 
 
-            function tree(el, flag) {
-                if (isDno(el)) {
-                    return true;
-                } else {
-                    el.attr("hidden_child", !flag);
-                    $('option').each(function (i, elem) {
-                        if ($(elem).attr("owner") == el.attr('id')) {
-                            $(elem).attr("hidden", !flag);
-                            tree($(elem), flag);
-                        }
-                    });
+        function isDno(el) {
+            dno = true;
+            var k = 0;
+            $('option').each(function (i, elem) {
+                k = k + 1;
+                if (($(elem).attr("owner") == el.attr('id')) && ($(elem).attr("r") == "0")) {
+                    dno = false;
                 }
-            }
+                ;
+            });
+            return dno;
+        }
 
-            function tree_all(el, flag) {
 
+        function tree(el, flag) {
+            if (isDno(el)) {
+                return true;
+            } else {
                 el.attr("hidden_child", !flag);
                 $('option').each(function (i, elem) {
-                    if (($(elem).attr("r") == "0") && ($(elem).attr("owner") != 0)) {
+                    if ($(elem).attr("owner") == el.attr('id')) {
                         $(elem).attr("hidden", !flag);
                         tree($(elem), flag);
                     }
                 });
-
             }
+        }
 
-            jQuery('#exampleFormControlSelect2').on('change', function () {
-                n = 1;
-                a = jQuery(this).find(":selected").attr('id');
+        function tree_all(el, flag) {
 
-                s = "" + a + "/" + n;
-                {#alert(s);#}
-
-                jQuery('#pl').load(s);
-                $('#goEditPanel').attr('hidden', false);
-                $('#goEdit').attr('checked', false);
-                old_value_goEdit = false;
-
+            el.attr("hidden_child", !flag);
+            $('option').each(function (i, elem) {
+                if (($(elem).attr("r") == "0") && ($(elem).attr("owner") != 0)) {
+                    $(elem).attr("hidden", !flag);
+                    tree($(elem), flag);
+                }
             });
 
-            jQuery('#exampleFormControlSelect2').on('dblclick', function () {
-                el = jQuery(this).find(":selected");
-                tree(el, (el.attr('hidden_child') == 'true'));
-            });
+        }
 
-            var collapse_flag = true;
+        jQuery('#exampleFormControlSelect2').on('change', function () {
+            n = 1;
+            a = jQuery(this).find(":selected").attr('id');
 
-            jQuery('#collapse').on('click', function () {
-                el = jQuery(this).find(":selected");
-                {#console.log("Зайшли в collapse");#}
-                collapse_flag = !collapse_flag;
-                tree_all(el, collapse_flag);
-            });
-        </script>
-        {#TODO#}
-        <script>
-            {#jQuery("#add").on('click', function () {#}
-            {#    a = jQuery('#exampleFormControlSelect2').find(":selected").attr('id');#}
-            {#    s = "" + a;#}
-            {#jQuery('#pl').load(s);#}
-            {#    jQuery('#pl').load('http://127.0.0.1:8000/plan/add/' + a);#}
+            s = "" + a + "/" + n;
+            {#alert(s);#}
+
+            jQuery('#pl').load(s);
+            $('#goEditPanel').attr('hidden', false);
+            $('#goEdit').attr('checked', false);
+            old_value_goEdit = false;
+
+        });
+
+        jQuery('#exampleFormControlSelect2').on('dblclick', function () {
+            el = jQuery(this).find(":selected");
+            tree(el, (el.attr('hidden_child') == 'true'));
+        });
+
+        var collapse_flag = true;
+
+        jQuery('#collapse').on('click', function () {
+            el = jQuery(this).find(":selected");
+            {#console.log("Зайшли в collapse");#}
+            {#console.log(collapse_flag);#}
+            collapse_flag = !collapse_flag;
+            tree_all(el, collapse_flag);
+        });
+    </script>
 
 
-        </script>
 
-    </div>
 
 
 {% endblock %}

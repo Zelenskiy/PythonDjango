@@ -88,6 +88,16 @@
 
             </div>
 
+            <a style='position: fixed; bottom: 30px; right: 1px; cursor:pointer; display:none;'
+               id='Top'>
+                <img src="{% static "images/up.png" %}" alt="Вверх" title="Вверх">
+            </a>
+            <a style='position: fixed; bottom: 30px; right: 1px; cursor:pointer; display:none;'
+               id='Bottom'>
+                <img src="{% static "images/down.png" %}" alt="Вниз" title="Вниз">
+            </a>
+
+
             <select id="sel_month" class=" ml-5 mb-2">
                 <option>Вересень</option>
                 <option>Жовтень</option>
@@ -178,8 +188,6 @@
 
         <div class="container-fluid mt-lg-5 ml-1 div-nofix-1">
 
-            <button onclick="changeChZn('15.09.2019', 0)">555</button>
-
 
             <p><strong>Навчальний рік:</strong>&nbsp;{{ year }}</p>
             <p><strong>Список робочих днів: </strong>&nbsp;</p>
@@ -246,21 +254,6 @@
 
 
     <script type="text/javascript">
-        {#showDropdown = function (element) {#}
-        {#    var event;#}
-        {#    event = document.createEvent('MouseEvents');#}
-        {#    event.initMouseEvent('mousedown', true, true, window);#}
-        {#    element.dispatchEvent(event);#}
-        {# };#}
-        {##}
-        {#$('#sel-mnu').on('mouseover', function () {#}
-        {#    var dropdown = document.getElementById('sel-mnu');#}
-        {#    showDropdown(dropdown);#}
-        {# });#}
-        {#$('#sel-mnu').on('mouseout', function () {#}
-        {#    var dropdown = document.getElementById('sel-mnu');#}
-        {#    showDropdown(dropdown);#}
-        {# });#}
 
 
         var month = {
@@ -317,29 +310,6 @@
                 }
             );
 
-            /*
-            jQuery('.tr_wday').each(function (index, value) {
-                d = ($(this).find('.w').attr('value'));
-                id_ = parseInt($(this).find('.i').attr('value'));
-                if (d==date) {
-                    console.log(id_);
-                    jQuery(this).find('.e').attr('value',String(cz));
-                    //Відправити Аджаксом на збереження
-                    $.ajax({
-                            url: "../setchzn/" + String(id_) + "/"+ String(cz)+"/",
-                            type: "POST",
-                            data: {},
-                            error: function () {
-                                console.log("Щось не те");
-                            },
-                            success: function () {
-                                console.log("Все Ok");
-                            }
-                        }
-                    );
-                }
-            });
-            */
 
             y = parseInt(date.substring(6));
             m = parseInt(date.substring(3, 5));
@@ -401,8 +371,7 @@
 
         function chzn_1(month, day) {
             r = 0;
-            {#day_ = parseInt(date.substr(0, 2));#}
-            {#month_ = parseInt(date.substr(3, 5));#}
+
             year_ = parseInt(stDate.substr(6));
             if (month < 9) {
                 year_ += 1;
@@ -414,28 +383,9 @@
             year_ = parseInt(stDate.substr(6));
             dateS = new Date(year_, month_ - 1, day_, 0, 0, 0, 0);
 
-            {#console.log(dateS);#}
-            {#console.log(dateF);#}
-
             var diffDays = datediff(dateS, dateF)
-            {#console.log(diffDays);#}
-
             r = jQuery('#trid_' + String(diffDays + 1)).find('.e').attr('value');
-            {#console.log(r);#}
-            {#console.log("--------")#}
-            {#jQuery('.tr_wday').each(function (index, value) {#}
-            {#    d = ($(this).find('.w').attr('value'));#}
-            {##}
-            {#    if ((parseInt(d.substr(3, 2)) == month) &&#}
-            {#        (parseInt(d.substr(0, 2)) == day)) {#}
-            {##}
-            {#        chzn = ($(this).find('.e').attr('value'));#}
-            {#ident = ($(this).find('.i').attr('value')).substring(2);#}
-            {##}
-            {#        r = chzn;#}
-            {#        return r;#}
-            {#    }#}
-            {#  });#}
+
             return r
         }
 
@@ -482,26 +432,6 @@
                 jQuery("#lastRow").attr('hidden', false)
             }
             jQuery('#year').text(String(y) + " рік");
-
-            // Тут починаємо експерименти
-
-
-            {#console.log("Місяць "+String(m)+" " + String(chzn_1(m, 1)));#}
-
-            {#var data = $("#update-form").serialize();#}
-            {#$.ajax({#}
-            {#        url: "../getmonth/" + String(m) + "/",#}
-            {#        type: "POST",#}
-            {#        //data: m,#}
-            {#        error: function () {#}
-            {#            console.log("Щось не те");#}
-            {#        },#}
-            {#        success: function () {#}
-            {#            s = "" + a + "/" + n;#}
-            {#            $('#pl').load(s);#}
-            {#        }#}
-            {#    }#}
-            {# ); #}
 
 
         }
@@ -572,6 +502,30 @@
             {#alert("sssssssssssssssssssss");#}
             y = parseInt(stDate.substring(6));
             fillCalendar(9, y);
+        });
+
+
+        jQuery(function () {
+            $("#Top").hide().removeAttr("href");
+            if ($(window).scrollTop() >= "200") $("#Top").fadeIn("slow")
+            $(window).scroll(function () {
+                if ($(window).scrollTop() <= "200") $("#Top").fadeOut("slow")
+                else $("#Top").fadeIn("slow")
+            });
+
+            $("#Bottom").hide().removeAttr("href");
+            if ($(window).scrollTop() <= $(document).height() - "999") $("#Bottom").fadeIn("slow")
+            $(window).scroll(function () {
+                if ($(window).scrollTop() >= $(document).height() - "999") $("#Bottom").fadeOut("slow")
+                else $("#Bottom").fadeIn("slow")
+            });
+
+            $("#Top").click(function () {
+                $("html, body").animate({scrollTop: 0}, "slow")
+            })
+            $("#Bottom").click(function () {
+                $("html, body").animate({scrollTop: $(document).height()}, "slow")
+            })
         });
 
     </script>
