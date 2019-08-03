@@ -183,11 +183,7 @@
 <script type="text/javascript">
 
     {#$('#navbarSupportedContent').delay(5000).fadeOut('slow');#}
-    {#$("#tableId").keypress(function(e) {#}
-    {#      if (e.which == 27) {#}
-    {#          console.log("ESC")#}
-    {#      }#}
-    {# });#}
+
 
     function goEdit(e) {
         {#console.log("Зайшов у goEdit");#}
@@ -201,7 +197,8 @@
             jQuery(e).html('<textarea id="ta_edit" name="' + nam +
                 '  ' +
                 '" cols="' + String(parseInt(w / 8) + 10) +
-                '" rows = "' + String(parseInt(h / 28) + 2) + '"> ' +
+                '" rows = "' + String(parseInt(h / 28) + 2) +'"'+
+                '  onkeydown="keyTextArea(event);"> ' +
                 text + '</textarea> ');
             oldArrea = jQuery(e);
 
@@ -260,7 +257,11 @@
                 if (nam != "N") {
 
                     text = jQuery(e).text().trim();
-                    jQuery(e).html('<textarea id="ta_edit" name="' + nam + '"  cols="' + String(parseInt(w / 8) + 10) + '" rows = "' + String(parseInt(h / 28) + 2) + '"> ' + text + '</textarea> ');
+                    jQuery(e).html('<textarea id="ta_edit" ' +
+                        'name="' + nam +
+                        '" cols="' + String(parseInt(w / 8) + 10) +
+                        '" rows = "' + String(parseInt(h / 28) + 2) + '"' +
+                        ' onkeydown="keyTextArea(event);"> ' + text + '</textarea> ');
                     jQuery(e).children('#ta_edit').focus();
                     //------------
                     var textarea = $('#ta_edit'),
@@ -324,6 +325,22 @@
 
     }
 
+    function esc_without_save() {
+        text = oldArrea.find('textarea').val();
+        text = text.trim();
+        oldArrea.text(text);
+        oldArrea = undefined;
+    }
+
+    function keyTextArea(e) {
+        {#console.log("Зайшов keyTextArea");#}
+        {#console.log(e);#}
+          if (e.key === "Escape") {
+              console.log("ESC")
+              esc_without_save();
+          }
+          return false;
+     }
 
     jQuery.fn.swap = function (b) {
         b = jQuery(b)[0];

@@ -205,22 +205,25 @@ def rib_update_plan(request, id, num_field):
                7: 'responsible', 8: 'note'}
 
         if num_field == 4:
+            content = ''
             try:
-                p.content = data['content']
+                content = data['content'].strip()
             except:
-                p.content = data['content  ']
+                content = data['content  '].strip()
+            content = content.replace('\r\n\r\n', '\r\n')
+            p.content = content
             p.save()
         elif num_field == 5:
-            p.termin = data['termin']
+            p.termin = data['termin'].strip()
             p.save()
         elif num_field == 6:
-            p.generalization = data['generalization']
+            p.generalization = data['generalization'].strip()
             p.save()
         elif num_field == 7:
-            p.responsible = data['responsible']
+            p.responsible = data['responsible'].strip()
             p.save()
         elif num_field == 8:
-            p.note = data['note']
+            p.note = data['note'].strip()
             p.save()
         elif num_field == 9:
             s = float(data['sort'].replace(",", "."))
@@ -341,5 +344,3 @@ class MyRegisterFormView(FormView):
 def export_word(request):
     filename = export_plan_to_word()
     return FileResponse(open(filename, 'rb'), as_attachment=True)
-
-
