@@ -185,7 +185,7 @@
     {#$('#navbarSupportedContent').delay(5000).fadeOut('slow');#}
 
 
-    function goEdit(e) {
+    function goEdit(e, id_) {
         {#console.log("Зайшов у goEdit");#}
 
 
@@ -194,11 +194,12 @@
             text = jQuery(e).text().trim();
             w = jQuery(e).outerWidth(true);
             h = jQuery(e).outerHeight(true);
-            jQuery(e).html('<textarea id="ta_edit" name="' + nam +
-                '  ' +
-                '" cols="' + String(parseInt(w / 8) + 10) +
-                '" rows = "' + String(parseInt(h / 28) + 2) +'"'+
-                '  onkeydown="keyTextArea(event);"> ' +
+            id_s = "'" +id_+"'";
+            nam_s = "'" +nam+"'";
+            jQuery(e).html('<textarea id="ta_edit" name="' + nam +'"'+
+                ' cols="' + String(parseInt(w / 8) + 10) +'"'+
+                ' rows = "' + String(parseInt(h / 28) + 2) +'"'+
+                ' onkeydown="keyTextArea(event, '+id_s+','+nam_s+');"> ' +
                 text + '</textarea> ');
             oldArrea = jQuery(e);
 
@@ -257,11 +258,13 @@
                 if (nam != "N") {
 
                     text = jQuery(e).text().trim();
+                    id_s = "'" +id_+"'";
+                    nam_s = "'" +nam+"'";
                     jQuery(e).html('<textarea id="ta_edit" ' +
-                        'name="' + nam +
-                        '" cols="' + String(parseInt(w / 8) + 10) +
-                        '" rows = "' + String(parseInt(h / 28) + 2) + '"' +
-                        ' onkeydown="keyTextArea(event);"> ' + text + '</textarea> ');
+                        'name="' + nam +'"'+
+                        ' cols="' + String(parseInt(w / 8) + 10) +'"'+
+                        ' rows = "' + String(parseInt(h / 28) + 2) + '"' +
+                        ' onkeydown="keyTextArea(event, '+id_s+','+nam_s+');"> ' + text + '</textarea> ');
                     jQuery(e).children('#ta_edit').focus();
                     //------------
                     var textarea = $('#ta_edit'),
@@ -317,7 +320,7 @@
                 }
                 oldArrea = undefined;
             } else {
-                goEdit(e);
+                goEdit(e, id);
             }
 
         }
@@ -332,12 +335,23 @@
         oldArrea = undefined;
     }
 
-    function keyTextArea(e) {
+    function tab_with_save(id, nam) {
+        console.log(id);
+        console.log(nam);
+
+        {#editField(id);#}
+    }
+
+    function keyTextArea(e,id,nam) {
         {#console.log("Зайшов keyTextArea");#}
         {#console.log(e);#}
           if (e.key === "Escape") {
               console.log("ESC")
               esc_without_save();
+          } else
+          if (e.key === "Tab") {
+              console.log("Tab")
+              tab_with_save(id,nam);
           }
           return false;
      }
