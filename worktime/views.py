@@ -2,13 +2,14 @@ import datetime
 from datetime import timedelta
 from distutils.command import register
 
-
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import CreateView
 from django_extensions.db.fields import json
 
-from worktime.forms import SettingsForm, VacationForm
-from worktime.models import Settings, Academyear, Vacat, Workday
+from timetable.models import Teacher, Timetable
+from worktime.forms import SettingsForm, VacationForm,  MissForm
+from worktime.models import Settings, Academyear, Vacat, Workday, Worktimetable, Missing
 
 
 def str_to_datestr(ss1):
@@ -75,6 +76,8 @@ def generatewd(request):
                 day.num = i
                 day.weekchzn = (nw + 1) % 2 + 1
 
+                day.worktimetable_id = Worktimetable.objects.get(pk=1)
+
             day.acyear_id = Academyear.objects.get(pk=Vacat.objects.filter(acyear_id__name__iexact=ay)[0].id)
             day.save()
         ay = Settings.objects.filter(field='academic_year')[0].value.strip()
@@ -100,7 +103,7 @@ def index(request):
                 w.num = int(request.POST['n-' + s])
                 flag = True
             dat_form = request.POST['w-' + s]
-            dat_model= w.wday.strftime("%d.%m.%Y")
+            dat_model = w.wday.strftime("%d.%m.%Y")
 
             if dat_model != dat_form:
                 w.wday = datetime.datetime.strptime(request.POST['w-' + s], '%d.%m.%Y')
@@ -119,11 +122,55 @@ def index(request):
                 print("Збережено")
     # print(len(workdays))
 
-
     context = {'workdays': workdays, 'year': ay, 'start': start, 'end': end}
 
     return render(request, 'worktime/index.html', context)
 
+class MissCreateView(CreateView):
+    template_name = 'worktime/replace.html'
+    form_class = MissForm
+    success_url = 'worktime/replace.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        st = Settings.objects.filter(field='timetable')[0].value
+        tt = Timetable.objects.get(pk=st)
+        context['teachers'] = Teacher.objects.filter(timetable_id=tt)
+        return context
+
+
+# def replace(request):
+#     st = Settings.objects.filter(field='timetable')[0].value
+#     tt = Timetable.objects.get(pk=st)
+#     # TODO
+#     ac = Academyear.objects.get(pk=1)
+#     wt = Worktimetable.objects.filter(acyear_id=ac)[0]
+#     teachers = Teacher.objects.filter(timetable_id=tt)
+#     missing = Missing.objects.filter(worktimeable=wt)
+#
+#     # print(teachers[0].name)
+#
+#
+#     context = {'teachers':teachers, 'missing': missing}
+#     return render(request, 'worktime/replace.html', context)
+
+
+@csrf_exempt
+def repladd(request):
+    if request.POST and request.is_ajax(): # and request.user.has_perm('plan.change_plan'):
+        r = Missing()
+
+        # TODO виправити хрінь з цією табл
+        r.worktimeable = Worktimetable.objects.get(pg=1)
+        r.date_st = datetime.datetime.strptime(request.POST['datepicker1'], '%d.%m.%Y')
+        r.date_fin = datetime.datetime.strptime(request.POST['datepicker2'], '%d.%m.%Y')
+        r.reason = request.POST['reason']
+        st = Settings.objects.filter(field='timetable')[0].value
+        tt = Timetable.objects.get(pk=st)
+        teachers = Teacher.objects.filter(timetable_id=tt)
+        for teacher in teachers:
+            pass
+
+    return render(request, 'worktime/replace.html')
 
 @csrf_exempt
 def setchzn(request, id, chzn):
@@ -131,6 +178,7 @@ def setchzn(request, id, chzn):
     workday.weekchzn = chzn
     workday.save()
     return render(request, 'worktime/index.html')
+
 
 def vacation(request):
     flag = 0

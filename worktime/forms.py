@@ -6,7 +6,14 @@ from plan.models import Plan
 from django.views.generic.edit import FormView
 from django.contrib.auth.forms import UserCreationForm
 
-from worktime.models import Settings, Vacat, Workday
+from timetable.models import Teacher
+from worktime.models import Settings, Vacat, Workday, Missing
+
+
+class MissForm(ModelForm):
+    class Meta:
+        model = Missing
+        fields = {'teach', 'date_st', 'date_fin', 'reason', 'kl_ker', 'poch_kl'}
 
 
 class SettingsForm(ModelForm):
@@ -14,7 +21,8 @@ class SettingsForm(ModelForm):
         model = Settings
         fields = {'field', 'value'}
         widgets = {
-          }
+        }
+
 
 class VacationForm(ModelForm):
     class Meta:
@@ -30,7 +38,6 @@ class WorkdayForm(ModelForm):
     class Meta:
         model = Workday
         fields = {'num', 'wday', 'numworkweek', 'dayweek', 'weekchzn'}
-
 
         widgets = {
 

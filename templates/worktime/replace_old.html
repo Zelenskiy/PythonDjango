@@ -1,0 +1,75 @@
+{% extends "layout/basic_worktime.html" %}
+{% load static %}
+{% load js %}
+
+
+{% block title %}
+    Заміна відсутніх вчителів
+{% endblock %}
+
+{% block content %}
+    <link type="text/css" href="{% static "css/jquery-ui.css" %}" rel="Stylesheet"/>
+    <script type="text/javascript" src="{% static "js/jquery-ui.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery-ui-min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/replace.js" %}"></script>
+
+
+    {% if user.is_authenticated %}
+        <div class="container-fluid mt-lg-5">
+            <p>Дані про відсутнього вчителя</p>
+            <form method="post"> {% csrf_token %}
+                <p>Відсутній вчитель:
+
+{#                    <select name="teach">#}
+{#                        <option></option>#}
+{#                        {% for teacher in teachers %}#}
+{#                            <option>{{ teacher.short }}</option>#}
+{##}
+{#                        {% endfor %}#}
+{#                    </select>#}
+                    {{ missing.teach.short }}
+                </p>
+                <p>Дата з <input type="text" id="datepicker1" name="datepicker1"></p>
+                <p>по <input type="text" id="datepicker2" name="datepicker2">
+                </p>
+                <p>Причина відсутності <input id="reason" name="reason" onkeyup="reasType();" onfocus="reasEnter();"/>
+                </p>
+                <button type="button" onclick="add();">Додати
+                </button>
+            </form>
+            <div id="pnl">
+
+
+            </div>
+
+
+        </div>
+        <script>
+
+        </script>
+
+    {% else %}
+        <script type="text/javascript">
+            alert("Увійдіть");
+            document.location.href = '/accounts/login/';
+
+        </script>
+
+
+    {% endif %}
+    <script type="text/javascript">
+        $("#datepicker1").datepicker();
+        $("#datepicker2").datepicker();
+        $.datepicker.setDefaults({
+            dayNames: ["Неділя", "Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Субота"],
+            dayNamesShort: ["Нед", "Пон", "Вів", "Сер", "Чет", "П'я", "Суб"],
+            dayNamesMin: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+            dateFormat: "dd.mm.yy",
+            firstDay: 1,
+            monthNames: ["Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"],
+            monthNamesShort: ["Січ", "Лют", "Бер", "Кві", "Тра", "Чер", "Лип", "Сер", "Вер", "Жов", "Лис", "Гру"],
+        });
+
+    </script>
+
+{% endblock %}

@@ -5,19 +5,11 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Головна{% endblock %} - Дошка оголошень</title>
-    {#<link type="text/css" href="{% static "style.css" %}" rel="stylesheet">#}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    {#    {% load bootstrap3 %}#}
-    {#    <script src="{% bootstrap_jquery_url %}"></script>#}
-    {#    {% bootstrap_javascript %}#}
-    {#    {% bootstrap_css %}#}
 </head>
 <body>
-{#<header>#}
-{#    <h1>Оголошення</h1>#}
-{#</header>#}
 
 <style>
     img.resize {
@@ -28,31 +20,14 @@
 
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
 
-    {#    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"#}
-    {#            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">#}
-    {#        <span class="navbar-toggler-icon"></span>#}
-    {#    </button>#}
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'index' %}">Головна <span class="sr-only">(current)</span></a>
             </li>
-            {#            <li class="nav-item">#}
-            {##}
-            {#                {% for rubric in rubrics %}#}
-            {#                    <a class="nav-link" href="{% url 'by_rubric' rubric.pk %}">{{ rubric.name }}</a>#}
-            {#                {% endfor %}#}
-            {##}
-            {#            </li>#}
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'addandsave' %}">Додати <span class="sr-only">(current)</span></a>
-            </li>
 
 
-            {#            <li class="nav-item">#}
-            {#                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>#}
-            {#            </li>#}
         </ul>
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -61,22 +36,12 @@
     </div>
 </nav>
 
-{#<nav>#}
-{#    <a href="{% url 'index' %}">Головна</a>#}
-{#    <a href="{% url 'add' %}">Додати</a>#}
-{##}
-{#    {% for rubric in rubrics %}#}
-{#        <a href="{% url 'by_rubric' rubric.pk %}">{{ rubric.name }}</a>#}
-{#    {% endfor %}#}
-{##}
-{#</nav>#}
 <section>
     <div class="container mt-3 ml-3">
         <div class="row">
-{#            <div class="col-6 offset-md-0">#}
+
                 {% block content %}
                 {% endblock %}
-{#            </div>#}
 
         </div>
 

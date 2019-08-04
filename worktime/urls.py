@@ -9,12 +9,15 @@ from PythonDjango import settings
 #
 #
 from timetable.views import importasc, importgo, viewteachers
-from worktime.views import setting, vacation, index, generatewd,setchzn
+from worktime.views import setting, vacation, index, generatewd, setchzn, replace, repladd, MissCreateView
 
 urlpatterns = [
 
                   path('settings/', setting, name='settings_url'),
                   path('vacations/', vacation, name='vacation_url'),
+                  path('replace/', MissCreateView.as_view()),
+                  # path('replace/', replace, name='replace_url'),
+                  path('repladd/', repladd, name='repladd_url'),
                   path('index/', index, name='index_url'),
                   # path('getmonth/<int:m>/', getmonth, name='getmonth_url'),
                   path('generatewd/', generatewd, name='generatewd_url'),
