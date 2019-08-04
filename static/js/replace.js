@@ -1,6 +1,10 @@
 jQuery(document).ready(function () {
     reasonList = ['Лікарняний', 'Відрядження', 'Курси'];
     var n = -1;
+    // tt = jQuery('#worktimeable').val();
+    // jQuery('#workttlist').val(tt);
+
+    jQuery('#pnl').load('../repltable/');
 
 });
 
@@ -10,6 +14,7 @@ function reasEnter() {
 
 //TODO виправити некоректність розрахунку початку виділення
 function reasType() {
+
     n++;
     e = jQuery("input[name='reason']");
     text = e.val();

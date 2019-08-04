@@ -1,0 +1,52 @@
+<p></p>
+<style type="text/css">
+    .dataTable tbody tr:nth-child(1n) {
+        background-color: #bee5eb;
+        border-color: white;
+    }
+
+    .dataTable tbody tr:nth-child(2n) {
+        background-color: #E3F2FD;
+        border-color: white;
+    }
+</style>
+<table class="table dataTable" border="0">
+    <tr class="bg-info text-white">
+        <td>Вчитель</td>
+        <td>Початок</td>
+        <td>Кінець</td>
+        <td>Причина</td>
+        <td>Кл.керівн.</td>
+        <td>Поч.класи</td>
+        <td>-</td>
+    </tr>
+    {% for miss in missing %}
+        <tr>
+            <td>{{ miss.teach }}</td>
+            <td>{{ miss.date_st|date:"d.m.Y" }}</td>
+            <td>{{ miss.date_fin|date:"d.m.Y" }}</td>
+            <td>{{ miss.reason }}</td>
+            <td>
+                {% if miss.kl_ker %}
+                    Так
+                {% else %}
+                    Ні
+                {% endif %}
+            </td>
+            <td>
+                {% if miss.poch_kl %}
+                    Так
+                {% else %}
+                    Ні
+                {% endif %}
+            </td>
+            <td>
+                <button type="button"> -</button>
+            </td>
+
+        </tr>
+    {% endfor %}
+
+
+</table>
+

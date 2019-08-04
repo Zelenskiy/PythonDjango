@@ -1,19 +1,32 @@
 from django.forms import ModelForm, Textarea, TextInput
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from plan.models import Plan
-from django.views.generic.edit import FormView
-from django.contrib.auth.forms import UserCreationForm
 
-from timetable.models import Teacher
-from worktime.models import Settings, Vacat, Workday, Missing
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+
+from worktime.models import Settings, Vacat, Workday, Missing, Academyear, Worktimetable
 
 
 class MissForm(ModelForm):
     class Meta:
         model = Missing
-        fields = {'teach', 'date_st', 'date_fin', 'reason', 'kl_ker', 'poch_kl'}
+        fields = {'teach', 'date_st', 'date_fin', 'reason', 'kl_ker', 'poch_kl', 'worktimeable'}
+        widgets = {
+            'date_st': TextInput(attrs={'id': 'datepicker1', 'name': 'datepicker1'}),
+            'date_fin': TextInput(attrs={'id': 'datepicker2', 'name': 'datepicker2'}),
+            'reason': TextInput(attrs={'id': 'reason', 'name': 'reason', 'onkeyup': 'reasType();', 'onfocus': 'reasEnter();'}),
+
+            'worktimeable': TextInput(attrs={'id': 'workttlist'}),
+        }
+    #
+    # def get_initials(self):
+    #     ac = Academyear.objects.get(pk=1)
+    #     wt = Worktimetable.objects.filter(acyear_id=ac)[0]
+    #
+    #
+    #     return {
+    #         'worktimeable': wt
+    #     }
 
 
 class SettingsForm(ModelForm):

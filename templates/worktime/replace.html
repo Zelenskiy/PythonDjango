@@ -15,36 +15,75 @@
 
 
     {% if user.is_authenticated %}
-        <div class="container-fluid mt-lg-5">
-            <p>Дані про відсутнього вчителя</p>
-            <form method="post"> {% csrf_token %}
-                {{ form.as_p }}
-{#                <p>Відсутній вчитель:#}
-{##}
-{#                    <select name="teach">#}
-{#                        <option></option>#}
-{#                        {% for teacher in teachers %}#}
-{#                            <option>{{ teacher.short }}</option>#}
-{##}
-{#                        {% endfor %}#}
-{#                    </select>#}
-{#                    {{ missing.teach.short }}#}
-{#                </p>#}
-{#                <p>Дата з <input type="text" id="datepicker1" name="datepicker1"></p>#}
-{#                <p>по <input type="text" id="datepicker2" name="datepicker2">#}
-{#                </p>#}
-{#                <p>Причина відсутності <input id="reason" name="reason" onkeyup="reasType();" onfocus="reasEnter();"/>#}
-{#                </p>#}
-                <button type="submit" >Додати
-                </button>
+        <div class="row mt-lg-5">
 
-            </form>
-            <div id="pnl">
+            <div class="col  ">
+                <p class=" ml-1" style="font-size: 22px;">Дані про відсутнього вчителя</p>
+                <form method="post"> {% csrf_token %}
+
+
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label">Вчитель:</label>
+                        <div class="col-sm-10">
+                            {{ form.teach }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Дата з: </label>
+                        <div class="col-sm-10">
+                            {{ form.date_st }}
+                        </div>
+                    </div>
+                   <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Дата по: </label>
+                        <div class="col-sm-10">
+                            {{ form.date_fin}}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Причина: </label>
+                        <div class="col-sm-10">
+                            {{ form.reason }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Класний керівник: </label>
+                        <div class="col-sm-10">
+                            {{ form.kl_ker }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Початкові класи: </label>
+                        <div class="col-sm-10">
+                            {{ form.poch_kl }}
+                        </div>
+                    </div>
+
+
+
+                    {#                <p>Дата з <input type="text" id="datepicker1" name="datepicker1"></p>#}
+                    {#                <p>по <input type="text" id="datepicker2" name="datepicker2">#}
+                    {#                </p>#}
+                    {#                <p>Причина відсутності <input id="reason" name="reason" onkeyup="reasType();" onfocus="reasEnter();"/>#}
+                    {#                </p>#}
+
+                    <button type="submit">Додати
+                    </button>
+
+                </form>
+                <div id="pnl">
+
+
+                </div>
 
 
             </div>
-
-
+            <div class="col ">
+                Ok
+            </div>
         </div>
         <script>
 
@@ -73,5 +112,8 @@
         });
 
     </script>
+    {#    <input id="worktimeable" type="text" value="{{ worktimeable }}">#}
+
+
 
 {% endblock %}

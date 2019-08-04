@@ -129,13 +129,27 @@ def index(request):
 class MissCreateView(CreateView):
     template_name = 'worktime/replace.html'
     form_class = MissForm
-    success_url = 'worktime/replace.html'
+    success_url = '../../worktime/replace/'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        st = Settings.objects.filter(field='timetable')[0].value
-        tt = Timetable.objects.get(pk=st)
-        context['teachers'] = Teacher.objects.filter(timetable_id=tt)
+        # ac = Academyear.objects.get(pk=1)
+        # wt = Worktimetable.objects.filter(acyear_id=ac)[0]
+        # context['worktimeable'] = (wt)
         return context
+
+    def form_valid(self, form):
+        ac = Academyear.objects.get(pk=1)
+        wt = Worktimetable.objects.filter(acyear_id=ac)[0]
+        form.instance.worktimeable = wt
+        return super(MissCreateView, self).form_valid(form)
+
+def repltable(request):
+    # TODO
+    ac = Academyear.objects.get(pk=1)
+    wt = Worktimetable.objects.filter(acyear_id=ac)[0]
+    missing = Missing.objects.filter(worktimeable=wt)
+    context = {'missing': missing}
+    return render(request,  'worktime/repltable.html', context)
 
 
 # def replace(request):
