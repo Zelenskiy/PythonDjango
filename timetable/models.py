@@ -40,7 +40,7 @@ class Teacher(models.Model):
     sort = models.FloatField(default=0, null=True, blank=True, verbose_name='Порядок сортування')
     timetable_id = models.ForeignKey('Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
     def __str__(self):
-        return self.short
+        return self.name
     class Meta:
         ordering = ['sort']
 

@@ -1,30 +1,48 @@
 <p></p>
+
 <style type="text/css">
     .dataTable tbody tr:nth-child(1n) {
         background-color: #bee5eb;
         border-color: white;
+        border-style: solid;
+        border-width: 1px;
     }
 
     .dataTable tbody tr:nth-child(2n) {
         background-color: #E3F2FD;
         border-color: white;
+        border-style: solid;
+        border-width: 1px;
+
+    }
+
+    td {
+        text-align: center;
+        border-color: white;
+        border-style: solid;
+        border-width: 1px;
+    }
+
+    .td-header {
+        border-color: #17A2B8;
+        font-size: 12px;
     }
 </style>
-<table class="table dataTable" border="0">
+<table class="dataTable ">
     <tr class="bg-info text-white">
-        <td>Вчитель</td>
-        <td>Початок</td>
-        <td>Кінець</td>
-        <td>Причина</td>
-        <td>Кл.керівн.</td>
-        <td>Поч.класи</td>
-        <td>-</td>
+        <td class="td-header">Вчитель</td>
+        <td class="td-header">Початок</td>
+        <td class="td-header">Кінець</td>
+        <td class="td-header">Причина</td>
+        <td class="td-header">Кл.кер.</td>
+        <td class="td-header">Поч.кл.</td>
+        <td class="td-header">-</td>
     </tr>
     {% for miss in missing %}
         <tr>
-            <td>{{ miss.teach }}</td>
-            <td>{{ miss.date_st|date:"d.m.Y" }}</td>
-            <td>{{ miss.date_fin|date:"d.m.Y" }}</td>
+            <td>{{ miss.teach.short }}</td>
+            <td>{{ miss.date_st|date:"d.m" }}</td>
+            <td>{{ miss.date_fin|date:"d.m" }}</td>
             <td>{{ miss.reason }}</td>
             <td>
                 {% if miss.kl_ker %}
@@ -41,7 +59,7 @@
                 {% endif %}
             </td>
             <td>
-                <button type="button"> -</button>
+                <button class="btn btn-outline" type="button" onclick="del({{ miss.id }});"> -</button>
             </td>
 
         </tr>
@@ -50,3 +68,25 @@
 
 </table>
 
+<script type="text/javascript">
+    function del(id) {
+        console.log(id);
+        if (confirm('Вилучити запис?')){
+            $.ajax({
+                url: "../repldel/" + String(id) + "/",
+                type: "POST",
+                cache: false,
+                data: { sort:id},
+                error: function () {
+                    console.log("Щось не те");
+                },
+                success: function () {
+                    jQuery('#pnl').load('../repltable/');
+                }
+            }
+        );
+        }
+
+    }
+
+</script>

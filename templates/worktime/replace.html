@@ -17,71 +17,56 @@
     {% if user.is_authenticated %}
         <div class="row mt-lg-5">
 
-            <div class="col  ">
+            <div class="col-sm  w-100 ">
                 <p class=" ml-1" style="font-size: 22px;">Дані про відсутнього вчителя</p>
                 <form method="post"> {% csrf_token %}
 
 
                     <div class="form-group row">
-                        <label for="staticEmail" class="col-sm-2 col-form-label">Вчитель:</label>
+                        <label for="staticEmail" class="col-sm-2 col-form-label ">Відсутній</label>
                         <div class="col-sm-10">
                             {{ form.teach }}
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Дата з: </label>
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">з </label>
                         <div class="col-sm-10">
                             {{ form.date_st }}
                         </div>
                     </div>
-                   <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Дата по: </label>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">по </label>
                         <div class="col-sm-10">
-                            {{ form.date_fin}}
+                            {{ form.date_fin }}
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Причина: </label>
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">причина </label>
                         <div class="col-sm-10">
                             {{ form.reason }}
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Класний керівник: </label>
-                        <div class="col-sm-10">
-                            {{ form.kl_ker }}
+                    <div class="form-inline">
+                        <div class="custom-control custom-checkbox  my-1 mr-sm-2 ml-lg-5">
+                            {{ form.kl_ker }} Кл. керівн.
+                        </div>
+                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                            {{ form.poch_kl }} Поч. класи
+                        </div>
+
+                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                            <button type="submit" class="btn btn-outline-primary ">Додати</button>
                         </div>
                     </div>
-
-                    <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Початкові класи: </label>
-                        <div class="col-sm-10">
-                            {{ form.poch_kl }}
-                        </div>
-                    </div>
-
-
-
-                    {#                <p>Дата з <input type="text" id="datepicker1" name="datepicker1"></p>#}
-                    {#                <p>по <input type="text" id="datepicker2" name="datepicker2">#}
-                    {#                </p>#}
-                    {#                <p>Причина відсутності <input id="reason" name="reason" onkeyup="reasType();" onfocus="reasEnter();"/>#}
-                    {#                </p>#}
-
-                    <button type="submit">Додати
-                    </button>
 
                 </form>
                 <div id="pnl">
 
-
                 </div>
-
-
             </div>
-            <div class="col ">
+            <div class="col-sm   w-100">
                 Ok
             </div>
         </div>

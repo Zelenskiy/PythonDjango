@@ -9,7 +9,7 @@ from PythonDjango import settings
 #
 #
 from timetable.views import importasc, importgo, viewteachers
-from worktime.views import setting, vacation, index, generatewd, setchzn, repladd, MissCreateView, repltable
+from worktime.views import setting, vacation, index, generatewd, setchzn, repladd, MissCreateView, repltable, repldel
 
 urlpatterns = [
 
@@ -23,6 +23,7 @@ urlpatterns = [
                   path('generatewd/', generatewd, name='generatewd_url'),
                   path('setchzn/<int:id>/<int:chzn>/', setchzn, name='setchzn_url'),
                   path('repltable/', repltable, name='repltable_url'),
+                  path('repldel/<int:id>/', repldel, name='repldel_url'),
 
 
 

@@ -143,6 +143,12 @@ class MissCreateView(CreateView):
         form.instance.worktimeable = wt
         return super(MissCreateView, self).form_valid(form)
 
+@csrf_exempt
+def repldel(request, id):
+    if request.POST and request.is_ajax():
+        Missing.objects.get(pk=id).delete()
+    return render(request, 'worktime/replace.html', {})
+
 def repltable(request):
     # TODO
     ac = Academyear.objects.get(pk=1)

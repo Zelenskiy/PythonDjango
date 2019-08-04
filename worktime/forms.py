@@ -1,4 +1,4 @@
-from django.forms import ModelForm, Textarea, TextInput
+from django.forms import ModelForm, Textarea, TextInput, Select, CheckboxInput
 from django import forms
 
 from django.contrib.auth.models import User
@@ -12,13 +12,19 @@ class MissForm(ModelForm):
         model = Missing
         fields = {'teach', 'date_st', 'date_fin', 'reason', 'kl_ker', 'poch_kl', 'worktimeable'}
         widgets = {
-            'date_st': TextInput(attrs={'id': 'datepicker1', 'name': 'datepicker1'}),
-            'date_fin': TextInput(attrs={'id': 'datepicker2', 'name': 'datepicker2'}),
-            'reason': TextInput(attrs={'id': 'reason', 'name': 'reason', 'onkeyup': 'reasType();', 'onfocus': 'reasEnter();'}),
+            'teach': Select(attrs={'class': 'form-control'}),
+            'date_st': TextInput(attrs={'id': 'datepicker1', 'name': 'datepicker1', 'class': 'form-control'}),
+            'date_fin': TextInput(attrs={'id': 'datepicker2', 'name': 'datepicker2', 'class': 'form-control'}),
+            'reason': TextInput(attrs={'id': 'reason', 'name': 'reason', 'class': 'form-control', 'onkeyup': 'reasType();', 'onfocus': 'reasEnter();'}),
+            # 'kl_ker': CheckboxInput(attrs={'class': 'custom-control-checkbox'}),
+            # 'poch_kl': CheckboxInput(attrs={'class': 'custom-control-label'}),
+            # 'poch_kl': CheckboxInput(attrs={'class': 'form-control'}),
+
+
 
             'worktimeable': TextInput(attrs={'id': 'workttlist'}),
         }
-    #
+    # CheckboxInput
     # def get_initials(self):
     #     ac = Academyear.objects.get(pk=1)
     #     wt = Worktimetable.objects.filter(acyear_id=ac)[0]
