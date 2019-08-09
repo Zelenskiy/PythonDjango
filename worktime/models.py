@@ -77,3 +77,14 @@ class Settings(models.Model):
 
     class Meta:
         ordering = ['sort', 'published']
+
+class Historyrepl(models.Model):
+    D  = models.DateField(null=False, blank=False, verbose_name='Дата пропуску')
+    VT = models.CharField(default='', null=True, blank=True, max_length=15, verbose_name='Відсутній вчитель')
+    PV = models.CharField(default='', null=True, blank=True, max_length=35, verbose_name='Причина пропуску')
+    P1 = models.CharField(default='', null=True, blank=True, max_length=15, verbose_name='Предмет, з якого пропущено урок')
+    KL = models.CharField(default='', null=True, blank=True, max_length=7, verbose_name='Клас, у якому пропущено урок')
+    ZT = models.CharField(default='', null=True, blank=True, max_length=15, verbose_name='Вчитель, який заміняє')
+    P2 = models.CharField(default='', null=True, blank=True, max_length=15, verbose_name='Предмет, яким заміняють')
+    poch_kl = models.BooleanField(default=False, null=False, blank=True, verbose_name='Викладає в початкових класах')
+    timetable_id = models.ForeignKey('timetable.Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)

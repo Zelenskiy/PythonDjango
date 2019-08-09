@@ -9,6 +9,8 @@
 
 {% block content %}
     <link type="text/css" href="{% static "css/jquery-ui.css" %}" rel="Stylesheet"/>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.js"></script>
+
     <script type="text/javascript" src="{% static "js/jquery-ui.js" %}"></script>
     <script type="text/javascript" src="{% static "js/jquery-ui-min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/replace.js" %}"></script>
@@ -23,7 +25,7 @@
 
 
                     <div class="form-group row">
-                        <label for="staticEmail" class="col-sm-2 col-form-label ">Відсутній</label>
+                        <label for="staticEmail" class="col-sm-2 col-form-label ">Відсутній &nbsp;&nbsp;&nbsp; </label>
                         <div class="col-sm-10">
                             {{ form.teach }}
                         </div>
@@ -42,7 +44,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">причина </label>
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">причина &nbsp; &nbsp; &nbsp; </label>
                         <div class="col-sm-10">
                             {{ form.reason }}
                         </div>
@@ -55,24 +57,125 @@
                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
                             {{ form.poch_kl }} Поч. класи
                         </div>
-
                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
                             <button type="submit" class="btn btn-outline-primary ">Додати</button>
                         </div>
                     </div>
-
                 </form>
+                <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                    <button type="btn" class="btn btn-outline-primary " onclick="add();">Додати ajax</button>
+                </div>
+
+
                 <div id="pnl">
 
                 </div>
             </div>
-            <div class="col-sm   w-100">
-                Ok
-            </div>
-        </div>
-        <script>
 
-        </script>
+            <div class="col-sm   w-100 ">
+                <p class=" ml-1" style="font-size: 22px;">Генерація таблиці замін</p>
+                <form id="#update-form2" method="post"> {% csrf_token %}
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Початок </label>
+                        <div class="col-sm-10">
+                            <input type="text" id="datepicker3" name="datepicker3" class="form-control"
+                                   value="{{ st }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Кінець </label>
+                        <div class="col-sm-10">
+                            <input type="text" id="datepicker4" name="datepicker4" class="form-control"
+                                   value="{{ fin }}">
+
+                        </div>
+
+                    </div>
+                </form>
+                <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                    <button onclick="genRepl();" class="btn btn-outline-primary ml-lg-5">
+                        Розрахувати
+                    </button>
+                </div>
+                <p></p>
+                <div class="form-group row">
+
+                    <div class="input-group">
+                            <textarea type="text" rows="30" id="result" name="result"
+                                      class="form-control" style="overflow-x: auto;font-size:8px;"></textarea>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class=" ">
+                <p class=" ml-3 mr-3" style="font-size: 22px;">Генерація пояснюючої записки</p>
+                {#                <form id="#update-form2" method="post" action="../repl_3/" > {% csrf_token %}#}
+                <form id="#uploadForm2" method="post"  enctype="multipart/form-data"> {% csrf_token %}
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Початок </label>
+                        <div class="col-sm-10">
+                            <input type="text" id="datepicker5" name="datepicker5" class="form-control"
+                                   value="{{ sthist }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Кінець </label>
+                        <div class="col-sm-10">
+                            <input type="text" id="datepicker6" name="datepicker6" class="form-control"
+                                   value="{{ finhist }}">
+
+                        </div>
+
+                    </div>
+                    <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                        <p>
+                            <input class="form-control"
+
+                                   accept=".xlsx"
+                                   id="fileInput" class="input-file" name="upload" type="file"
+                            >
+                            {#                        <button  class="btn btn-outline-primary ml-lg-5">#}
+                            {#                       Виберіть файл журналу#}
+                            {#                    </button>#}
+                        </p>
+                    </div>
+                    <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                        <button class="btn btn-outline-primary ml-lg-5"
+                                id="hist_btn"
+                                type="submit"
+                                {#                                                            onclick="genReplhist();"#}
+                                 formaction="../repl_3/"
+                                title="">
+                            Генерувати П.З.
+                        </button>
+                    </div>
+                </form>
+                {#                Вибрати файл з таблицею Журнал замін#}
+                {#                <form method="post" enctype="multipart/form-data">#}
+                {#                    {% csrf_token %}#}
+
+                {#                    <p>#}
+                {#                        <button type="submit">Upload</button>#}
+                {#                    </p>#}
+                {##}
+                {##}
+                {#                </form>#}
+
+
+                {#                http://qaru.site/questions/377377/how-open-select-file-dialog-via-js      #}
+
+                <p></p>
+            </div>
+
+
+        </div>
+
 
     {% else %}
         <script type="text/javascript">
@@ -84,8 +187,74 @@
 
     {% endif %}
     <script type="text/javascript">
+
+        {#$('#uploadForm2').submit(function () {#}
+        {##}
+        {#    var formData = new FormData($(this)[0]);#}
+        {#    $.ajax({#}
+        {#        url: '../repl_3/',#}
+        {#        type: 'POST',#}
+        {#        data: formData,#}
+        {#        async: false,#}
+        {#        success: function (data) {#}
+        {#            alert(data)#}
+        {#        },#}
+        {#        cache: false,#}
+        {#        contentType: false,#}
+        {#        processData: false#}
+        {#    });#}
+        {#    return false;#}
+        {# });#}
+
+        {#var files;#}
+        {##}
+        {#jQuery('input[type=file]').change(function () {#}
+        {##}
+        {#    files = this.files#}
+        {#    console.log("kskjdskjjkdskjdskjjkdsjkdskjjk", files);#}
+        {##}
+        {# });#}
+        {##}
+        {#jQuery('#hist_btn').click(function (event) {#}
+        {#    event.stopPropagation();#}
+        {#    event.preventDefault();#}
+        {#    var data = new FormData();#}
+        {#    jQuery.each(files, function (key, value) {#}
+        {#        console.log("value="+value);#}
+        {#        console.log("key="+key);#}
+        {##}
+        {#        data.append(key, value);#}
+        {#    });#}
+        {#    console.log(data);#}
+        {#    jQuery.ajax({#}
+        {#        url: '../repl_3/',#}
+        {#        type: 'POST',#}
+        {#        cache: false,#}
+        {#        dataType: 'json',#}
+        {#        processData: false,#}
+        {#        contentType: false,#}
+        {#        success: function () {#}
+        {#            if (typeof respond.error === 'undefined') {#}
+        {#                var files_path = respond.files;#}
+        {#                var html = '';#}
+        {#                jQuery.each(files_path, function (key, val) {#}
+        {#                    html += val + '<br/>';#}
+        {#                })#}
+        {#                jQuery('.ajax-respond').html(html);#}
+        {#            } else {#}
+        {#                console.log('Помилка відповіді сервера:' + respond.error);#}
+        {#            }#}
+        {#        },#}
+        {#        error: function (jqXHR, textStatus, errorThrown) {#}
+        {#            console.log('Помилка Ajax запиту: ' + textStatus);#}
+        {#        }#}
+        {#    });#}
+        {# });#}
+
         $("#datepicker1").datepicker();
         $("#datepicker2").datepicker();
+        $("#datepicker3").datepicker();
+        $("#datepicker4").datepicker();
         $.datepicker.setDefaults({
             dayNames: ["Неділя", "Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Субота"],
             dayNamesShort: ["Нед", "Пон", "Вів", "Сер", "Чет", "П'я", "Суб"],
@@ -99,6 +268,54 @@
     </script>
     {#    <input id="worktimeable" type="text" value="{{ worktimeable }}">#}
 
+    <script type="text/javascript">
 
+
+        function genRepl() {
+            //Обробка кнопки початку генерації таблиці замін
+            console.log("aaaaaaaabbbb");
+            //Генеруємо
+            {#var data = $("#update-form2").serialize();#}
+            data = {};
+            data['datepicker3'] = $('#datepicker3').val();
+            data['datepicker4'] = $('#datepicker4').val();
+            {#console.log($('#datepicker4').val());#}
+            console.log(data);
+            jQuery.ajax({
+                url: "../replgen/",
+                type: "POST",
+                cache: false,
+                data: data,
+                error: function () {
+                    console.log("Щось не те");
+                },
+                success: function () {
+                    console.log("success");
+                    console.log(data);
+                    jQuery('#result').load('../resp/');
+                    {#jQuery('#result').val(data['text']);#}
+                    //Зберігаємо поля дат
+                }
+            });
+            data['datepicker3'] = $('#datepicker3').val();
+            data['datepicker4'] = $('#datepicker4').val();
+            console.log('save');
+            console.log(data);
+            jQuery.ajax({
+                url: "../datesave/",
+                type: "POST",
+                cache: false,
+                data: data,
+                error: function () {
+                    console.log("Щось не те в збереженні дат");
+                },
+                success: function () {
+                    console.log("success");
+
+                }
+            });
+        }
+
+    </script>
 
 {% endblock %}

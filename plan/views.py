@@ -34,15 +34,6 @@ def ribbon(request):
     return render(request, 'plan/ribbon.html', context)
 
 
-# def updplan (request, id):
-#     data = request.POST
-#     p = Plan.objects.get(pk=id)
-#
-#
-#
-#     context = {}
-#     return render(request, 'plan/ribbview.html', context)
-
 def ribbview(request, r_id):
     # form = PlanForm()
     s = Settings.objects.filter(field='plantable')[0].value

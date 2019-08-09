@@ -213,7 +213,7 @@ def imp_3(pt_id):
 
 def imp_4(pt_id):
     print("Починаю експортувати")
-
+    # TODO
     wb = openpyxl.load_workbook('d:/MyDoc/Dropbox/BASE/1/rozd.xlsx')
     sheet = wb['Sheet1']
     # Рахуємо кількість заповнених рядків у таблиці Excel. У n номер останнього рядка з даними

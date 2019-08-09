@@ -12,7 +12,7 @@ class MissForm(ModelForm):
         model = Missing
         fields = {'teach', 'date_st', 'date_fin', 'reason', 'kl_ker', 'poch_kl', 'worktimeable'}
         widgets = {
-            'teach': Select(attrs={'class': 'form-control'}),
+            'teach': Select(attrs={'id': 'teacher', 'class': 'form-control'}),
             'date_st': TextInput(attrs={'id': 'datepicker1', 'name': 'datepicker1', 'class': 'form-control'}),
             'date_fin': TextInput(attrs={'id': 'datepicker2', 'name': 'datepicker2', 'class': 'form-control'}),
             'reason': TextInput(attrs={'id': 'reason', 'name': 'reason', 'class': 'form-control', 'onkeyup': 'reasType();', 'onfocus': 'reasEnter();'}),
