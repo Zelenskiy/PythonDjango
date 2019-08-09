@@ -4,15 +4,11 @@ from datetime import timedelta
 
 import openpyxl
 from django.core.files.storage import FileSystemStorage
-from django.utils import timezone
-import pytz
-from distutils.command import register
 
 from django.db.models import Q
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView
-from django_extensions.db.fields import json
 
 from PythonDjango.settings import BASE_DIR, MEDIA_DIR
 from timetable.models import Teacher, Timetable, Day, Card, Lesson, Subject, Resp
@@ -175,47 +171,233 @@ class MissCreateView(CreateView):
 
 def psmaker(filename, d1, d2):
     wb = openpyxl.load_workbook(os.path.join(BASE_DIR, 'media', filename))
-    ttfrset = Settings.objects.filter(field='timetable')[0].value
-    tt = Timetable.objects.get(pk=int(ttfrset))
-    Historyrepl.objects.filter(timetable_id=tt).delete()
-
     sheet = wb['Аркуш1']
     # Рахуємо кількість заповнених рядків у таблиці Excel. У n номер останнього рядка з даними
     n = 1
     k = 1
     s = str(sheet['A' + str(n)].value)
+    history = []
     while s is not None:
+        rec = {}
         n += 1
         s = str(sheet['A' + str(n)].value)
         dat = (sheet['B' + str(n)].value)
         # dat = datetime.datetime.strptime(datS,'%Y-%m-%d %h:%m:%s')
-        print(dat)
+
         try:
             k = int(s)
         except:
             break
         if (dat > d1 or dat == d1) and (dat < d2 or dat == d2):
-            h = Historyrepl()
-            h.D = dat
-            h.VT = str(sheet['C' + str(n)].value)
-            h.PV = str(sheet['D' + str(n)].value)
-            h.P1 = str(sheet['E' + str(n)].value)
-            h.KL = str(sheet['F' + str(n)].value)
-            h.ZT = str(sheet['G' + str(n)].value)
-            h.P2 = str(sheet['I' + str(n)].value)
+            rec['D'] = dat
+
+            rec['VT'] = str(sheet['C' + str(n)].value)
+            rec['PV'] = str(sheet['D' + str(n)].value)
+            rec['P1'] = str(sheet['E' + str(n)].value)
+            rec['KL'] = str(sheet['F' + str(n)].value)
+            rec['ZT'] = str(sheet['G' + str(n)].value)
+            rec['P2'] = str(sheet['I' + str(n)].value)
             tmp = str(sheet['J' + str(n)].value)
             if tmp == 'pk':
-                h.poch_kl = True
+                rec['poch_kl'] = True
             else:
-                h.poch_kl = False
-            h.timetable_id = tt;
-            h.save()
+                rec['poch_kl'] = False
+            history += [rec]
     print(n)
-    # Тепер з таблиці Historyrepl вибираємо дані для таблиці
+    # D_old = datetime.datetime.strptime('01.09.2000', '%d.%m.%Y')
+    # VT_old = ''
+    # PV_old = ''
+    # P1_old = ''
+    # KL_old = ''
+    # ZT_old = ''
+    # P2_old = ''
+    # poch_kl_old = False
+    teachers = []
+    for h in history:
+        # Визначаємо кількість вчителів
+        title = h['VT'] + '~' + h['PV']
+        reason = h['PV']
+        # rec = {}
+        if not title in teachers:
+            teach = h['VT']
+            subjects = []
+            zamteachers = []
+            rec = {}
+            for h2 in history:
+                title2 = h2['VT'] + '~' + h2['PV']
+                if title == title2:
+                    #--------------------------
+                    zam = h2['ZT']
+                    if not zam in zamteachers:
+                        zamsubjects = []
+                        for h3 in history:
+                            title3 = h3['VT'] + '~' + h3['PV']
+                            if title2 == title3 and h3['ZT'] == zam:
+                                subject = h3['P1']
+                                if not subject in zamsubjects:
+                                    klases = []
+                                    for h4 in history:
+                                        title4 = h4['VT'] + '~' + h4['PV']
+                                        if title3 == title4 and h4['P1'] == h3['P1']:
+                                            klas = h4['KL']
+                                            if not klas in klases:
+                                                klases += [klas]
+                                    rec2 = {}
+
+                                    rec2['subject'] = subject
+                                    rec2['classes'] = klases
+                                    if not rec2 in subjects:
+                                        subjects += [rec2]
+                                rec4 = {}
+                                rec4 ['zteach'] = zam
+                                rec4['subj'] = subjects
+                        zamteachers += [rec4]
+                    rec3 = {}
+                    rec3['subjects'] = zamteachers
+
+                    #-------------------------------------------------
+                    subject = h2['P1']
+                    if not subject in subjects:
+                        klases = []
+                        for h3 in history:
+                            title3 = h3['VT'] + '~' + h3['PV']
+                            if title2 == title3 and h3['P1'] == h2['P1']:
+                                klas = h3['KL']
+                                if not klas in klases:
+                                    klases += [klas]
+                        rec1 = {}
+                        rec1['subject'] = subject
+                        rec1['classes'] = klases
+                        if not rec1 in subjects:
+                            subjects += [rec1]
 
 
+            rec['title'] = title
+            rec['reason'] = reason
+            rec['subjects'] = subjects
+            rec['teach'] = teach
+            rec['zamteach'] = [rec3]
+            if not rec in teachers:
+                teachers += [rec]
 
-    return True
+    for t in teachers:
+        count = 0
+        date = []
+        dss = []
+
+        for h in history:
+            title = h['VT'] + '~' + h['PV']
+
+            if title == t['title']:
+                count += 1
+                ds = date_to_dd_mm(h['D'])
+                if not ds in dss:
+                    dss += [ds]
+                date += [ds]
+                # Вчителі, що заміняють
+                # z = h['ZT']
+                # if not z in zamt:
+                #     zamt += [z]
+
+        t['count'] = count
+        # t['date'] = date
+        t['min'] = min_list(date)
+        t['max'] = max_list(date)
+        t['days'] = len(dss)
+        # t['zamt'] = zamt
+
+    listExcel = []
+
+    for i, t in enumerate(teachers):
+        rec = {}
+        rec['N'] = str(i + 1)
+        rec['teach'] = t['teach']
+        subjects = t['subjects']
+        s = ''
+        for subject in subjects:
+            klss = ''
+            for kl in subject['classes']:
+                klss += kl
+            klss = klss.replace('-', '')
+            s += subject['subject'] + '(' + klss + '),'
+        rec['subject'] = s[:-1]
+        rec['dmin'] = t['min']
+        rec['dmax'] = t['max']
+        rec['days'] = t['days']
+        rec['count'] = t['count']
+        rec['reason'] = t['reason']
+
+        listExcel += [rec]
+
+    wb = openpyxl.load_workbook(os.path.join(BASE_DIR, 'media', 'templ', 'PZap.xlsx'))
+    sheet = wb['Аркуш1']
+
+    n = 7
+    for t in listExcel:
+        sheet['B' + str(n)].value = t['N']
+        sheet['C' + str(n)].value = t['teach']
+        sheet['D' + str(n)].value = t['subject']
+        sheet['E' + str(n)].value = t['dmin']
+        sheet['F' + str(n)].value = t['dmax']
+        sheet['G' + str(n)].value = t['days']
+        sheet['H' + str(n)].value = t['count']
+        sheet['L' + str(n)].value = t['reason']
+
+        n += 2
+
+    wb.save(os.path.join(BASE_DIR, 'media', 'report', 'PZap.xlsx'))
+
+
+    # for t in teachers:
+    #
+    #     for h in history:
+    #         title = h['VT'] + '~' + h['PV']
+    #         z = h['ZT']
+    #         subjects = []
+    #
+    #         for h2 in history:
+    #             title2 = h2['VT'] + '~' + h2['PV']
+    #             if title == title2 and z == h2['ZT'] :
+    #                 subject = h2['P1']
+    #                 if not subject in subjects:
+    #                     klases = []
+    #                     for h3 in history:
+    #                         title3 = h3['VT'] + '~' + h3['PV']
+    #                         if title2 == title3 and z == h2['ZT'] and h3['P1'] == h2['P1']:
+    #                             klas = h3['KL']
+    #                             if not klas in klases:
+    #                                 klases += [klas]
+    #                     rec1 = {}
+    #                     rec1[subject] = klases
+    #                     if not rec1 in subjects:
+    #                         subjects += [rec1]
+    #         rec = {}
+    #         rec[h2['ZT']] = subjects
+    #         if not rec in zamt:
+    #             zamt += [rec]
+    #     t['zamt'] = zamt
+
+
+def min_list(ls):
+    min = ls[0]
+    for l in ls:
+        if l < min:
+            min = l
+    return min
+
+
+def max_list(ls):
+    max = ls[0]
+    for l in ls:
+        if l > max:
+            max = l
+    return max
+
+
+def date_to_dd_mm(d):
+    day = '0' + str(d.day)[-2:]
+    month = '0' + str(d.month)[-2:]
+    return day + '.' + month + '.'
 
 
 @csrf_exempt
@@ -233,7 +415,8 @@ def repl_3(request):
         # print('filename='+filename)
         # print('uploaded_file_url='+uploaded_file_url)
 
-    return render(request, 'worktime/replace.html')
+    context = {}
+    return render(request, 'worktime/replace.html', context)
 
 
 @csrf_exempt

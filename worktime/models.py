@@ -88,3 +88,7 @@ class Historyrepl(models.Model):
     P2 = models.CharField(default='', null=True, blank=True, max_length=15, verbose_name='Предмет, яким заміняють')
     poch_kl = models.BooleanField(default=False, null=False, blank=True, verbose_name='Викладає в початкових класах')
     timetable_id = models.ForeignKey('timetable.Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ['VT', 'PV', 'P1', 'KL']
+
