@@ -29,7 +29,7 @@ class Plan(models.Model):
     done = models.BooleanField(default=False, null=False, blank=True, verbose_name='Відмітка про виконання')
     #tmp = models.CharField(max_length=50, null=True, blank=True, verbose_name='tmp')
     #tmp2 = models.CharField(max_length=50, null=True, blank=True, verbose_name='tmp')
-    plantable_id = models.ForeignKey('Plantable', default=None, null=False, blank=True, on_delete=models.PROTECT)
+    plantable_id = models.ForeignKey('Plantable', default=None, null=True, blank=True, on_delete=models.PROTECT)
     #published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубликовано')
 
     #rubric    = models.CharField(null=True, blank=True, max_length=10)

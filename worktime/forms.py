@@ -4,13 +4,13 @@ from django import forms
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
-from worktime.models import Settings, Vacat, Workday, Missing, Academyear, Worktimetable
+from worktime.models import Settings, Vacat, Workday, Missing, Academyear, Worktimetable, Hourlyworker
 
 
 class MissForm(ModelForm):
     class Meta:
         model = Missing
-        fields = {'teach', 'date_st', 'date_fin', 'reason', 'kl_ker', 'poch_kl', 'worktimeable'}
+        fields = {'teach', 'date_st', 'date_fin', 'reason', 'kl_ker', 'poch_kl', 'timetable_id'}
         widgets = {
             'teach': Select(attrs={'id': 'teacher', 'class': 'form-control'}),
             'date_st': TextInput(attrs={'id': 'datepicker1', 'name': 'datepicker1', 'class': 'form-control'}),
@@ -33,6 +33,18 @@ class MissForm(ModelForm):
     #     return {
     #         'worktimeable': wt
     #     }
+
+class HourlyForm(ModelForm):
+    class Meta:
+        model = Hourlyworker
+        fields = {'typehw','description','teacher_id'}
+        widgets = {
+            'teacher_id': Select(attrs={'id': 'teacher', 'class': 'form-control'}),
+            'typehw': TextInput(attrs={'id': 'typehw', 'name': 'typehw', 'class': 'form-control'}),
+            'description': TextInput(attrs={'id': 'description', 'name': 'description', 'class': 'form-control'}),
+            #
+            # 'worktimeable': TextInput(attrs={'id': 'workttlist'}),
+        }
 
 
 class SettingsForm(ModelForm):

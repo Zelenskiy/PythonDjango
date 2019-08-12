@@ -38,15 +38,15 @@ class Resp(models.Model):
         ordering = ['-published']
 
 class Teacher(models.Model):
-    # ident = models.CharField(max_length=10)
     name = models.CharField(max_length=30)
     short = models.CharField(max_length=10)
     gender = models.CharField(max_length=10)
     color = models.CharField(max_length=10)
     sort = models.FloatField(default=0, null=True, blank=True, verbose_name='Порядок сортування')
     timetable_id = models.ForeignKey('Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
-    cards = models.ManyToManyField('Card', blank=True, symmetrical=True, related_name='cards')
-    # lessons = models.ManyToManyField('Lesson')
+    cards = models.ManyToManyField('Card')
+    # cards = models.ManyToManyField('Card', blank=True, symmetrical=True, related_name='cards')
+
     def __str__(self):
         return self.name
     class Meta:
@@ -56,14 +56,10 @@ class Teacher(models.Model):
 class Class(models.Model):
     classrooms = models.ManyToManyField('Classroom')
     teachers = models.ManyToManyField('Teacher')
-    # ident = models.CharField(max_length=10)
     name = models.CharField(max_length=10)
     short = models.CharField(max_length=5)
     sort = models.FloatField(default=0, null=True, blank=True, verbose_name='Порядок сортування')
     timetable_id = models.ForeignKey('Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
-
-    # classroomids = models.CharField(max_length=10, null=True, blank=True)
-    # teacherid = models.CharField(max_length=10, null=True, blank=True)
 
     class Meta:
         ordering = ['sort']
@@ -72,7 +68,6 @@ class Class(models.Model):
 
 
 class Subject(models.Model):
-    # ident = models.CharField(max_length=10)
     name = models.CharField(max_length=30)
     short = models.CharField(max_length=10)
     sort = models.FloatField(default=0, null=True, blank=True, verbose_name='Порядок сортування')
@@ -99,11 +94,8 @@ class Group(models.Model):
     entireclass = models.CharField(max_length=10)
     divisiontag = models.CharField(max_length=10)
     studentcount = models.CharField(max_length=10)
-    # ident = models.CharField(max_length=10)
     sort = models.FloatField(default=0, null=True, blank=True, verbose_name='Порядок сортування')
     timetable_id = models.ForeignKey('Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
-
-    # classid = models.CharField(max_length=10, null=True, blank=True)
 
     class Meta:
         ordering = ['sort']
@@ -111,7 +103,6 @@ class Group(models.Model):
 
 
 class Lesson(models.Model):
-    # subject_id = models.ForeignKey('Subject', default=None, blank=True, null=True, on_delete=models.PROTECT)
     subjects = models.ManyToManyField('Subject')
     classes = models.ManyToManyField('Class')
     groups = models.ManyToManyField('Group')
@@ -120,16 +111,9 @@ class Lesson(models.Model):
     periodspercard = models.CharField(max_length=10)
     periodsperweek = models.CharField(max_length=10)
     weeks = models.CharField(max_length=10)
-    # ident = models.CharField(max_length=10)
     sort = models.FloatField(default=0, null=True, blank=True, verbose_name='Порядок сортування')
     timetable_id = models.ForeignKey('Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
-
-    # subjectid = models.CharField(max_length=10, null=True, blank=True)
-    # classids = models.CharField(max_length=10, null=True, blank=True)
-    # groupids = models.CharField(max_length=10, null=True, blank=True)
     studentids = models.CharField(max_length=10, null=True, blank=True)
-    # teacherids = models.CharField(max_length=10, null=True, blank=True)
-    # classroomids = models.CharField(max_length=10, null=True, blank=True)
 
     class Meta:
         ordering = ['sort']
@@ -144,9 +128,6 @@ class Card(models.Model):
     period_id = models.ForeignKey('Period', default=None, blank=True, null=True, on_delete=models.PROTECT)
     timetable_id = models.ForeignKey('Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
 
-
-    # lessonid = models.CharField(max_length=10, null=True, blank=True)
-    # classroomids = models.CharField(max_length=10, null=True, blank=True)
 
 
 

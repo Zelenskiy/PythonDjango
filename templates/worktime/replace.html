@@ -1,5 +1,7 @@
 {% extends "layout/basic_worktime.html" %}
 {% load static %}
+
+
 {% load js %}
 
 
@@ -62,9 +64,9 @@
                         </div>
                     </div>
                 </form>
-{#                <div class="custom-control custom-checkbox my-1 mr-sm-2">#}
-{#                    <button type="btn" class="btn btn-outline-primary " onclick="add();">Додати ajax</button>#}
-{#                </div>#}
+                {#                <div class="custom-control custom-checkbox my-1 mr-sm-2">#}
+                {#                    <button type="btn" class="btn btn-outline-primary " onclick="add();">Додати ajax</button>#}
+                {#                </div>#}
 
 
                 <div id="pnl">
@@ -100,7 +102,7 @@
                     </button>
                 </div>
                 <p></p>
-                <div class="form-group row">
+                <div class="form-group row mr-1 ml-3">
 
                     <div class="input-group">
                             <textarea type="text" rows="30" id="result" name="result"
@@ -114,18 +116,18 @@
             <div class=" ">
                 <p class=" ml-3 mr-3" style="font-size: 22px;">Генерація пояснюючої записки</p>
                 {#                <form id="#update-form2" method="post" action="../repl_3/" > {% csrf_token %}#}
-                <form id="#uploadForm2" method="post"  enctype="multipart/form-data"> {% csrf_token %}
+                <form id="#uploadForm2" method="post" enctype="multipart/form-data"> {% csrf_token %}
 
 
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Початок </label>
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Початок  </label>
                         <div class="col-sm-10">
                             <input type="text" id="datepicker5" name="datepicker5" class="form-control"
                                    value="{{ sthist }}">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Кінець </label>
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Кінець  </label>
                         <div class="col-sm-10">
                             <input type="text" id="datepicker6" name="datepicker6" class="form-control"
                                    value="{{ finhist }}">
@@ -133,43 +135,31 @@
                         </div>
 
                     </div>
-                    <div class="custom-control custom-checkbox my-1 mr-sm-2">
-                        <p>
-                            <input class="form-control"
+{#                    <div class="form-group my-1 mr-sm-2  mr-1 ml-1">#}
+{#                        <label>Виберіть файл журналу</label>#}
+{##}
+{#                        <input class="form-control-file" accept=".xlsx"#}
+{#                               id="fileInput" name="upload" type="file" title="">#}
+{##}
+{#                    </div>#}
 
-                                   accept=".xlsx"
-                                   id="fileInput" class="input-file" name="upload" type="file"
-                            >
-                            {#                        <button  class="btn btn-outline-primary ml-lg-5">#}
-                            {#                       Виберіть файл журналу#}
-                            {#                    </button>#}
-                        </p>
+                    <div class="custom-file ">
+                        <input type="file" class="custom-file-input" id="validatedCustomFile" name="upload" accept=".xlsx" required>
+                        <label class="custom-file-label" for="validatedCustomFile">Виберіть файл...</label>
+                        <div class="invalid-feedback">Файл Excel, до якого записоно заміни уроків</div>
                     </div>
-                    <div class="custom-control custom-checkbox my-1 mr-sm-2">
-                        <button class="btn btn-outline-primary ml-lg-5"
+
+                    <div class="custom-control row custom-checkbox my-1 mr-sm-1 mt-3">
+                        <button class="btn btn-outline-primary  btn-block"
                                 id="hist_btn"
                                 type="submit"
                                 {#                                                            onclick="genReplhist();"#}
-                                 formaction="../repl_3/"
+                                formaction="../repl_3/"
                                 title="">
                             Генерувати П.З.
                         </button>
                     </div>
                 </form>
-                {#                Вибрати файл з таблицею Журнал замін#}
-                {#                <form method="post" enctype="multipart/form-data">#}
-                {#                    {% csrf_token %}#}
-
-                {#                    <p>#}
-                {#                        <button type="submit">Upload</button>#}
-                {#                    </p>#}
-                {##}
-                {##}
-                {#                </form>#}
-
-
-                {#                http://qaru.site/questions/377377/how-open-select-file-dialog-via-js      #}
-
                 <p></p>
             </div>
 
@@ -188,68 +178,6 @@
     {% endif %}
     <script type="text/javascript">
 
-        {#$('#uploadForm2').submit(function () {#}
-        {##}
-        {#    var formData = new FormData($(this)[0]);#}
-        {#    $.ajax({#}
-        {#        url: '../repl_3/',#}
-        {#        type: 'POST',#}
-        {#        data: formData,#}
-        {#        async: false,#}
-        {#        success: function (data) {#}
-        {#            alert(data)#}
-        {#        },#}
-        {#        cache: false,#}
-        {#        contentType: false,#}
-        {#        processData: false#}
-        {#    });#}
-        {#    return false;#}
-        {# });#}
-
-        {#var files;#}
-        {##}
-        {#jQuery('input[type=file]').change(function () {#}
-        {##}
-        {#    files = this.files#}
-        {#    console.log("kskjdskjjkdskjdskjjkdsjkdskjjk", files);#}
-        {##}
-        {# });#}
-        {##}
-        {#jQuery('#hist_btn').click(function (event) {#}
-        {#    event.stopPropagation();#}
-        {#    event.preventDefault();#}
-        {#    var data = new FormData();#}
-        {#    jQuery.each(files, function (key, value) {#}
-        {#        console.log("value="+value);#}
-        {#        console.log("key="+key);#}
-        {##}
-        {#        data.append(key, value);#}
-        {#    });#}
-        {#    console.log(data);#}
-        {#    jQuery.ajax({#}
-        {#        url: '../repl_3/',#}
-        {#        type: 'POST',#}
-        {#        cache: false,#}
-        {#        dataType: 'json',#}
-        {#        processData: false,#}
-        {#        contentType: false,#}
-        {#        success: function () {#}
-        {#            if (typeof respond.error === 'undefined') {#}
-        {#                var files_path = respond.files;#}
-        {#                var html = '';#}
-        {#                jQuery.each(files_path, function (key, val) {#}
-        {#                    html += val + '<br/>';#}
-        {#                })#}
-        {#                jQuery('.ajax-respond').html(html);#}
-        {#            } else {#}
-        {#                console.log('Помилка відповіді сервера:' + respond.error);#}
-        {#            }#}
-        {#        },#}
-        {#        error: function (jqXHR, textStatus, errorThrown) {#}
-        {#            console.log('Помилка Ajax запиту: ' + textStatus);#}
-        {#        }#}
-        {#    });#}
-        {# });#}
 
         $("#datepicker1").datepicker();
         $("#datepicker2").datepicker();
@@ -273,7 +201,8 @@
 
         function genRepl() {
             //Обробка кнопки початку генерації таблиці замін
-            console.log("aaaaaaaabbbb");
+
+
             //Генеруємо
             {#var data = $("#update-form2").serialize();#}
             data = {};
@@ -314,6 +243,8 @@
 
                 }
             });
+
+
         }
 
     </script>

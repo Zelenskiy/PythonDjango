@@ -1,0 +1,80 @@
+{% load static %}
+{% load js %}
+
+<p></p>
+
+<script type="text/javascript" src="{% static "js/repltable.js" %}">
+
+</script>
+
+<style type="text/css">
+    .dataTable tbody tr:nth-child(1n) {
+        background-color: #bee5eb;
+        border-color: white;
+        border-style: solid;
+        border-width: 1px;
+    }
+
+    .dataTable tbody tr:nth-child(2n) {
+        background-color: #E3F2FD;
+        border-color: white;
+        border-style: solid;
+        border-width: 1px;
+
+    }
+
+    td {
+        text-align: center;
+        border-color: white;
+        border-style: solid;
+        border-width: 1px;
+    }
+
+    .td-header {
+        border-color: #17A2B8;
+    {#font-size: 12px;#}
+    }
+</style>
+<table class="dataTable ">
+    <tr class="bg-info text-white">
+        <td class="td-header" style="width: 180px">Вчитель</td>
+        <td class="td-header" style="width: 80px">Тип</td>
+        <td class="td-header" style="width: 180px">Опис</td>
+        <td class="td-header">-</td>
+    </tr>
+    {% for hw in hws %}
+        <tr>
+            <td>{{ hw.teacher_id.short }}</td>
+            <td>{{ hw.typehw }}</td>
+            <td>{{ hw.description }}</td>
+            <td>
+                <button class="btn btn-outline" type="button" onclick="del_pz({{ hw.id }});"> -</button>
+            </td>
+
+        </tr>
+    {% endfor %}
+
+
+</table>
+
+<script type="text/javascript">
+    function del_pz(id) {
+        console.log(id);
+        if (confirm('Вилучити запис?')) {
+            $.ajax({
+                    url: "../pzdel/" + String(id) + "/",
+                    type: "POST",
+                    cache: false,
+                    data: {sort: id},
+                    error: function () {
+                        console.log("Щось не те");
+                    },
+                    success: function () {
+                         jQuery('#pnl_pz').load('../hwtable/');
+                    }
+                }
+            );
+        }
+    }
+
+</script>

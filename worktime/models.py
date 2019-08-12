@@ -21,7 +21,7 @@ class Replacement(models.Model):
                                  on_delete=models.PROTECT)
     reason = models.CharField(null=True, blank=True, max_length=15)
     published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубліковано')
-    worktimeable = models.ForeignKey('Worktimetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
+    timetable_id = models.ForeignKey('timetable.Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
 
 
 class Missing(models.Model):
@@ -33,10 +33,18 @@ class Missing(models.Model):
     kl_ker = models.BooleanField(default=True, null=False, blank=True, verbose_name='Класний керівник')
     poch_kl = models.BooleanField(default=False, null=False, blank=True, verbose_name='Викладає в початкових класах')
     published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубліковано')
-    worktimeable = models.ForeignKey('Worktimetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
+    timetable_id = models.ForeignKey('timetable.Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
 
     class Meta:
         ordering = ['-published']
+
+class Hourlyworker(models.Model):
+    teacher_id = models.ForeignKey('timetable.Teacher', default=None, blank=True, null=True, on_delete=models.PROTECT, verbose_name='Вчитель')
+    typehw = models.IntegerField(null=False, default=0, verbose_name='0 - погодинник, 1-10 кількість годин на день') # 0 - погодинник, 1-10 кількість годин на день
+    timetable_id = models.ForeignKey('timetable.Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
+    description = models.CharField(null=True, blank=True, max_length=15, verbose_name='Опис для виводу в записку')
+    published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубліковано')
+
 
 
 class Workday(models.Model):
@@ -46,8 +54,8 @@ class Workday(models.Model):
     dayweek = models.IntegerField(null=False)
     weekchzn = models.IntegerField(null=False, verbose_name="1-чис., 2-зн., 0-вихідний")
     # TODO Тут допилять додавання цього поля при генерації
-    worktimetable = models.ForeignKey('Worktimetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
-    acyear_id = models.ForeignKey('Academyear', default=None, blank=True, null=True, on_delete=models.PROTECT)
+    worktimetable_id = models.ForeignKey('Worktimetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
+    # acyear_id = models.ForeignKey('Academyear', default=None, blank=True, null=True, on_delete=models.PROTECT)
 
 
 class Academyear(models.Model):
@@ -59,9 +67,9 @@ class Vacat(models.Model):
     name = models.CharField(default='', null=True, blank=True, max_length=15)
     deleted = models.BooleanField(default=False, null=False)
     # TODO Тут допилять додавання цього поля при генерації
-    worktimetable = models.ForeignKey('Worktimetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
-
-    acyear_id = models.ForeignKey('Academyear', default=0, blank=False, null=False, on_delete=models.PROTECT)
+    worktimetable_id = models.ForeignKey('Worktimetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
+    #
+    # acyear_id = models.ForeignKey('Academyear', default=0, blank=False, null=False, on_delete=models.PROTECT)
     published = models.DateTimeField(auto_now=True, db_index=True)
 
     class Meta:
@@ -78,17 +86,4 @@ class Settings(models.Model):
     class Meta:
         ordering = ['sort', 'published']
 
-class Historyrepl(models.Model):
-    D  = models.DateField(null=False, blank=False, verbose_name='Дата пропуску')
-    VT = models.CharField(default='', null=True, blank=True, max_length=15, verbose_name='Відсутній вчитель')
-    PV = models.CharField(default='', null=True, blank=True, max_length=35, verbose_name='Причина пропуску')
-    P1 = models.CharField(default='', null=True, blank=True, max_length=15, verbose_name='Предмет, з якого пропущено урок')
-    KL = models.CharField(default='', null=True, blank=True, max_length=7, verbose_name='Клас, у якому пропущено урок')
-    ZT = models.CharField(default='', null=True, blank=True, max_length=15, verbose_name='Вчитель, який заміняє')
-    P2 = models.CharField(default='', null=True, blank=True, max_length=15, verbose_name='Предмет, яким заміняють')
-    poch_kl = models.BooleanField(default=False, null=False, blank=True, verbose_name='Викладає в початкових класах')
-    timetable_id = models.ForeignKey('timetable.Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
-
-    class Meta:
-        ordering = ['VT', 'PV', 'P1', 'KL']
 

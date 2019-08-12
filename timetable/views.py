@@ -1,3 +1,5 @@
+import codecs
+
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from django.shortcuts import render
@@ -7,9 +9,9 @@ from PythonDjango.settings import BASE_DIR
 from timetable.models import *
 import logging
 
-from worktime.models import Settings
+from worktime.models import Settings, Missing, Hourlyworker
 
-logging.basicConfig(filename="log-file.log", level=logging.INFO)
+# logging.basicConfig(filename="log-file.log", level=logging.INFO)
 
 
 # logging.info("Открыт Каталог товаров")
@@ -18,7 +20,6 @@ def viewteachers(request):
     s = Settings.objects.filter(field='timetable')[0].value
     table = Timetable.objects.get(pk=int(s))
 
-    logging.info("!!!!!!!!       timetable/teachers.html")
     teachers = Teacher.objects.filter(timetable_id=table)
     context = {'teachers': teachers}
 
@@ -42,11 +43,35 @@ def importasc(request):
 
 def importgo(namefile, uploaded_file_url):
     # TODO
-    # tt_id = 11  # Це прибрати перед розкоментуванням
+    # Чистимо старі бази
+    Missing.objects.all().delete()
+    Hourlyworker.objects.all().delete()
+    Card.objects.all().delete()
+    Class.objects.all().delete()
+    Classroom.objects.all().delete()
+    Teacher.objects.all().delete()
+    Day.objects.all().delete()
+    Group.objects.all().delete()
+    Lesson.objects.all().delete()
+    Period.objects.all().delete()
+    Resp.objects.all().delete()
+    Subject.objects.all().delete()
+    Timetable.objects.all().delete()
+
 
     # Початок тимчасово закоментованого
 
-    tree = ET.parse(BASE_DIR + uploaded_file_url)
+    # tree = ET.parse(BASE_DIR + uploaded_file_url)
+    # tree = ET.parse('d:/MyDoc/PythonDjango/asc_cp1251.xml')
+    # filename = 'd:/MyDoc/PythonDjango/asc_cp1251.xml'
+    # namefile = 'aaa'
+    # uploaded_file_url = 'aaa'
+
+
+    filename = BASE_DIR + uploaded_file_url
+    tree = ET.parse(codecs.open(filename, 'rb', 'cp1251'))
+    # tree = ET.parse((filename))
+
     xml = tree.getroot()
     timetable = Timetable()
     timetable.gen_codename(uploaded_file_url)
@@ -71,22 +96,9 @@ def importgo(namefile, uploaded_file_url):
     lesson_teacherids    = {}
     lesson_classroomids    = {}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     for child in xml:
         if child.tag == "days":
-            print("Processing XML for Day")
+            print(" Processing XML for Day")
             for d in child:
                 day = Day()
                 day.name = d.get("name").strip()
@@ -95,7 +107,7 @@ def importgo(namefile, uploaded_file_url):
                 day.timetable_id = Timetable.objects.get(pk=tt_id)
                 day.save()
         elif child.tag == "periods":
-            print("Processing XML for Period")
+            print(" Processing XML for Period")
             for d in child:
                 period = Period()
                 period.period = d.get("period").strip()
@@ -115,7 +127,7 @@ def importgo(namefile, uploaded_file_url):
                 teacher.gender = d.get("gender").strip()
                 teacher.color = d.get("color").strip()
                 teacher.timetable_id = Timetable.objects.get(pk=tt_id)
-
+                teacher.sort = int(d.get("id").strip()[1:])
                 teacher.save()
                 id = teacher.id
                 teacher_ident[id] = d.get("id").strip()
@@ -130,6 +142,7 @@ def importgo(namefile, uploaded_file_url):
                 clas.name = d.get("name").strip()
                 clas.short = d.get("short").strip()
                 clas.timetable_id = Timetable.objects.get(pk=tt_id)
+                clas.sort = int(d.get("id").strip()[1:])
                 clas.save()
                 id = clas.id
 
@@ -166,6 +179,7 @@ def importgo(namefile, uploaded_file_url):
                 subject.name = d.get("name").strip()
                 subject.short = d.get("short").strip()
                 subject.timetable_id = Timetable.objects.get(pk=tt_id)
+                subject.sort = int(d.get("id").strip()[1:])
                 subject.save()
                 id = subject.id
                 subject_ident[id] = d.get("id").strip()
@@ -180,6 +194,7 @@ def importgo(namefile, uploaded_file_url):
                 classroom.name = d.get("name").strip()
                 classroom.short = d.get("short").strip()
                 classroom.timetable_id = Timetable.objects.get(pk=tt_id)
+                classroom.sort = int(d.get("id").strip()[1:])
                 classroom.save()
                 id = classroom.id
                 classroom_ident[id] = d.get("id").strip()
@@ -196,6 +211,7 @@ def importgo(namefile, uploaded_file_url):
                 group.divisiontag = d.get("divisiontag").strip()
                 group.studentcount = d.get("studentcount").strip()
                 group.timetable_id = Timetable.objects.get(pk=tt_id)
+                group.sort = int(d.get("id").strip()[1:])
                 group.save()
                 id = group.id
                 group_ident[id] = d.get("id").strip()
@@ -225,6 +241,7 @@ def importgo(namefile, uploaded_file_url):
                 lesson.periodsperweek = d.get("periodsperweek").strip()
                 lesson.weeks = d.get("weeks").strip()
                 lesson.timetable_id = Timetable.objects.get(pk=tt_id)
+                lesson.sort = int(d.get("id").strip()[1:])
                 lesson.save()
                 id = lesson.id
                 lesson_ident[id] = d.get("id").strip()
@@ -313,18 +330,6 @@ def importgo(namefile, uploaded_file_url):
 
 
 
-                # ss = d.get("lessonid").strip()
-                # l = Lesson.objects.filter(timetable_id=tt_id, ident=ss)
-                # per = l[0].id
-                # card.lesson_id = l.get(pk=per)
-                # ss = d.get("day").strip()
-                # l = Day.objects.filter(timetable_id=tt_id, day=ss)
-                # per = l[0].id
-                # card.day_id = l.get(pk=per)
-                # ss = d.get("period").strip()
-                # l = Period.objects.filter(timetable_id=tt_id, period=ss)
-                # per = l[0].id
-                # card.period_id = l.get(pk=per)
                 classroomids = d.get("classroomids").strip()
                 card.timetable_id = Timetable.objects.get(pk=tt_id)
                 card.save()
@@ -337,141 +342,35 @@ def importgo(namefile, uploaded_file_url):
                         if classroom_ident[id_clr] == clrm:
                             card.classrooms.add(clasroom)
                 card.save()
-                if card.lesson_id == None:
-                    continue
-                teachers = card.lesson_id.teachers.all()
 
-                for teach in teachers:
+    print("")
+    print("Генеруємо посилання на картки в таблиці вчителів")
+    print('\n', "Processing links for Cards         ", end='')
+    i = 0
+    cards = Card.objects.filter(timetable_id=tt_id)
+    for card in cards:
+        i += 1
+        print('\b\b\b\b\b', str(i).rjust(4), end='')
+        if card.lesson_id != None:
+            teachers = card.lesson_id.teachers.all()
+            for teach in teachers:
+                teach.cards.add(card)
+    print("")
+    p = Settings.objects.filter(field='timetable')[0]
+    p.value = str(tt_id)
+    p.save()
+    # ts = Teacher.objects.filter(timetable_id=tt_id)
+    # for t in ts:
+    #     cs = Card.objects.filter(timetable_id=tt_id)
+    #     for c in cs:
+    #         if c.lesson_id != None:
+    #             teachers = c.lesson_id.teachers.all()
+    #             for teach in teachers:
+    #                 if t == teach:
+    #                     t.cards.add(c)
+    #     t.save()
 
-                    teach.cards.add(card)
     print("Завершено")
 
 
 
-    # Кінець тимчасово закоментованого
-
-    # Заповнюємо ManyToMany поля
-
-
-    # classes = Class.objects.filter(timetable_id=tt_id)
-    # for clas in classes:
-    #     rooms = clas.classroomids.split(',')
-    #     for room in rooms:
-    #         if room != '':
-    #             per = Classroom.objects.filter(timetable_id=tt_id, ident=room)[0]
-    #             i_id = per.id
-    #             clas.classrooms.add(Classroom.objects.get(pk=i_id))
-    #     clas.save()
-
-    # print("Заповнюємо Teacher.cards")
-    # teachers = Teacher.objects.filter(timetable_id=tt_id)
-    # for teach in teachers:
-    #     ident = teacher_ident[teach.id]
-    #     lessons = Lesson.objects.filter(timetable_id=tt_id)
-    #     for lesson in lessons:
-    #         lident = lesson_ident[lesson.id]
-    #         teachs = lesson.teachers
-    #
-    #
-    #         for t in teachs:
-    #             if t.strip() == teach.ident.strip():
-    #                 q = Q(timetable_id=tt_id) & Q(lesson_id__ident=lident)
-    #                 cards = Card.objects.filter(q)
-    #                 for card in cards:
-    #                     teach.cards.add(card)
-
-
-
-
-    # teachers = models.ManyToManyField('Teacher')
-
-    # Для поля Lesson
-    # print("Processing ManyToMany for Lesson")
-    # lessons = Lesson.objects.filter(timetable_id=tt_id)
-    # for lesson in lessons:
-    #     # print(lesson.classids)
-    #     ls = lesson.subjectid.split(',')
-    #     for l in ls:
-    #         if l != '':
-    #             per = Subject.objects.filter(timetable_id=tt_id, ident=l)[0]
-    #             i_id = per.id
-    #             lesson.subjects.add(Subject.objects.get(pk=i_id))
-    #     ls = lesson.classids.split(',')
-    #     for l in ls:
-    #         if l != '':
-    #             per = Class.objects.filter(timetable_id=tt_id, ident=l)[0]
-    #             i_id = per.id
-    #             lesson.classes.add(Class.objects.get(pk=i_id))
-    #     ls = lesson.groupids.split(',')
-    #     for l in ls:
-    #         if l != '':
-    #             per = Group.objects.filter(timetable_id=tt_id, ident=l)[0]
-    #             i_id = per.id
-    #             lesson.groups.add(Group.objects.get(pk=i_id))
-    #     ls = lesson.teacherids.split(',')
-    #     for l in ls:
-    #         if l != '':
-    #             per = Teacher.objects.filter(timetable_id=tt_id, ident=l)[0]
-    #             i_id = per.id
-    #             lesson.teachers.add(Teacher.objects.get(pk=i_id))
-    #     ls = lesson.classroomids.split(',')
-    #     for l in ls:
-    #         if l != '':
-    #             per = Classroom.objects.filter(timetable_id=tt_id, ident=l)[0]
-    #             i_id = per.id
-    #             lesson.classrooms.add(Classroom.objects.get(pk=i_id))
-    #     lesson.save()
-
-    # Для поля Group
-    # print("Processing ManyToMany for Group")
-    # groups = Group.objects.filter(timetable_id=tt_id)
-    # for group in groups:
-    #     cls = group.classid.split(',')
-    #     for cl in cls:
-    #         if cl != '':
-    #             per = Class.objects.filter(timetable_id=tt_id, ident=cl)[0]
-    #             i_id = per.id
-    #             group.classes.add(Class.objects.get(pk=i_id))
-    #     group.save()
-
-    #
-    # # Для поля Card
-    # print("Processing ManyToMany for Card")
-    # cards = Card.objects.filter(timetable_id=tt_id)
-    # for card in cards:
-    #     # print(lesson.classids)
-    #     ls = card.classroomids.split(',')
-    #     for l in ls:
-    #         if l != '':
-    #             per = Classroom.objects.filter(timetable_id=tt_id, ident=l)[0]
-    #             i_id = per.id
-    #             card.classrooms.add(Classroom.objects.get(pk=i_id))
-    #     card.save()
-
-
-# Скрипти для очистки
-
-"""
-
-delete from timetable_card where true;
-delete from timetable_teacher_cards where true;
-delete from timetable_card_classrooms where true;
-delete from timetable_class where true;
-delete from timetable_class_classrooms where true;
-delete from timetable_class_teachers where true;
-delete from timetable_classroom where true;
-delete from timetable_day where true;
-delete from timetable_group where true;
-delete from timetable_group_classes where true;
-delete from timetable_lesson where true;
-delete from timetable_lesson_classes where true;
-delete from timetable_lesson_classrooms where true;
-delete from timetable_lesson_groups where true;
-delete from timetable_lesson_subjects where true;
-delete from timetable_lesson_teachers where true;
-delete from timetable_period where true;
-delete from timetable_subject where true;
-delete from timetable_teacher where true;
-delete from timetable_timetable where true;
-
-"""

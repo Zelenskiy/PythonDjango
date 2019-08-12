@@ -3,8 +3,6 @@
 jQuery(document).ready(function () {
     reasonList = ['Лікарняний', 'Відрядження', 'Курси'];
     var n = -1;
-    // tt = jQuery('#worktimeable').val();
-    // jQuery('#workttlist').val(tt);
 
     jQuery('#pnl').load('../repltable/');
 

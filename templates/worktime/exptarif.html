@@ -1,0 +1,120 @@
+{% extends "layout/basic_worktime.html" %}
+{% load static %}
+
+
+{% load js %}
+
+
+{% block title %}
+    Заміна відсутніх вчителів
+{% endblock %}
+
+{% block content %}
+    <link type="text/css" href="{% static "css/jquery-ui.css" %}" rel="Stylesheet"/>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.js"></script>
+
+    <script type="text/javascript" src="{% static "js/jquery-ui.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery-ui-min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/replace.js" %}"></script>
+
+
+    {% if user.is_authenticated %}
+        <div class="row mt-lg-5">
+
+            <div class="col-sm  w-100 ">
+                <textarea cols = "80" rows="40">
+                   {{ text }}
+                </textarea>
+
+            </div>
+
+
+
+        </div>
+
+
+    {% else %}
+        <script type="text/javascript">
+            alert("Увійдіть");
+            document.location.href = '/accounts/login/';
+
+        </script>
+
+
+    {% endif %}
+    <script type="text/javascript">
+
+
+
+        $("#datepicker1").datepicker();
+        $("#datepicker2").datepicker();
+        $("#datepicker3").datepicker();
+        $("#datepicker4").datepicker();
+        $.datepicker.setDefaults({
+            dayNames: ["Неділя", "Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Субота"],
+            dayNamesShort: ["Нед", "Пон", "Вів", "Сер", "Чет", "П'я", "Суб"],
+            dayNamesMin: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+            dateFormat: "dd.mm.yy",
+            firstDay: 1,
+            monthNames: ["Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"],
+            monthNamesShort: ["Січ", "Лют", "Бер", "Кві", "Тра", "Чер", "Лип", "Сер", "Вер", "Жов", "Лис", "Гру"],
+        });
+
+    </script>
+    {#    <input id="worktimeable" type="text" value="{{ worktimeable }}">#}
+
+    <script type="text/javascript">
+
+
+        function genRepl() {
+            //Обробка кнопки початку генерації таблиці замін
+
+
+
+                //Генеруємо
+                {#var data = $("#update-form2").serialize();#}
+                data = {};
+                data['datepicker3'] = $('#datepicker3').val();
+                data['datepicker4'] = $('#datepicker4').val();
+                {#console.log($('#datepicker4').val());#}
+                console.log(data);
+                jQuery.ajax({
+                    url: "../replgen/",
+                    type: "POST",
+                    cache: false,
+                    data: data,
+                    error: function () {
+                        console.log("Щось не те");
+                    },
+                    success: function () {
+                        console.log("success");
+                        console.log(data);
+                        jQuery('#result').load('../resp/');
+                        {#jQuery('#result').val(data['text']);#}
+                        //Зберігаємо поля дат
+                    }
+                });
+                data['datepicker3'] = $('#datepicker3').val();
+                data['datepicker4'] = $('#datepicker4').val();
+                console.log('save');
+                console.log(data);
+                jQuery.ajax({
+                    url: "../datesave/",
+                    type: "POST",
+                    cache: false,
+                    data: data,
+                    error: function () {
+                        console.log("Щось не те в збереженні дат");
+                    },
+                    success: function () {
+                        console.log("success");
+
+                    }
+                });
+
+
+        }
+
+    </script>
+
+{% endblock %}

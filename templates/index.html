@@ -3,15 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <title>АРМ керівника школи</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 </head>
 <body>
-<h2><a href="/plan/ribbon/">Річний план (стрічка)</a></h2>
-<h2><a href="/plan/view/">Річний план</a></h2>
-<h2><a href="/worktime/settings">Налаштування</a></h2>
-<h2><a href="/worktime/index/">Робочі дні</a></h2>
-<h2><a href="/worktime/vacations/">Канікули та свята</a></h2>
-<h2><a href="/plan/export_word/">Експорт плану</a></h2>
-<h2><a href="/worktime/replace/">Заміна відсутніх вчителів</a></h2>
+<style type="text/css">
+    a {
+        color: #0b2e13;
+    }
+
+</style>
+<div class="row mt-3 text-white ">
+    <div class="col mb-3" style="background-color: #20c997;">
+        <div class="card-header">
+            <h3 class="ml-3">Річний план</h3>
+        </div>
+
+        <h6 class="ml-5"><a href="/plan/ribbon/">Річний план (стрічка)</a></h6>
+        <h6 class="ml-5"><a href="/plan/view/">Річний план</a></h6>
+        <h6 class="ml-5"><a href="/plan/export_word/">Експорт плану</a></h6>
+        <p>&nbsp;</p>
+    </div>
+    <div class="col mb-3 text-white " style="background-color:  purple;">
+        <div class="card-header">
+            <h3 class="ml-3">Розклад уроків</h3>
+        </div>
+        <h6 class="ml-5"><a href="#">Розклад уроків</a></h6>
+        <h6 class="ml-5"><a href="/worktime/setforpz/">Уведення даних про вчителів погодинників</a></h6>
+
+        <h6 class="ml-5"><a href="/worktime/replace/">Заміна відсутніх вчителів</a></h6>
+        <h6 class="ml-5"><a href="/worktime/exptarif/">Виведення списка для тарифікації</a></h6>
+        <h6 class="ml-5"><a href="#">Виведення списка для звірки навчальних планів</a></h6>
+        <h6 class="ml-5"><a href="#">Формування дат для календарного планування</a></h6>
+        <h6 class="ml-5"><a href="#">Розклад уроків в Excel</a></h6>
+        <h6 class="ml-5"><a href="#">Таблиця вчителів</a></h6>
+        
+
+        <p>&nbsp;</p>
+    </div>
+    <div class="col mb-3 text-white " style="background-color: deeppink;">
+        <div class="card-header">
+            <h3 class="ml-3">Імпорт та експорт</h3>
+        </div>
+        <h6 class="ml-5"><a href="/timetable/importasc/">Імпорт розкладу з ASC</a></h6>
+        <h6 class="ml-5"><a href="/plan/export_word/">Експорт плану</a></h6>
+        <h6 class="ml-5"><a href="/worktime/prepeduplan/">Підготувати файл для імпорту навчального плану для формування ASC</a></h6>
+        <h6 class="ml-5"><a href="#">Імпорт навчального плану для формування ASC</a></h6>
+        <h6 class="ml-5"><a href="#">Експорт навчального плану в ASC</a></h6>
+
+        <p>&nbsp;</p>
+    </div>
+    <div class="col mb-3 text-white " style="background-color: #6f42c1;">
+        <div class="card-header">
+            <h3 class="ml-3">Налаштування</h3>
+        </div>
+
+        <h6 class="ml-5"><a href="/worktime/settings">Налаштування</a></h6>
+        <h6 class="ml-5"><a href="/worktime/vacations/">Канікули та свята</a></h6>
+        <h6 class="ml-5"><a href="/worktime/generatewd/">Генерування робочих днів</a></h6>
+        <h6 class="ml-5"><a href="/worktime/index/">Робочі дні</a></h6>
+        <p>&nbsp;</p>
+    </div>
+
+
+</div>
 
 
 </body>
