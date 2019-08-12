@@ -5,16 +5,61 @@ from django.db.models import Q
 from django.shortcuts import render
 import xml.etree.ElementTree as ET
 
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import CreateView
+
 from PythonDjango.settings import BASE_DIR
+from timetable.forms import TeacherForm
 from timetable.models import *
 import logging
 
 from worktime.models import Settings, Missing, Hourlyworker
 
+
 # logging.basicConfig(filename="log-file.log", level=logging.INFO)
 
 
 # logging.info("Открыт Каталог товаров")
+
+class TeacherCreateView(CreateView):
+    template_name = 'timetable/teachers.html'
+    form_class = TeacherForm
+    success_url = '../../timetable/teachers/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ttfrset = Settings.objects.filter(field='timetable')[0].value
+        tt = Timetable.objects.get(pk=int(ttfrset))
+        context['teachers'] = Teacher.objects.filter(timetable_id=tt)
+
+        return context
+
+    def form_valid(self, form):
+        ttfrset = Settings.objects.filter(field='timetable')[0].value
+        tt = Timetable.objects.get(pk=int(ttfrset))
+
+        form.instance.timetable_id = tt
+        return super(TeacherCreateView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        print("invalid")
+        return super(TeacherCreateView, self).form_invalid(form)
+
+
+@csrf_exempt
+def tchdel(request, id):
+    if request.POST and request.is_ajax():
+        Teacher.objects.get(pk=id).delete()
+    return render(request, 'timetable/teachers.html', {})
+
+
+def tchtable(request):
+    ttfrset = Settings.objects.filter(field='timetable')[0].value
+    tt = Timetable.objects.get(pk=int(ttfrset))
+    teachers = Teacher.objects.filter(timetable_id=tt)
+    context = {'teachers': teachers}
+    return render(request, 'timetable/tchtable.html', context)
+
 
 def viewteachers(request):
     s = Settings.objects.filter(field='timetable')[0].value
@@ -44,29 +89,27 @@ def importasc(request):
 def importgo(namefile, uploaded_file_url):
     # TODO
     # Чистимо старі бази
-    Missing.objects.all().delete()
-    Hourlyworker.objects.all().delete()
-    Card.objects.all().delete()
-    Class.objects.all().delete()
-    Classroom.objects.all().delete()
-    Teacher.objects.all().delete()
-    Day.objects.all().delete()
-    Group.objects.all().delete()
-    Lesson.objects.all().delete()
-    Period.objects.all().delete()
-    Resp.objects.all().delete()
-    Subject.objects.all().delete()
-    Timetable.objects.all().delete()
+    # Missing.objects.all().delete()
+    # Hourlyworker.objects.all().delete()
+    # Card.objects.all().delete()
+    # Class.objects.all().delete()
+    # Classroom.objects.all().delete()
+    # Teacher.objects.all().delete()
+    # Day.objects.all().delete()
+    # Group.objects.all().delete()
+    # Lesson.objects.all().delete()
+    # Period.objects.all().delete()
+    # Resp.objects.all().delete()
+    # Subject.objects.all().delete()
+    # Timetable.objects.all().delete()
 
 
-    # Початок тимчасово закоментованого
 
     # tree = ET.parse(BASE_DIR + uploaded_file_url)
     # tree = ET.parse('d:/MyDoc/PythonDjango/asc_cp1251.xml')
     # filename = 'd:/MyDoc/PythonDjango/asc_cp1251.xml'
     # namefile = 'aaa'
     # uploaded_file_url = 'aaa'
-
 
     filename = BASE_DIR + uploaded_file_url
     tree = ET.parse(codecs.open(filename, 'rb', 'cp1251'))
@@ -89,12 +132,12 @@ def importgo(namefile, uploaded_file_url):
     group_classid = {}
     lesson_ident = {}
 
-    lesson_subjectid    = {}
-    lesson_classids    = {}
-    lesson_groupids    = {}
-    lesson_studentids    = {}
-    lesson_teacherids    = {}
-    lesson_classroomids    = {}
+    lesson_subjectid = {}
+    lesson_classids = {}
+    lesson_groupids = {}
+    lesson_studentids = {}
+    lesson_teacherids = {}
+    lesson_classroomids = {}
 
     for child in xml:
         if child.tag == "days":
@@ -232,7 +275,7 @@ def importgo(namefile, uploaded_file_url):
         elif child.tag == "lessons":
 
             i = 0
-            print('\n',"Processing XML for Lessons         ", end='')
+            print('\n', "Processing XML for Lessons         ", end='')
             for d in child:
                 i += 1
                 print('\b\b\b\b\b', str(i).rjust(4), end='')
@@ -276,9 +319,7 @@ def importgo(namefile, uploaded_file_url):
                         if group_ident[id_clr] == gr:
                             lesson.groups.add(group)
 
-
                 lesson_studentids[id] = d.get("studentids").strip()
-
 
                 lesson_teacherids[id] = d.get("teacherids").strip()
                 # lesson.teachers = []
@@ -290,7 +331,6 @@ def importgo(namefile, uploaded_file_url):
                         if teacher_ident[id_clr] == tch:
                             lesson.teachers.add(teacher)
 
-
                 lesson_classroomids[id] = d.get("classroomids").strip()
                 # lesson.classrooms = []
                 clrms = lesson_classroomids[id].split(',')
@@ -300,7 +340,6 @@ def importgo(namefile, uploaded_file_url):
                         id_clr = classroom.id
                         if classroom_ident[id_clr] == clrm:
                             lesson.classrooms.add(classroom)
-
 
                 lesson.save()
 
@@ -327,8 +366,6 @@ def importgo(namefile, uploaded_file_url):
                 for period_ in period_s:
                     if period == period_.period:
                         card.period_id = period_
-
-
 
                 classroomids = d.get("classroomids").strip()
                 card.timetable_id = Timetable.objects.get(pk=tt_id)
@@ -371,6 +408,3 @@ def importgo(namefile, uploaded_file_url):
     #     t.save()
 
     print("Завершено")
-
-
-

@@ -166,6 +166,7 @@ class MissCreateView(CreateView):
 
         ttfrset = Settings.objects.filter(field='timetable')[0].value
         tt = Timetable.objects.get(pk=int(ttfrset))
+        # tt = Timetable.objects.get(pk=int(Settings.objects.filter(field='timetable')[0].value))
 
         form.instance.timetable_id = tt
         return super(MissCreateView, self).form_valid(form)

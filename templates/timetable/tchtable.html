@@ -1,0 +1,84 @@
+{% load static %}
+{% load js %}
+
+<p></p>
+
+<script type="text/javascript" src="{% static "js/repltable.js" %}">
+
+</script>
+
+<style type="text/css">
+    .dataTable tbody tr:nth-child(1n) {
+        background-color: #bee5eb;
+        border-color: white;
+        border-style: solid;
+        border-width: 1px;
+    }
+
+    .dataTable tbody tr:nth-child(2n) {
+        background-color: #E3F2FD;
+        border-color: white;
+        border-style: solid;
+        border-width: 1px;
+
+    }
+
+    td {
+        {#text-align: center;#}
+        border-color: white;
+        border-style: solid;
+        border-width: 1px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .td-header {
+        border-color: #17A2B8;
+    {#font-size: 12px;#}
+    }
+</style>
+<table class="dataTable ">
+    <tr class="bg-info text-white">
+        <td class="td-header" style="width: 280px">ПІБ повністю</td>
+        <td class="td-header" style="width: 160px">Прізвище, ініціали</td>
+        <td class="td-header" style="width: 80px">Колір</td>
+        <td class="td-header" style="width: 60px">Стать</td>
+        <td class="td-header">-</td>
+    </tr>
+    {% for hw in teachers %}
+        <tr>
+            <td>{{ hw.name }}</td>
+            <td>{{ hw.short }}</td>
+            <td style="background-color:{{ hw.color }} ;">{{ hw.color }}</td>
+            <td style="text-align: center;">{{ hw.gender }}</td>
+            <td>
+                <button class="btn btn-outline" type="button" onclick="del_pz({{ hw.id }});"> -</button>
+            </td>
+
+        </tr>
+    {% endfor %}
+
+
+</table>
+
+<script type="text/javascript">
+    function del_pz(id) {
+        console.log(id);
+        if (confirm('Вилучити запис?')) {
+            $.ajax({
+                    url: "../tchdel/" + String(id) + "/",
+                    type: "POST",
+                    cache: false,
+                    data: {sort: id},
+                    error: function () {
+                        alert("Не можу вилучити через зв'язки в інших таблицях");
+                    },
+                    success: function () {
+                        jQuery('#pnl_tch').load('../tchtable/');
+                    }
+                }
+            );
+        }
+    }
+
+</script>

@@ -12,5 +12,13 @@
         <property name="enable_load_extension" value="true" />
       </driver-properties>
     </data-source>
+    <data-source source="LOCAL" name="User Data Source [2] - jdbc:firebirdsql://127.0.0.1:3050/d:/MyDoc/PythonDjango/KYRS.FDB" uuid="88e54699-b830-475c-9f24-d078052ae4c5">
+      <driver-ref>3cc70c0b-bc80-4ef8-843e-12b219cd9ea3</driver-ref>
+      <synchronize>true</synchronize>
+      <configured-by-url>true</configured-by-url>
+      <remarks>dsdsds</remarks>
+      <jdbc-driver>org.firebirdsql.jdbc.FBDriver</jdbc-driver>
+      <jdbc-url>jdbc:firebirdsql://127.0.0.1:3050/$PROJECT_DIR$/KYRS.FDB</jdbc-url>
+    </data-source>
   </component>
 </project>

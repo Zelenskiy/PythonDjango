@@ -4,15 +4,19 @@ from django import forms
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
+from timetable.models import Timetable, Teacher
 from worktime.models import Settings, Vacat, Workday, Missing, Academyear, Worktimetable, Hourlyworker
 
 
+
 class MissForm(ModelForm):
+    teach = forms.ModelChoiceField(queryset=Teacher.objects.filter(timetable_id=Timetable.objects.get(pk=int(Settings.objects.filter(field='timetable')[0].value))))
     class Meta:
         model = Missing
         fields = {'teach', 'date_st', 'date_fin', 'reason', 'kl_ker', 'poch_kl', 'timetable_id'}
         widgets = {
             'teach': Select(attrs={'id': 'teacher', 'class': 'form-control'}),
+            # 'teach': Select(attrs={'id': 'teacher', 'class': 'form-control'}),
             'date_st': TextInput(attrs={'id': 'datepicker1', 'name': 'datepicker1', 'class': 'form-control'}),
             'date_fin': TextInput(attrs={'id': 'datepicker2', 'name': 'datepicker2', 'class': 'form-control'}),
             'reason': TextInput(attrs={'id': 'reason', 'name': 'reason', 'class': 'form-control', 'onkeyup': 'reasType();', 'onfocus': 'reasEnter();'}),
@@ -35,6 +39,9 @@ class MissForm(ModelForm):
     #     }
 
 class HourlyForm(ModelForm):
+    teacher_id = forms.ModelChoiceField(queryset=Teacher.objects.filter(
+        timetable_id=Timetable.objects.get(pk=int(Settings.objects.filter(field='timetable')[0].value))))
+
     class Meta:
         model = Hourlyworker
         fields = {'typehw','description','teacher_id'}

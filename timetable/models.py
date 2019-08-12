@@ -10,7 +10,8 @@ class Timetable(models.Model):
     acyear_id = models.ForeignKey('worktime.Academyear', default=None, blank=True, null=True, on_delete=models.PROTECT)
 
     def gen_codename(self, s):
-        self.codename = slugify(s, allow_unicode=True)+'-'+str(int(time()))
+        self.codename = slugify(s, allow_unicode=True) + '-' + str(int(time()))
+
 
 class Day(models.Model):
     day = models.CharField(max_length=10)
@@ -21,6 +22,7 @@ class Day(models.Model):
     class Meta:
         ordering = ['day']
 
+
 class Period(models.Model):
     period = models.CharField(max_length=10)
     starttime = models.CharField(max_length=10)
@@ -30,12 +32,15 @@ class Period(models.Model):
     class Meta:
         ordering = ['period']
 
+
 class Resp(models.Model):
     text = models.TextField(null=True, blank=True, verbose_name='Результат розрахунку')
     timetable_id = models.ForeignKey('Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
     published = models.DateTimeField(auto_now=True, db_index=True, verbose_name='Опубліковано')
+
     class Meta:
         ordering = ['-published']
+
 
 class Teacher(models.Model):
     name = models.CharField(max_length=30)
@@ -45,12 +50,14 @@ class Teacher(models.Model):
     sort = models.FloatField(default=0, null=True, blank=True, verbose_name='Порядок сортування')
     timetable_id = models.ForeignKey('Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
     cards = models.ManyToManyField('Card')
+
     # cards = models.ManyToManyField('Card', blank=True, symmetrical=True, related_name='cards')
 
     def __str__(self):
         return self.name
+
     class Meta:
-        ordering = ['sort']
+        ordering = ['-timetable_id', 'sort']
 
 
 class Class(models.Model):
@@ -65,8 +72,6 @@ class Class(models.Model):
         ordering = ['sort']
 
 
-
-
 class Subject(models.Model):
     name = models.CharField(max_length=30)
     short = models.CharField(max_length=10)
@@ -75,6 +80,7 @@ class Subject(models.Model):
 
     class Meta:
         ordering = ['sort']
+
 
 class Classroom(models.Model):
     # ident = models.CharField(max_length=10)
@@ -85,7 +91,6 @@ class Classroom(models.Model):
 
     class Meta:
         ordering = ['sort']
-
 
 
 class Group(models.Model):
@@ -99,7 +104,6 @@ class Group(models.Model):
 
     class Meta:
         ordering = ['sort']
-
 
 
 class Lesson(models.Model):
@@ -119,19 +123,9 @@ class Lesson(models.Model):
         ordering = ['sort']
 
 
-
-
 class Card(models.Model):
     classrooms = models.ManyToManyField('Classroom')
     lesson_id = models.ForeignKey('Lesson', default=None, blank=True, null=True, on_delete=models.PROTECT)
     day_id = models.ForeignKey('Day', default=None, blank=True, null=True, on_delete=models.PROTECT)
     period_id = models.ForeignKey('Period', default=None, blank=True, null=True, on_delete=models.PROTECT)
     timetable_id = models.ForeignKey('Timetable', default=None, blank=True, null=True, on_delete=models.PROTECT)
-
-
-
-
-
-
-
-
