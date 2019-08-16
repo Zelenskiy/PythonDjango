@@ -648,6 +648,47 @@ def exptarif(request):
     return FileResponse(open(filename, 'rb'), as_attachment=True)
 
 
+def expnavforcheck(request):
+    # Експортуємо години для тарифікації
+    ttfrset = Settings.objects.filter(field='timetable')[0].value
+    tt = Timetable.objects.get(pk=int(ttfrset))
+    teachers = Teacher.objects.filter(timetable_id=tt)
+
+    text = ''
+    for teacher in teachers:
+        cl_1_4 = ('1-А')
+        count_1_4 = 0
+        count_5_9 = 0
+        count_10_11 = 0
+        cards = teacher.cards.all()
+        for card in cards:
+            lesson = card.lesson_id
+            if lesson.weeks == '1':
+                inc = 1
+            elif lesson.weeks == '10' or lesson.weeks == '01':
+                inc = 0.5
+            else:
+                inc = 0
+            classes = lesson.classes.all()
+            if len(classes) > 0:
+                if (classes[0].name[:1] in ['1', '2', '3', '4']) and not (classes[0].name[1:2] in ['0', '1', '2']):
+                    count_1_4 += inc
+                elif classes[0].name[:1] in ['5', '6', '7', '8', '9']:
+                    count_5_9 += inc
+                elif classes[0].name[:1] == '1':
+                    count_10_11 += inc
+
+        text += (teacher.short + "\t" +
+                 str(count_1_4).replace('.', ',') + "\t" +
+                 str(count_5_9).replace('.', ',') + "\t" +
+                 str(count_10_11).replace('.', ',')) + "\t" + "\n" + "\n"
+        text = text.replace(',0', '').replace('\t0\t', '\t\t')
+
+    filename = os.path.join(BASE_DIR, 'media', 'templ', 'exptarif.txt')
+    open(filename, 'w').write(text)
+    return FileResponse(open(filename, 'rb'), as_attachment=True)
+
+
 
 def repl_3(request):
     if len(request.FILES) == 0:
