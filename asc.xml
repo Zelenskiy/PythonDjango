@@ -167,10 +167,10 @@
    <students options="canadd" columns="id,classid,name"/>
    <groups options="canadd" columns="id,classid,name,entireclass,divisiontag,studentcount">
       <group id="*1" name="Весь клас" classid="*1" entireclass="1" divisiontag="0" studentcount=""/>
-      <group id="*2" name="1 група" classid="*1" entireclass="0" divisiontag="1" studentcount=""/>
-      <group id="*3" name="2 група" classid="*1" entireclass="0" divisiontag="1" studentcount=""/>
-      <group id="*4" name="Хлопці" classid="*1" entireclass="0" divisiontag="2" studentcount=""/>
-      <group id="*5" name="Дівчата" classid="*1" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="*2" name="1 група"   classid="*1" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="*3" name="2 група"   classid="*1" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="*4" name="Хлопці"    classid="*1" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="*5" name="Дівчата"   classid="*1" entireclass="0" divisiontag="2" studentcount=""/>
       <group id="*6" name="Весь клас" classid="*2" entireclass="1" divisiontag="0" studentcount=""/>
       <group id="*7" name="1 група" classid="*2" entireclass="0" divisiontag="1" studentcount=""/>
       <group id="*8" name="2 група" classid="*2" entireclass="0" divisiontag="1" studentcount=""/>
@@ -473,7 +473,7 @@
       <lesson id="*158" classids="*20" subjectid="*12" periodspercard="1" periodsperweek="2.0" teacherids="*16,*15" classroomids="*22" groupids="*97,*98" studentids="" weeks="1"/>
       <lesson id="*159" classids="*17" subjectid="*12" periodspercard="1" periodsperweek="1.0" teacherids="*14,*16" classroomids="*14" groupids="*82,*83" studentids="" weeks="1"/>
       <lesson id="*160" classids="*16" subjectid="*12" periodspercard="1" periodsperweek="1.0" teacherids="*14,*16" classroomids="*14" groupids="*77,*78" studentids="" weeks="1"/>
-      <lesson id="*161" classids="*15" subjectid="*12" periodspercard="1" periodsperweek="1.0" teacherids="*14,*16" classroomids="*14" groupids="*72,*73" studentids="" weeks="1"/>
+      <lesson id="*161" classids="*15" subjectid="*12" periodspercard="1" periodsperweek="1.0" teacherids0" classroomids="*14" groupids="*72,*73" studentids="" weeks="1"/>
       <lesson id="*162" classids="*14" subjectid="*12" periodspercard="1" periodsperweek="1.0" teacherids="*14,*16" classroomids="*14" groupids="*67,*68" studentids="" weeks="1"/>
       <lesson id="*163" classids="*13" subjectid="*12" periodspercard="1" periodsperweek="1.0" teacherids="*16,*15" classroomids="*22" groupids="*62,*63" studentids="" weeks="1"/>
       <lesson id="*164" classids="*12" subjectid="*12" periodspercard="1" periodsperweek="1.0" teacherids="*16,*15" classroomids="*22" groupids="*57,*58" studentids="" weeks="1"/>

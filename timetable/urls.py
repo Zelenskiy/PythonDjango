@@ -24,13 +24,14 @@ from plan.views import index, imp_from_excel, view, postr,  \
 #
 #
 from timetable.views import importasc, importgo, \
-    tchdel, viewteachers, TeacherCreateView, tchtable
+    tchdel, viewteachers, TeacherCreateView, tchtable, expeduplan
 
 urlpatterns = [
 
                   path('importasc/', importasc, name='importasc'),
                   path('viewteachers/', viewteachers, name='viewteachers'),
                   path('tchtable/', tchtable, name='tchtable_url'),
+                  path('expeduplan/', expeduplan, name='expeduplan_url'),
                   path('tchdel/<int:id>/', tchdel, name='tchdel_url'),
                   path('teachers/', TeacherCreateView.as_view(), name='teachers_url'),
 

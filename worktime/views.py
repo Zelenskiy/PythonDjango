@@ -572,7 +572,7 @@ def fill_context(context):
 
 def prepeduplan(request):
     # Готуємо файл для введення навчального плану
-    filename = os.path.join(BASE_DIR, 'media','templ', 'ENav.xlsx')
+    filename = os.path.join(BASE_DIR, 'media', 'templ', 'ENav.xlsx')
     wb = openpyxl.load_workbook(filename)
     sheet1 = wb['Вчителі']
     sheet2 = wb['Предмети']
@@ -580,32 +580,32 @@ def prepeduplan(request):
     sheet4 = wb['Класи']
     # sheet5 = wb['Кабінети']
 
-
     ttfrset = Settings.objects.filter(field='timetable')[0].value
     tt = Timetable.objects.get(pk=int(ttfrset))
     teachers = Teacher.objects.filter(timetable_id=tt)
     r = 1
     sheet1['A1'].value = ' -H- '
     for teacher in teachers:
-        r+=1
+        r += 1
         sheet1['A' + str(r)].value = teacher.name
     classes = Class.objects.filter(timetable_id=tt)
-    r=1
+    r = 1
     for clas in classes:
-        r+=1
+        r += 1
         sheet4['A' + str(r)].value = clas.name
     # classrooms = Classroom.objects.filter(timetable_id=tt)
     # r=1
     # for clasr in classrooms:
     #     r+=1
     #     sheet5['A' + str(r)].value = clasr.name
-    r=1
+    r = 1
     subjects = Subject.objects.filter(timetable_id=tt)
     for subj in subjects:
-        r+=1
+        r += 1
         sheet2['A' + str(r)].value = subj.short
     wb.save(filename)
     return FileResponse(open(filename, 'rb'), as_attachment=True)
+
 
 def exptarif(request):
     # Експортуємо години для тарифікації
@@ -640,10 +640,13 @@ def exptarif(request):
         text += (teacher.short + "\t" +
                  str(count_1_4).replace('.', ',') + "\t" +
                  str(count_5_9).replace('.', ',') + "\t" +
-                 str(count_10_11).replace('.', ',')) + "\t"+ "\n" + "\n"
-        text = text.replace(',0','').replace('\t0\t','\t\t')
-    context = {'text': text}
-    return render(request, 'worktime/exptarif.html', context)
+                 str(count_10_11).replace('.', ',')) + "\t" + "\n" + "\n"
+        text = text.replace(',0', '').replace('\t0\t', '\t\t')
+
+    filename = os.path.join(BASE_DIR, 'media', 'templ', 'exptarif.txt')
+    open(filename, 'w').write(text)
+    return FileResponse(open(filename, 'rb'), as_attachment=True)
+
 
 
 def repl_3(request):
@@ -691,6 +694,7 @@ def pzdel(request, id):
     if request.POST and request.is_ajax():
         Hourlyworker.objects.get(pk=id).delete()
     return render(request, 'worktime/setforpz.html', {})
+
 
 @csrf_exempt
 def repldel(request, id):
@@ -782,6 +786,7 @@ def hwtable(request):
     hws = Hourlyworker.objects.filter(timetable_id=tt)
     context = {'hws': hws}
     return render(request, 'worktime/setforpzpnl.html', context)
+
 
 def repltable(request):
     ttfrset = Settings.objects.filter(field='timetable')[0].value

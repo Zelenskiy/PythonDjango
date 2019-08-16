@@ -1,7 +1,12 @@
 import codecs
+import copy
+import os
+import random
 
+import openpyxl
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
+from django.http import FileResponse
 from django.shortcuts import render
 import xml.etree.ElementTree as ET
 
@@ -53,6 +58,312 @@ def tchdel(request, id):
     return render(request, 'timetable/teachers.html', {})
 
 
+def expeduplan(request):
+
+    if request.method == 'POST' and request.FILES['myfile']:
+        filename_out = os.path.join(BASE_DIR, 'media', 'report', 'workload.xml')
+
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage()
+        filename_in = fs.save(myfile.name, myfile)
+
+        # filename_in = 'D:/MyDoc/PythonDjango/ENav0.xlsx'
+        # filename_in = os.path.join(BASE_DIR, 'media', 'templ', 'ENav.xlsx')
+        wb = openpyxl.load_workbook(filename_in)
+        sheet = wb['Навантаження']
+        # Рахуємо кількість заповнених рядків у таблиці Excel. У n номер останнього рядка з даними
+        n = 2
+        k = 1
+
+        lessons = []
+        teachers = []
+        classes = []
+        classrooms = []
+        subjects = []
+        n = 2
+        while True:
+            # while s is not None:
+            n += 1
+            s = str(sheet['B' + str(n)].value).strip()
+            if s == 'None':
+                break
+            rec = {}
+            rec['groupids'] = []
+            c1 = str(sheet['B' + str(n)].value)
+            c2 = str(sheet['C' + str(n)].value)
+            c3 = str(sheet['D' + str(n)].value)
+            t1 = str(sheet['H' + str(n)].value)
+            t2 = str(sheet['I' + str(n)].value)
+            t3 = str(sheet['J' + str(n)].value)
+            r1 = str(sheet['K' + str(n)].value)
+            r2 = str(sheet['L' + str(n)].value)
+            r3 = str(sheet['M' + str(n)].value)
+            g1 = str(sheet['N' + str(n)].value)
+            g2 = str(sheet['O' + str(n)].value)
+            g3 = str(sheet['P' + str(n)].value)
+            rec['classids'] = [c1]
+            if str(c2) != 'None':
+                rec['classids'] += [c2]
+            if str(c3) != 'None':
+                rec['classids'] += [c3]
+            rec['subjectid'] = sheet['E' + str(n)].value
+            obj_to_list(rec['subjectid'], subjects)
+            rec['periodspercard'] = str(sheet['F' + str(n)].value)
+            if rec['periodspercard'] == 'None':
+                rec['periodspercard'] = '1'
+            rec['periodsperweek'] = str(sheet['G' + str(n)].value)
+            rec['teacherids'] = [t1]
+
+            if str(t2) != 'None':
+                rec['teacherids'] += [t2]
+            if str(t3) != 'None':
+                rec['teacherids'] += [t3]
+            rec['classroomids'] = [r1]
+            if str(r2) != 'None':
+                rec['classroomids'] += [r2]
+            if str(r3) != 'None':
+                rec['classroomids'] += [r3]
+            if str(g1) == 'None':
+                rec['groupids'] = ['']
+                if str(g2) != 'None':
+                    rec['groupids'] += [g2]
+                    if str(g3) != 'None':
+                        rec['groupids'] += [g3]
+            rec['studentids'] = str(sheet['Q' + str(n)].value)
+            if rec['studentids'] == 'None':
+                rec['studentids'] = ''
+            rec['weeks'] = str(sheet['R' + str(n)].value)
+            if rec['weeks'] == 'None':
+                rec['weeks'] = '1'
+            weektmp = rec['weeks']
+            k = rec['periodsperweek'].find('.')
+            if k > -1:
+                rec['periodsperweek'] = rec['periodsperweek'][:k]
+                rec['weeks'] = '1'
+                lessons += [rec]
+                rec2 = copy.deepcopy(rec)
+                rec2['weeks'] = weektmp
+                rec2['periodsperweek'] = '0.5'
+                lessons += [rec2]
+            else:
+                lessons += [rec]
+
+            obj_to_list(t1, teachers)
+            obj_to_list(t2, teachers)
+            obj_to_list(t3, teachers)
+            obj_to_list(c1, classes)
+            obj_to_list(c2, classes)
+            obj_to_list(c3, classes)
+            obj_to_list(r1, classrooms)
+            obj_to_list(r2, classrooms)
+            obj_to_list(r2, classrooms)
+
+        teachers.sort()
+
+        t_list = []
+        # id,name,short,gender,color
+        for i, t in enumerate(teachers):
+            rec = {}
+            rec['id'] = '*' + str(i + 1)
+            rec['name'] = t
+            rec['short'] = namet_to_short(t)
+            if t[-2:] == 'ич':
+                rec['gender'] = 'M'
+            else:
+                rec['gender'] = 'F'
+            dec = random.randint(1, 16777215)
+            rec['color'] = '#' + hex(dec).split('x')[-1].upper()
+            t_list += [rec]
+        classes.sort()
+        c_list = []
+        # id,name,short,classroomids,teacherid
+        for i, c in enumerate(classes):
+            rec = {}
+            rec['id'] = '*' + str(i + 1)
+            rec['name'] = c
+            rec['short'] = c
+            rec['classroomids'] = ''
+            rec['teacherid'] = ''
+            c_list += [rec]
+        subjects.sort()
+        s_list = []
+        # id,name,short
+        for i, s in enumerate(subjects):
+            rec = {}
+            rec['id'] = '*' + str(i + 1)
+            rec['name'] = s
+            rec['short'] = s
+            s_list += [rec]
+        classrooms.sort()
+        r_list = []
+        # id,name,short
+        for i, r in enumerate(classrooms):
+            rec = {}
+            rec['id'] = '*' + str(i + 1)
+            rec['name'] = r
+            rec['short'] = r
+            r_list += [rec]
+        g_list = []
+        # id,classid,name,entireclass,divisiontag,studentcount
+        i = 0
+        ngr = ['Весь клас', '1 група', '2 група', 'Хлопці', 'Дівчата']
+        for num_cl, c in enumerate(classes):
+            for num_gr, g in enumerate(ngr):
+                i += 1
+                rec = {}
+                rec['id'] = '*' + str(i)
+                rec['classid'] = '*' + str(num_cl + 1)
+                rec['name'] = g
+                if num_gr == 0:
+                    rec['entireclass'] = '1'
+                    rec['divisiontag'] = '0'
+                else:
+                    rec['entireclass'] = '0'
+                    if num_gr == 1 or num_gr == 2:
+                        rec['divisiontag'] = '1'
+                    else:
+                        rec['divisiontag'] = '2'
+                rec['studentcount'] = ''
+                g_list += [rec]
+
+        # id,subjectid,classids,groupids,studentids,teacherids,classroomids,periodspercard,periodsperweek,weeks
+        l_list = []
+        for i, l in enumerate(lessons):
+            print(i)
+            rec = {}
+            rec['classids'] = ''
+            rec['groupids'] = ''
+            rec['teacherids'] = ''
+            rec['classroomids'] = ''
+            rec['periodspercard'] = l['periodspercard']
+            rec['periodsperweek'] = l['periodsperweek']
+            rec['weeks'] = l['weeks']
+            rec['id'] = '*' + str(i + 1)
+            l['groupids'] +=['']+ ['']
+            for s in s_list:
+                if s['name'] == l['subjectid']:
+                    rec['subjectid'] = s['id']
+            for cii, cls in enumerate(l['classids']):
+                for ci, c in enumerate(c_list):
+                    sh = 0
+                    # g = l['groupids'][cii]
+                    # if g == '':
+                    #     sh = 0
+                    # else:
+                    #     sh = int(g)
+                    # print('sh=',sh)
+                    if c['name'] == cls:
+                        rec['classids'] += c['id'] + ','
+
+                        gr = cl_to_gr(c['id'], sh, c_list, g_list)
+                        rec['groupids'] += gr+','
+
+
+            rec['classids'] = rec['classids'][:-1]
+            rec['groupids'] = rec['groupids'][:-1]
+            rec['teacherids'] = ''
+            for ts in l['teacherids']:
+                for t in t_list:
+                    if t['name'] == ts:
+                        rec['teacherids'] += t['id'] + ','
+            rec['teacherids'] = rec['teacherids'][:-1]
+            rec['classroomids'] = ''
+            for ts in l['classroomids']:
+                for t in r_list:
+                    if t['name'] == ts:
+                        rec['classroomids'] += t['id'] + ','
+            rec['classroomids'] = rec['classroomids'][:-1]
+
+            l_list += [rec]
+
+        text = '<timetable importtype="database" options="idprefix:XML,groupstype1,' \
+               'decimalseparatordot" defaultexport="1">' + '\n' + \
+               '   <days options="canadd" columns="day,name,short">' + '\n' + \
+               '     <day name="Понеділок" short="Пн." day="0"/>' + '\n' + \
+               '     <day name="Вівторок" short=" Вт." day="1"/>' + '\n' + \
+               '     <day name="Середа" short=" Ср." day="2"/>' + '\n' + \
+               '     <day name="Четвер" short=" Чт." day="3"/>' + '\n' + \
+               '     <day name="П\'ятниця" short="Пт." day="4"/>' + '\n' + \
+               '   </days>' + '\n' + \
+               '   <periods options="canadd" columns="period,starttime,endtime">' + '\n' + \
+               '      <period period="1" starttime="8:30" endtime="9:15"/>' + '\n' + \
+               '      <period period="2" starttime="9:25" endtime="10:10"/>' + '\n' + \
+               '      <period period="3" starttime="10:30" endtime="11:15"/>' + '\n' + \
+               '      <period period="4" starttime="11:35" endtime="12:20"/>' + '\n' + \
+               '      <period period="5" starttime="12:30" endtime="13:15"/>' + '\n' + \
+               '      <period period="6" starttime="13:25" endtime="14:10"/>' + '\n' + \
+               '      <period period="7" starttime="14:20" endtime="15:05"/>' + '\n' + \
+               '      <period period="8" starttime="15:15" endtime="16:00"/>' + '\n' + \
+               '   </periods>' + '\n' \
+                                 '   <teachers options="canadd" columns="id,name,short,gender,color">' + '\n' + \
+               '' + '\n'
+        for t in t_list:
+            text += '      <teacher id="' + t['id'] + '" name="' + t['name'] + \
+                    '" short="' + t['short'] + '" gender="' + t[
+                'gender'] + '" color="' + t['color'] + '"/>' + '\n'
+        text += '   </teachers>' + '\n'
+        text += '   <classes options="canadd" columns="id,name,short,classroomids,teacherid">' + '\n'
+        for c in c_list:
+            text += '      <class id="' + c['id'] + '" name="' + c['name'] + '" short="' + c[
+                'short'] + '" teacherid="" classroomids=""/>' + '\n'
+        text += '   </classes>' + '\n'
+        text += '   <subjects options="canadd" columns="id,name,short">' + '\n'
+        for s in s_list:
+            text += '      <subject id="' + s['id'] + '" name="' + s['name'] + '" short="' + s['short'] + '"/>' + '\n'
+        text += '   </subjects>' + '\n'
+        text += '   <classrooms options="canadd" columns="id,name,short">' + '\n'
+        for r in r_list:
+            text += '      <classroom id="' + r['id'] + '" name="' + r['name'] + '" short="' + r['short'] + '"/>' + '\n'
+        text += '   </classrooms>' + '\n'
+        text += '   <students options="canadd" columns="id,classid,name"/>' + '\n'
+        text += '   <groups options="canadd" columns="id,classid,name,entireclass,divisiontag,studentcount">' + '\n'
+        for g in g_list:
+            text += '      <group id="' + g['id'] + '" name="' + g['name'] + '" classid="' + g['classid'] + \
+                    '" entireclass="' + g['entireclass'] + '" divisiontag="' + \
+                    g['divisiontag'] + '" studentcount=""/>' + '\n'
+        text += '   </groups>' + '\n'
+        text += '   <lessons options="canadd" columns="id,subjectid,classids,groupids,studentids,teacherids,' \
+                'classroomids,periodspercard,periodsperweek,weeks">' + '\n'
+        for l in l_list:
+            text += '      <lesson id="' + l['id'] + '" classids="' + l['classids'] + '" subjectid="' + l[
+                'subjectid'] + '" periodspercard="' + l['periodspercard'] + '" ' \
+                                                                            'periodsperweek="' + l[
+                        'periodsperweek'] + '" teacherids="' + l['teacherids'] + '" classroomids="' + l[
+                        'classroomids'] + '" groupids="' + l['groupids'] + '" studentids="" weeks="' + l[
+                        'weeks'] + '"/>' + '\n'
+        text += '   </lessons>' + '\n'
+        text += '   <cards options="canadd" columns="lessonid,day,period,classroomids"/>' + '\n'
+        text += '</timetable>' + '\n'
+
+        open(filename_out, "w").write(text)
+
+        return FileResponse(open(filename_out, 'rb'), as_attachment=True)
+
+    else:
+        context = {}
+        return render(request, 'timetable/importeduplan.html', context)
+
+
+
+def cl_to_gr(cl, sh, c_list, g_list):
+    c =int(cl[1:])
+    g = c * 5 - 5 + 1 + sh
+    return '*'+str(g)
+
+def obj_to_list(t, ts):
+    if t != 'None':
+        if not t in ts:
+            ts += [t]
+
+
+def namet_to_short(name):
+    short = name
+    ss = name.split()
+    if len(ss) == 3:
+        short = ss[0] + ' ' + ss[1][:1].upper() + '.' + ss[2][:1].upper() + '.'
+    return short
+
+
 def tchtable(request):
     ttfrset = Settings.objects.filter(field='timetable')[0].value
     tt = Timetable.objects.get(pk=int(ttfrset))
@@ -102,8 +413,6 @@ def importgo(namefile, uploaded_file_url):
     # Resp.objects.all().delete()
     # Subject.objects.all().delete()
     # Timetable.objects.all().delete()
-
-
 
     # tree = ET.parse(BASE_DIR + uploaded_file_url)
     # tree = ET.parse('d:/MyDoc/PythonDjango/asc_cp1251.xml')
