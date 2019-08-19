@@ -65,7 +65,7 @@ def expeduplan(request):
 
         myfile = request.FILES['myfile']
         fs = FileSystemStorage()
-        filename_in = fs.save(myfile.name, myfile)
+        filename_in = os.path.join(BASE_DIR, 'media', fs.save(myfile.name, myfile))
 
         # filename_in = 'D:/MyDoc/PythonDjango/ENav0.xlsx'
         # filename_in = os.path.join(BASE_DIR, 'media', 'templ', 'ENav.xlsx')
@@ -96,8 +96,14 @@ def expeduplan(request):
             t2 = str(sheet['I' + str(n)].value)
             t3 = str(sheet['J' + str(n)].value)
             r1 = str(sheet['K' + str(n)].value)
+            if len(r1)==1:
+                r1 = ' '+r1
             r2 = str(sheet['L' + str(n)].value)
+            if len(r2)==1:
+                r2 = ' '+r2
             r3 = str(sheet['M' + str(n)].value)
+            if len(r3)==1:
+                r3 = ' '+r3
             g1 = str(sheet['N' + str(n)].value)
             g2 = str(sheet['O' + str(n)].value)
             g3 = str(sheet['P' + str(n)].value)
@@ -158,7 +164,13 @@ def expeduplan(request):
             obj_to_list(r2, classrooms)
             obj_to_list(r2, classrooms)
 
-        teachers.sort()
+        # teachers.sort()
+        # Тут робимо своє сортування по списку з Teacher
+        ttfrset = Settings.objects.filter(field='timetable')[0].value
+        tt = Timetable.objects.get(pk=int(ttfrset))
+        et_list = Teacher.objects.filter(timetable_id=tt)
+        teachers = my_sort(teachers, et_list)
+
 
         t_list = []
         # id,name,short,gender,color
@@ -185,7 +197,13 @@ def expeduplan(request):
             rec['classroomids'] = ''
             rec['teacherid'] = ''
             c_list += [rec]
-        subjects.sort()
+        # subjects.sort()
+        # Тут робимо своє сортування по списку з Subject
+
+        et_list = Subject.objects.filter(timetable_id=tt)
+        subjects =  my_sort(subjects, et_list)
+
+
         s_list = []
         # id,name,short
         for i, s in enumerate(subjects):
@@ -344,6 +362,20 @@ def expeduplan(request):
         return render(request, 'timetable/importeduplan.html', context)
 
 
+def my_sort(mlist, et_list):
+    copy_ = copy.deepcopy(mlist)
+
+    mlist = []
+
+    for te in et_list:
+        if te.name in copy_:
+            mlist += [te.name]
+    for ct in copy_:
+        if not ct in mlist:
+            mlist += [ct]
+
+
+    return mlist
 
 def cl_to_gr(cl, sh, c_list, g_list):
     c =int(cl[1:])

@@ -15,7 +15,7 @@ from django.views.generic import CreateView
 from openpyxl.styles import Border
 
 from PythonDjango.settings import BASE_DIR, MEDIA_DIR
-from timetable.models import Teacher, Timetable, Day, Card, Lesson, Subject, Resp, Class, Classroom
+from timetable.models import Teacher, Timetable, Day, Card, Lesson, Subject, Resp, Class, Classroom, Period
 from worktime.forms import SettingsForm, VacationForm, MissForm, HourlyForm
 from worktime.models import Settings, Academyear, Vacat, Workday, Worktimetable, Missing, Hourlyworker
 
@@ -648,46 +648,120 @@ def exptarif(request):
     return FileResponse(open(filename, 'rb'), as_attachment=True)
 
 
-def expnavforcheck(request):
-    # Експортуємо години для тарифікації
+def expfortab(request):
+    # Експортуємо години для табеля
     ttfrset = Settings.objects.filter(field='timetable')[0].value
     tt = Timetable.objects.get(pk=int(ttfrset))
     teachers = Teacher.objects.filter(timetable_id=tt)
-
-    text = ''
+    cards = Card.objects.filter(timetable_id=tt)
+    days = Day.objects.filter(timetable_id=tt)
+    periods = Period.objects.filter(timetable_id=tt)
+    tabel = []
     for teacher in teachers:
-        cl_1_4 = ('1-А')
-        count_1_4 = 0
-        count_5_9 = 0
-        count_10_11 = 0
-        cards = teacher.cards.all()
-        for card in cards:
-            lesson = card.lesson_id
-            if lesson.weeks == '1':
-                inc = 1
-            elif lesson.weeks == '10' or lesson.weeks == '01':
-                inc = 0.5
-            else:
-                inc = 0
-            classes = lesson.classes.all()
-            if len(classes) > 0:
-                if (classes[0].name[:1] in ['1', '2', '3', '4']) and not (classes[0].name[1:2] in ['0', '1', '2']):
-                    count_1_4 += inc
-                elif classes[0].name[:1] in ['5', '6', '7', '8', '9']:
-                    count_5_9 += inc
-                elif classes[0].name[:1] == '1':
-                    count_10_11 += inc
+        rec = {}
+        rec['id'] = teacher.id
+        i = 0
+        rec['name'] = teacher.name
+        for w in range(2):
+            for day in days:
+               i += 1
+               rec[i] = 0
+        tabel += [rec]
 
-        text += (teacher.short + "\t" +
-                 str(count_1_4).replace('.', ',') + "\t" +
-                 str(count_5_9).replace('.', ',') + "\t" +
-                 str(count_10_11).replace('.', ',')) + "\t" + "\n" + "\n"
-        text = text.replace(',0', '').replace('\t0\t', '\t\t')
+    for card in cards:
+        day = card.day_id
+        lesson = card.lesson_id
+        teachers = lesson.teachers.all()
+        weeks = lesson.weeks
+        mn = int(lesson.periodspercard)
+        lesson_in_week = len(days)
+        w1 = int(day.day) + 1
+        w2 = lesson_in_week + w1
+        for teacher in teachers:
+            for tb in tabel:
+                if tb['id'] == teacher.id:
+                    if weeks == '10':
+                        tb[w1] += mn
+                    elif weeks == '01':
+                        tb[w2] += mn
+                    else:
+                        tb[w1] += mn
+                        tb[w2] += mn
+                    break
+    tex = ''
+    for tb in tabel:
+        tex += tb['name']+'\t'
+        for d in range(1, 6):
+            s = str(tb[d])
+            if s=='0':
+                s=''
+            tex +=s+'\t'
+        tex  += '\t\t'
+        for d in range(6, 11):
+            s = str(tb[d])
+            if s == '0':
+                s = ''
+            tex += s + '\t'
 
-    filename = os.path.join(BASE_DIR, 'media', 'templ', 'exptarif.txt')
-    open(filename, 'w').write(text)
+        tex += '\n\n'
+
+    filename = os.path.join(BASE_DIR, 'media', 'templ', 'expfortab.txt')
+    open(filename, 'w').write(tex)
     return FileResponse(open(filename, 'rb'), as_attachment=True)
 
+
+def expnavforcheck(request):
+    ttfrset = Settings.objects.filter(field='timetable')[0].value
+    tt = Timetable.objects.get(pk=int(ttfrset))
+
+    cards = Card.objects.filter(timetable_id=tt)
+    subjects = Subject.objects.filter(timetable_id=tt)
+    classes = Class.objects.filter(timetable_id=tt)
+    table = []
+    for subject in subjects:
+        rec = {}
+        rec['subject'] = subject.id
+        rec['subjectName'] = subject.name
+        for clas in classes:
+            rec[clas.name] = 0
+        table += [rec]
+    for card in cards:
+        lesson = card.lesson_id
+        weeks = lesson.weeks
+        mn = int(lesson.periodspercard)
+        if weeks == '1':
+            h = 1 * mn
+        else:
+            h = 0.5 * mn
+        subject = lesson.subjects.all()[0]
+        classes = lesson.classes.all()
+        for clas in classes:
+            for s in table:
+                if s['subject'] == subject.id:
+                    s[clas.name] += h
+                    break
+
+    tex = 'Предмет' + "\t"
+    subjects = Subject.objects.filter(timetable_id=tt)
+    classes = Class.objects.filter(timetable_id=tt)
+    for clas in classes:
+        tex += clas.name + "\t"
+    tex += "\n"
+    for s in table:
+        tex += s['subjectName'] + "\t"
+        print(s['subjectName'])
+        for clas in classes:
+            ho = str(s[clas.name]).replace('.', ',')
+            ho = ho.replace(' ', '')
+            if ho == '0':
+                ho = ''
+            tex += ho + "\t"
+        tex += "\n"
+    # tex = tex.replace('\t0\t', '\t\t')
+
+    filename = os.path.join(BASE_DIR, 'media', 'templ', 'expnavplan.txt')
+    open(filename, 'w').write(tex)
+    return FileResponse(open(filename, 'rb'), as_attachment=True)
 
 
 def repl_3(request):

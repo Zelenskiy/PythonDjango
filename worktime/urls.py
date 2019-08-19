@@ -11,7 +11,7 @@ from PythonDjango import settings
 from timetable.views import importasc, importgo, viewteachers
 from worktime.views import setting, vacation, index, generatewd, setchzn, repladd, MissCreateView, \
     repltable, repldel, replgen, repldel, datesave, resp, pzdel, \
-    expnavforcheck, repl_3, HourlyCreateView, exptarif, prepeduplan, hwtable
+    expnavforcheck, repl_3, HourlyCreateView, exptarif, prepeduplan, hwtable, expfortab
 
 urlpatterns = [
 
@@ -35,6 +35,7 @@ urlpatterns = [
                   path('resp/', resp, name='resp_url'),
                   path('repl_3/', repl_3, name='repl_3_url'),
                   path('exptarif/', exptarif, name='exptarif_url'),
+                  path('expfortab/', expfortab, name='expfortab_url'),
                   path('expnavforcheck/', expnavforcheck, name='expnavforcheck_url'),
                   path('prepeduplan/', prepeduplan, name='prepeduplan_url'),
 
