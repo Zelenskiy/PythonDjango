@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Дати для календарного планування</title>
+</head>
+<body>
+
+<form method="post">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td colspan="2">Чисельник</td>
+            <td></td>
+            <td colspan="2">Знаменник</td>
+
+        </tr>
+        <tr>
+            <td>Пн</td>
+            <td><input name="d1_1" type="checkbox" value="false"></td>
+             <td></td>
+            <td>Пн</td>
+            <td><input name="d2_1" type="checkbox" value="false"></td>
+        </tr>
+        <tr>
+            <td>Вт</td>
+            <td><input name="d1_2" type="checkbox" value="false"></td>
+             <td></td>
+            <td>Вт</td>
+            <td><input name="d2_2" type="checkbox" value="false"></td>
+        </tr>
+        <tr>
+            <td>Ср</td>
+            <td><input name="d1_3" type="checkbox" value="false"></td>
+             <td></td>
+            <td>Ср</td>
+            <td><input name="d2_3" type="checkbox" value="false"></td>
+        </tr>
+        <tr>
+            <td>Чт</td>
+            <td><input name="d1_4" type="checkbox" value="false"></td>
+             <td></td>
+            <td>Чт</td>
+            <td><input name="d2_4" type="checkbox" value="false"></td>
+        </tr>
+        <tr>
+            <td>Пт</td>
+            <td><input name="d1_5" type="checkbox" value="false"></td>
+             <td></td>
+            <td>Пт</td>
+            <td><input name="d2_5" type="checkbox" value="false"></td>
+        </tr>
+        <tr>
+            <td>Сб</td>
+            <td><input name="d1_6" type="checkbox" value="false"></td>
+             <td></td>
+            <td>Сб</td>
+            <td><input name="d2_6" type="checkbox" value="false"></td>
+        </tr>
+        <tr>
+            <td>Нд</td>
+            <td><input name="d1_7" type="checkbox" value="false"></td>
+             <td></td>
+            <td>Нд</td>
+            <td><input name="d2_7" type="checkbox" value="false"></td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <input name="short" type="checkbox" value="false" >без року
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <input name="nameDay" type="checkbox" value="false"> день тижня
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <input type="submit" >
+            </td>
+        </tr>
+    </table>
+
+
+</form>
+</body>
+</html>

@@ -1,6 +1,7 @@
 import datetime
 import os
 from datetime import timedelta
+from itertools import product
 
 import openpyxl
 from openpyxl.styles import Color, PatternFill, Font, Border, Side
@@ -664,8 +665,8 @@ def expfortab(request):
         rec['name'] = teacher.name
         for w in range(2):
             for day in days:
-               i += 1
-               rec[i] = 0
+                i += 1
+                rec[i] = 0
         tabel += [rec]
 
     for card in cards:
@@ -690,13 +691,13 @@ def expfortab(request):
                     break
     tex = ''
     for tb in tabel:
-        tex += tb['name']+'\t'
+        tex += tb['name'] + '\t'
         for d in range(1, 6):
             s = str(tb[d])
-            if s=='0':
-                s=''
-            tex +=s+'\t'
-        tex  += '\t\t'
+            if s == '0':
+                s = ''
+            tex += s + '\t'
+        tex += '\t\t'
         for d in range(6, 11):
             s = str(tb[d])
             if s == '0':
@@ -762,6 +763,41 @@ def expnavforcheck(request):
     filename = os.path.join(BASE_DIR, 'media', 'templ', 'expnavplan.txt')
     open(filename, 'w').write(tex)
     return FileResponse(open(filename, 'rb'), as_attachment=True)
+
+
+def calplandates(request):
+    if not request.POST:
+
+        context = {}
+        return render(request, 'worktime/calplandates.html', context)
+
+    else:
+        wts = Settings.objects.filter(field='worktimetable')[0].value
+        wt = Worktimetable.objects.all()[0]
+        workdays = Workday.objects.filter(worktimetable_id=wt)
+        tex = ''
+        nd = {1: 'Пн', 2: 'Вт', 3: 'Ср', 4: 'Чт', 5: 'Пт', 6: 'Сб', 7: 'Нд'}
+        for workday in workdays:
+            dayweek = workday.dayweek
+            weekchzn = workday.weekchzn
+            is_flag = request.POST.get('d' + str(weekchzn) + '_' + str(dayweek), False)
+            is_short = request.POST.get('short', False)
+            if is_flag:
+                if not is_short:
+                    tex += workday.wday.strftime("%d.%m.%y")
+                else:
+                    tex += workday.wday.strftime("%d.%m")
+                is_name = request.POST.get('nameDay', False)
+                if is_name:
+                    if is_short:
+                        tex += ' ' + nd[workday.dayweek]
+
+                tex += '\n'
+
+        filename = os.path.join(BASE_DIR, 'media', 'templ', 'calplandates.txt')
+        open(filename, 'w').write(tex)
+        response = FileResponse(open(filename, 'rb'), as_attachment=True)
+        return response
 
 
 def repl_3(request):

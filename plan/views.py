@@ -232,22 +232,6 @@ def rib_update_plan(request, id, num_field):
             p.save()
 
 
-        # print(map[num_field])
-
-        # if data['direction_id'] == '':
-        #     p.direction_id = Direction.objects.get(pk=0)
-        # else:
-        #     p.direction_id = Direction.objects.get(pk=int(data['direction_id']))
-        # if data['purpose_id'] == '':
-        #     p.purpose_id = Purpose.objects.get(pk=0)
-        # else:
-        #     p.purpose_id = Purpose.objects.get(pk=int(data['purpose_id']))
-        # p.content = data['content']
-        # p.generalization = data['generalization']
-        # p.responsible = data['responsible']
-        # p.termin = data['termin']
-        # p.note = data['note']
-
     return render(request, 'plan/ribbview.html', {})
 
 
